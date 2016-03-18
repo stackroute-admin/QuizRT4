@@ -94,6 +94,7 @@ app.use('/tournamentHandler', tournamentHandler);
 
 
 // server.listen(8080, function() {
-server.listen(7000, function() {
+// server.listen(7000, function() {
+server.listen(8082, function() {
   console.log('App started for Quiz Play!! Please use ur IP e.g 123.23.123.23:2000');
 });
