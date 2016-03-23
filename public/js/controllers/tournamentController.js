@@ -69,9 +69,7 @@
             $rootScope.playGame = {};
             $rootScope.playGame.levelId = levelId;
             $rootScope.playGame.tournamentId = tournamentId;
-            console.log("helloTournament----------------------"+$rootScope.playGame.tournamentId);
             $rootScope.playGame.topicId = topicId;
-            console.log("helloTournament----------------------"+$rootScope.playGame.topicId);
             $rootScope.playGame.topicName = topic_name;
             $rootScope.playGame.tournamentTitle = title;
             if ( $rootScope.playGame.topicId && $rootScope.playGame.tournamentId ) {
@@ -96,7 +94,6 @@
             showPlayButton = true;
           }
           return showPlayButton;
-
          }
        }
     });

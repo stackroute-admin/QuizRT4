@@ -82,7 +82,6 @@ module.exports = {
             }
             topic.points+=clientData.score;
             topic.level = self.findLevel(topic.points);
-            console.log("!!!!!!!!!!!!!"+topic.points);
           }
         });
         self.validateAndSaveProfile( profileData, done );

@@ -126,7 +126,12 @@ angular.module('quizRT')
                                     ans: "correct",
                                     gameId: startGameData.gameId,
                                     tournamentId: $scope.tournamentId,
-                                    topicId: startGameData.topicId
+                                    topicId: startGameData.topicId,
+                                    userId: $rootScope.loggedInUser.userId,
+                                    responseTime: $scope.time,
+                                    selectedOption:id,
+                                    questionId : $scope.currentQuestion.questionId,
+                                    gameTime: new Date().toString()
                                 });
                             } else {
                                 $(clickEvent.target).addClass('btn-danger');
@@ -136,7 +141,12 @@ angular.module('quizRT')
                                     ans: "wrong",
                                     gameId: startGameData.gameId,
                                     tournamentId: $scope.tournamentId,
-                                    topicId: startGameData.topicId
+                                    topicId: startGameData.topicId,
+                                    userId: $rootScope.loggedInUser.userId,
+                                    responseTime: $scope.time,
+                                    selectedOption:id,
+                                    questionId : $scope.currentQuestion.questionId,
+                                    gameTime: new Date().toString()
                                 });
                             }
                             $rootScope.tournamentSocket.emit('updateStatus', {

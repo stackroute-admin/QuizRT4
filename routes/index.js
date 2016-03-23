@@ -22,11 +22,7 @@ router.get('/', function(req, res, next) {
 
 	res.render('index', { title: "QuizART"});
 });
-
 router.get('/createConfTournament',function(req,res) {
   res.render('createConfTournament',{});
 });
-
-
-
 module.exports = router;

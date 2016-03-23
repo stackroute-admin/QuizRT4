@@ -35,8 +35,8 @@ var express = require('express'),
     confTournamentHandler=require('./routes/confTounamentHandler'),
     index = require('./routes/index'),
     authenticationHandler = require('./routes/authenticationHandler')(passport),
-     //redis_store = new RedisStore({ host: '172.23.238.253', port: 6379, client: redisClient}),
-    redis_store = new RedisStore({ host: 'localhost', port: 6379, client: redisClient}),
+    // redis_store = new RedisStore({ host: '172.23.238.253', port: 6379, client: redisClient}),
+    redis_store = new RedisStore({ host: '127.0.0.1', port: 6379, client: redisClient}),
     Quiz = require("./models/quiz"),
     sessionMiddleware = session({
       store: redis_store,
@@ -47,39 +47,31 @@ var express = require('express'),
       },
       secret: 'keyboard cat'
     });
+    mongoose.connect('mongodb://localhost/quizRT3');
 
 //mongoose.connect('mongodb://quizart.stackroute.in/quizRT3');
  // mongoose.connect('mongodb://172.23.238.253/quizRT3');
-mongoose.connect('mongodb://localhost/quizRT3');
+  }),
 mongoose.connection.on('error', console.error.bind(console, 'Failed to establish connection to MongoDB@StackRouteHost:PORT/quizRT3'));
 mongoose.connection.on('open', function() {
   console.log('Connected to MongoDB@StackRouteHost:PORT/quizRT3');
 });
-
 require('./routes/socket.js')(server,sessionMiddleware);
-
 app.use(logger('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
-
 app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
-
-
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine', 'ejs');
 //app.set('views', './views');
 //app.set('views', './views/createConfTournament.ejs');
-
 app.use(express.static('./public'));
 //register routers to route paths
-
 app.use('/', index);
 app.use('/auth',authenticationHandler);
-
 var initPassport = require('./passport-init');
 initPassport(passport);
 //middleware to check if user session exists, and check for isAuthenticated cookie
@@ -98,6 +90,7 @@ app.use('/topicsHandler', topicsHandler);
 app.use('/tournamentHandler', tournamentHandler);
 app.use('/',confTournamentHandler);
 // server.listen(8080, function() {
-server.listen(8080, function() {
+// server.listen(8080, function() {
+// server.listen(7000, function() {
   console.log('App started for Quiz Play!! Please use ur IP e.g 123.23.123.23:2000');
 });

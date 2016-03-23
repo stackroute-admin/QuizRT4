@@ -22,9 +22,6 @@ var express = require('express'),
     fs = require('fs'),
     slug = require('slug'),
     Tournament = require("../models/tournament");
-
-  
-
 router.route('/tournaments')
     .get(function(req, res) {
         Tournament.find()
@@ -74,7 +71,6 @@ router.route('/tournament/:tId')
 
 router.route('/createTournament')
     .post(function(req , res){
-
        var form = new formidable.IncomingForm(),
         fields =[],
         tournament = null;
@@ -125,12 +121,10 @@ function saveTournament(req, res ,tournament){
                 console.log('Database error. Could not validate tournament details: ' + tournament.title);
                 res.writeHead(500, {'Content-type': 'application/json'});
                 res.end(JSON.stringify({ error:'Could not validate tournament details: ' + tournament.title}) );
-
             }else if(tournamentFromDB){
                 console.log('Tournament already exist with given title :' + tournament.title);
                 res.writeHead(500, {'Content-type': 'application/json'});
                 res.end(JSON.stringify({ error:'Tournament already exist with given title. Please change your tournament title.'}) );
-
             }else{
                 // save tournament
                 var tournamentModel = new Tournament(),
@@ -170,13 +164,11 @@ function saveTournament(req, res ,tournament){
                         console.log('Database error. Could not save tournament details: ' + tournament.title);
                         res.writeHead(500, {'Content-type': 'application/json'});
                         res.end(JSON.stringify({ error:'Could not save tournament details: ' + tournament.title}) );
-
                     }
                      console.log("tournamentId created :",tournament._id);
                     res.json({ error: null, tournamentId:tournament._id });
 
                 });
-
             }
         });
 
@@ -194,12 +186,10 @@ function saveTournament(req, res ,tournament){
 //                 console.log('Database error. Could not validate tournament details: ' + tournament.title);
 //                 res.writeHead(500, {'Content-type': 'application/json'});
 //                 res.end(JSON.stringify({ error:'Could not validate tournament details: ' + tournament.title}) );
-
 //             }else if(tournament){
 //                 console.log('Tournament already exist with given title :' + tournament.title);
 //                 res.writeHead(500, {'Content-type': 'application/json'});
 //                 res.end(JSON.stringify({ error:'Tournament already exist with given title. Please change your tournament title.'}) );
-
 //             }else{
 //                 isValid = true;
 //             }

@@ -18,8 +18,8 @@
 // var GameManager = require('./gameManager/GameManager.js'),
 var GameManagerClass = require('./gameManager/gameManager.js'),
     GameManager = new GameManagerClass(),
-    TournamentManager = require('./tournamentManager/tournamentManager.js');
-
+    TournamentManager = require('./tournamentManager/tournamentManager.js'),
+    userAnalyticsSave = require('./clickStreamStatistics');
 module.exports = function(server,sessionMiddleware) {
   var io = require('socket.io')(server);
   io.use(function(socket,next){
@@ -76,6 +76,7 @@ module.exports = function(server,sessionMiddleware) {
           if(data.ans =='correct'){
             //increment correct of allplayers
             //decrement unsawered of all players
+            userAnalyticsSave(data,'quiz');
             GameManager.getGamePlayers(data.gameId).forEach(function(player){
               player.client.emit('isCorrect');
             });
@@ -112,6 +113,10 @@ module.exports = function(server,sessionMiddleware) {
 
         client.on( 'gameFinished', function( game ) {
           GameManager.finishGame( game );
+          console.log("----------------------"+util.inspect(game, false, null));
+        //   getUserAnalyticsForGame(client.request.session.user, game.gameId);
+        // getUserAnalyticsForGame(client.request.session.user, game.topicId,'null');
+        // getUserAnalyticsForGame(client.request.session.userId, game.gameId);
         });
 
         client.on('leaveGame', function( gameId ){
@@ -167,6 +172,7 @@ module.exports = function(server,sessionMiddleware) {
 
 
             client.on('confirmAnswer',function( data ){
+                userAnalyticsSave(data,'tournament');
               if(data.ans == 'correct') {
                 var gameManager = TournamentManager.getGameManager( data.tournamentId ),
                     gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
