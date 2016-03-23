@@ -47,9 +47,16 @@ var express = require('express'),
       secret: 'keyboard cat'
   }),
 
+
+
+
 // mongoose.connect('mongodb://quizart.stackroute.in/quizRT3');
 // mongoose.connect('mongodb://172.23.238.253/quizRT3');
 mongoose.connect('mongodb://localhost/quizRT3');
+
+// creating  a global mongo db connection object for storing analytics data.
+// var analyticsDbObj = mongoose.createConnection('mongodb://localhost/analyticsDB');
+
 mongoose.connection.on('error', console.error.bind(console, 'Failed to establish connection to MongoDB@StackRouteHost:PORT/quizRT3'));
 mongoose.connection.on('open', function() {
   console.log('Connected to MongoDB@StackRouteHost:PORT/quizRT3');
@@ -67,11 +74,13 @@ app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
 app.use(express.static('./public'));
 //register routers to route paths
+// app.set('analyticsDbObj',analyticsDbObj);
 
 app.use('/', index);
 app.use('/auth',authenticationHandler);
