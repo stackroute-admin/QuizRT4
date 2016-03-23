@@ -9,6 +9,7 @@
 //   Unless required by applicable law or agreed to in writing, software
 //   distributed under the License is distributed on an "AS IS" BASIS,
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   WITHOUT WARRANTIES OR gameFinished OF ANY KIND, either express or implied.
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 //
@@ -68,6 +69,7 @@ angular.module('quizRT')
             $rootScope.serverErrorMsg = 'User not authenticated.';
             $rootScope.serverErrorStatus = 401;
             $rootScope.serverErrorStatusText = 'User session could not be found. kindly do a fresh login.';
+            $rootScope.serverErrorStatusText = 'd';
             $location.path('/error');
             console.log('Problem maintaining the user session!');
         });
@@ -122,6 +124,11 @@ angular.module('quizRT')
                                     ans: "correct",
                                     gameId: startGameData.gameId,
                                     topicId: startGameData.topicId
+                                    userId: $rootScope.loggedInUser.userId,
+                                    responseTime: $scope.time,
+                                    selectedOption:id,
+                                    questionId : $scope.currentQuestion.questionId,
+                                    gameTime: new Date().toString()
                                 });
                             } else {
                                 $(element.target).addClass('btn-danger');
@@ -131,6 +138,11 @@ angular.module('quizRT')
                                     ans: "wrong",
                                     gameId: startGameData.gameId,
                                     topicId: startGameData.topicId
+                                    userId: $rootScope.loggedInUser.userId,
+                                    responseTime:$scope.time,
+                                    selectedOption:id,
+                                    questionId : $scope.currentQuestion.questionId,
+                                    gameTime: new Date().toString()
                                 });
                             }
                             $scope.isDisabled = true;
@@ -234,7 +246,8 @@ function loadNextQuestion( questions, questionNumber, $scope) {
         "options": options,
         "question": questions[questionNumber].question,
         "image": questions[questionNumber].image,
-        "correctIndex": questions[questionNumber].correctIndex
+        "correctIndex": questions[questionNumber].correctIndex,
+        "questionId" : questions[questionNumber].questionId
     };
     $scope.questionCounter++;
     return obj;

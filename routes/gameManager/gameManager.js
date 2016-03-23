@@ -13,7 +13,6 @@
 //   limitations under the License.
 //
 //	Name of Developers Anil Sawant
-
 var uuid = require('node-uuid'), // used to generate unique game ids
     questionBank = require('./questionBank'),
     LeaderBoard = require('./leaderboard.js'),
@@ -27,7 +26,6 @@ var uuid = require('node-uuid'), // used to generate unique game ids
 */
 var GameManager = function() {
   this.games = new Map(); // holds all the games. Waiting, Live, and Finished
-  console.log("$$$$$$$$$$$$$$"+this.games.topicId);
   this.players = new Map();// to map userId to [gameIds]
   this.topicsWaiting = {}; // holds only the games which are waiting for players. Maps topicId to gameId
 
@@ -186,7 +184,6 @@ var GameManager = function() {
   this.startGame = function( gameId ) {
     var game = this.games.get( gameId ),
         self = this;
-
     questionBank.getQuizQuestions( game.topicId, 5 , function( err, questions ) { // get questions from the questionBank
       if ( err ) {
         console.log('ERROR: Failed to get quiz questions for ' + gameId + '. Cannot start the game. Terminating the game launch.');
