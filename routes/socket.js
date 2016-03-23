@@ -16,11 +16,13 @@
 //                      + Anil Sawant
 
 // var GameManager = require('./gameManager/GameManager.js'),
+var util = require('util');
 var GameManagerClass = require('./gameManager/gameManager.js'),
     GameManager = new GameManagerClass(),
     TournamentManager = require('./tournamentManager/tournamentManager.js');
 //Edited by Wave 5
 var userAnalyticsSave = require('./clickStreamStatistics');
+    // getUserAnalyticsForGame = require('./getAnalyticsData');
 //End
 module.exports = function(server,sessionMiddleware) {
   var io = require('socket.io')(server);
@@ -116,6 +118,7 @@ module.exports = function(server,sessionMiddleware) {
             });
             GameManager.getGamePlayers(gameData.gameId).forEach( function( player, index) {
               player.client.emit('takeScore', {myRank: myRank, userId: client.request.session.user, topperScore:gameTopper.score, topperImage:gameTopper.playerPic });
+              console.log("PPPPPP " +gameData);
             });
           } else {
             console.log('User session does not exist for the user: ' + gameData.userId );
@@ -125,6 +128,12 @@ module.exports = function(server,sessionMiddleware) {
         client.on( 'gameFinished', function( game ) {
 
           GameManager.finishGame( game );
+          console.log("----------------------"+util.inspect(game, false, null));
+        //   getUserAnalyticsForGame(client.request.session.user, game.gameId);
+        // getUserAnalyticsForGame(client.request.session.user, game.topicId,'null');
+
+
+            // getUserAnalyticsForGame(client.request.session.userId, game.gameId);
         });
 
         client.on('leaveGame', function( gameId ){

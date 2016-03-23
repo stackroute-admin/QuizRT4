@@ -13,7 +13,7 @@
 //   limitations under the License.
 //
 //	Name of Developers Anil Sawant
-
+var util = require('util');
 var uuid = require('node-uuid'), // used to generate unique game ids
     questionBank = require('./questionBank'),
     LeaderBoard = require('./leaderboard.js'),

@@ -4,6 +4,7 @@
 var mongoose = require('mongoose'),
     userAnalyticsSchema = mongoose.Schema({
         userId: String,
+        gameId: String,
         tournamentId: String,
         topicId: String,
         questionId: String,
@@ -11,7 +12,6 @@ var mongoose = require('mongoose'),
         isCorrect : Boolean,
         responseTime: Number,
         gameTime: Date
-    }),
-    userAnalytics = mongoose.model('userAnalytics', userAnalyticsSchema);
+    });
 
-module.exports = userAnalytics;
+ module.exports = userAnalyticsSchema;
