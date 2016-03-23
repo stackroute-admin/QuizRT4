@@ -1,0 +1,66 @@
+<!--
+//Copyright {2016} {NIIT Limited, Wipro Limited}
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+//
+//   Name of Developers  Raghav Goel, Kshitij Jain, Lakshay Bansal, Ayush Jain, Saurabh Gupta, Akshay Meher
+//                       + Anil Sawant
+-->
+<link rel="stylesheet" href="css/result.css">
+<div class="container gameBoard" id="main">
+  <div class="msg">
+    <h2>{{msg}}</h2>
+  </div>
+  <div ng-if="gameTopper" class="row" id="gameTopper">
+    <div id="topper" class="col-md-3 col-sm-4 col-xs-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Rank : 1</h3>
+        </div>
+        <div class="panel-body content">
+
+          <a><img src="{{gameTopper.playerPic}}"></a>
+
+        </div>
+        <div class="panel-footer">
+            <p>{{gameTopper.playerName}} : {{gameTopper.score}}</p>
+        </div>
+      </div><!--end panel-->
+    </div>
+  </div>
+  <div class="row">
+    <div id="otherPlayers" ng-if="$index>0" class="col-md-3 col-sm-4 col-xs-6" ng-repeat="player in gameBoard">
+      <div class="panel panel-default " >
+        <div class="panel-heading">
+          <h3 class="panel-title">Rank : {{$index + 1}}</h3>
+        </div>
+        <div class="panel-body content">
+
+          <a><img src="{{player.playerPic}}"></a>
+
+        </div>
+        <div class="panel-footer">
+            <p>{{player.playerName}} : {{player.score}}</p>
+        </div>
+      </div><!--end panel-->
+    </div>
+  </div>
+
+  <!--  show the nextLevel button only when the game played was from a tournament-->
+  <div id="buttonsDiv">
+    <div class="row">
+      <button ng-if="isComingFromTournament" class="btn btn-success" ng-click="nextLevel()">Next level</button>
+      <button class="btn btn-primary" ng-click="goHome()">Home</button>
+    </div>
+  </div>
+</div>

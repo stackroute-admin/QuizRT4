@@ -1,0 +1,82 @@
+.alert {
+  padding: 7px;
+}
+#changePasswordDiv,
+#onlineImageLinkDiv,
+#settingsDiv .alert {
+  display: none;
+}
+#onlineImageLinkDiv {
+  margin-bottom: 5px;
+}
+#settingsDiv {
+  max-width: 500px;
+	padding: 5px;
+	margin: 0 auto;
+}
+#settingsDiv .alert button{
+  margin-top: -3px;
+}
+#settingsDiv h3{
+  border-bottom: 1px solid #999;
+  margin-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+#settingsDiv h5{
+  color: #aaa;
+  border-top: 1px solid #999;
+  margin-top: 20px;
+  padding-top: 8px;
+  cursor: pointer;
+}
+#settingsDiv h6{
+  color: #aaa;
+  cursor: pointer;
+}
+#addProfilePic {
+  margin-bottom: 10px;
+  text-align: center;
+}
+#settingsDiv #profilePic {
+  border: 1px solid #aaa;
+  border-radius: 80px;
+  color: #aaa;
+  cursor: pointer;
+  display: block;
+  height: 64px;
+  margin: 0 auto 7px;
+  text-decoration: none;
+  width: 64px;
+}
+#settingsDiv #profilePic:hover,
+#settingsDiv #profilePic:active {
+  border: 1px solid white;
+  color: white;
+}
+#settingsDiv #profilePic img{
+  border-radius: 80px;
+  height: 64px;
+  width: 64px;
+}
+#settingsDiv #profilePic span{
+  color: inherit;
+  display: block;
+  margin: 12px;
+}
+#settingsDiv .form-control {
+  margin-bottom: 10px;
+}
+#settingsDiv span {
+  color: inherit;;
+  cursor: pointer;
+}
+#settingsDiv span:hover,
+#settingsDiv h6:hover,
+#settingsDiv h5:hover {
+  color: white;
+}
+#userProfileForm {
+  padding-top: 5px;
+  border-top: 1px solid #999;
+}
