@@ -8,14 +8,14 @@ angular.module('quizRT')
                     outerRadius = 100,   //radius
                     color = d3.scale.category20(); //builtin range of colors
                 var dataSet=JSON.parse(attrs.chartData);
-                var vis = d3.select(attrs.displayLoc)
+                console.log(elem[0]);
+                var vis = d3.select(elem[0])
                     .append("svg") //create the SVG element inside the <body>
                     .data([dataSet]) //associate our data with the document
                     .attr("width", canvasWidth) //set the width of the canvas
                     .attr("height", canvasHeight) //set the height of the canvas
                     .append("g") //make a group to hold our pie chart
                     .attr("transform", "translate(" + 1.5*outerRadius + "," + 1.5*outerRadius + ")") // relocate center of pie to 'outerRadius,outerRadius'
-
                 // This will create <path> elements for us using arc data...
                 var arc = d3.svg.arc()
                     .outerRadius(outerRadius);

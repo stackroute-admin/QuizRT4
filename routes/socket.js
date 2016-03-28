@@ -73,12 +73,10 @@ module.exports = function(server,sessionMiddleware) {
 
 
         client.on('confirmAnswer',function(data){
-            // call save on collected  data
           userAnalyticsSave(data,'quiz');
           if(data.ans =='correct'){
             //increment correct of allplayers
             //decrement unsawered of all players
-
             GameManager.getGamePlayers(data.gameId).forEach(function(player){
               player.client.emit('isCorrect');
             });
@@ -173,7 +171,7 @@ module.exports = function(server,sessionMiddleware) {
 
 
             client.on('confirmAnswer',function( data ){
-                userAnalyticsSave(data,'tournament');
+              userAnalyticsSave(data,'tournament');
               if(data.ans == 'correct') {
                 var gameManager = TournamentManager.getGameManager( data.tournamentId ),
                     gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;

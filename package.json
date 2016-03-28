@@ -26,7 +26,9 @@
     "Pratik Sinha <pratik.sinha1@wipro.com>",
     "Venkata Gopichand Maddela <venkata.maddela@wipro.com>",
     "Mukesh Mishra <mukesh.mishra8@wipro.com>",
-    "Sunil Sanjeev Rao Mekala <sunil.mekala@wipro.com>"
+    "Sunil Sanjeev Rao Mekala <sunil.mekala@wipro.com>",
+    "Abhishek Kumar",
+    "Ghulam Rabbani"
   ],
   "dependencies": {
     "async": "^1.5.0",

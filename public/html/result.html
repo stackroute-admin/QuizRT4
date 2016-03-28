@@ -21,7 +21,8 @@
   <div class="msg">
     <h2>{{msg}}</h2>
   </div>
-  <div ng-if="gameTopper" class="row" id="gameTopper">
+  <div class="row">
+  <div ng-if="gameTopper" id="gameTopper">
     <div id="topper" class="col-md-3 col-sm-4 col-xs-6">
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -38,8 +39,10 @@
       </div><!--end panel-->
     </div>
   </div>
-  <div class="row">
-    <div id="otherPlayers" ng-if="$index>0" class="col-md-3 col-sm-4 col-xs-6" ng-repeat="player in gameBoard">
+  <div class="col-md-3 col-sm-4 col-xs-6" game-stat-pie-chart chart-data="{{dataSet}}"></div>
+</div>
+    <div  class="row otherPlayers" ng-if="$index>0" ng-repeat="player in gameBoard">
+      <div class="col-md-3 col-sm-4 col-xs-6">
       <div class="panel panel-default " >
         <div class="panel-heading">
           <h3 class="panel-title">Rank : {{$index + 1}}</h3>
@@ -54,8 +57,8 @@
         </div>
       </div><!--end panel-->
     </div>
+    <div class="col-md-3 col-sm-4 col-xs-6" game-stat-pie-chart chart-data="{{dataSet}}"></div>
   </div>
-
   <!--  show the nextLevel button only when the game played was from a tournament-->
   <div id="buttonsDiv">
     <div class="row">

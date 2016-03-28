@@ -7,10 +7,10 @@
   min-height: 500px;
 }
 .gameBoard #gameTopper #topper {
-  margin: auto !important;
-  float: none !important;
+  /*margin: auto !important;
+  float: none !important;*/
 }
-#otherPlayers {
+.otherPlayers {
   padding: 0 10px;
 }
 .gameBoard .panel-heading {
