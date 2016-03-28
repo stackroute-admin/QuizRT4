@@ -184,7 +184,7 @@ var GameManager = function() {
   this.startGame = function( gameId ) {
     var game = this.games.get( gameId ),
         self = this;
-    questionBank.getQuizQuestions( game.topicId, 5 , function( err, questions ) { // get questions from the questionBank
+    questionBank.getQuizQuestions( game.topicId, 1 , function( err, questions ) { // get questions from the questionBank
       if ( err ) {
         console.log('ERROR: Failed to get quiz questions for ' + gameId + '. Cannot start the game. Terminating the game launch.');
         console.error(err);

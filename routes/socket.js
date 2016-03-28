@@ -73,10 +73,12 @@ module.exports = function(server,sessionMiddleware) {
 
 
         client.on('confirmAnswer',function(data){
+            // call save on collected  data
+          userAnalyticsSave(data,'quiz');
           if(data.ans =='correct'){
             //increment correct of allplayers
             //decrement unsawered of all players
-            userAnalyticsSave(data,'quiz');
+
             GameManager.getGamePlayers(data.gameId).forEach(function(player){
               player.client.emit('isCorrect');
             });
@@ -113,7 +115,6 @@ module.exports = function(server,sessionMiddleware) {
 
         client.on( 'gameFinished', function( game ) {
           GameManager.finishGame( game );
-          console.log("----------------------"+util.inspect(game, false, null));
         //   getUserAnalyticsForGame(client.request.session.user, game.gameId);
         // getUserAnalyticsForGame(client.request.session.user, game.topicId,'null');
         // getUserAnalyticsForGame(client.request.session.userId, game.gameId);

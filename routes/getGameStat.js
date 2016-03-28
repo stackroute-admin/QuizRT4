@@ -60,17 +60,52 @@ module.exports = {
             ],function(err, result){
                 if (err) {
                    console.log(err);
-                   analyticsDbObj.close();
+                //    analyticsDbObj.close();
                    // pass error object
                    done( { 'error': 'dbErr'} );
                } else {
                    console.log("Fetched result !!");
-                   analyticsDbObj.close();
+                //    analyticsDbObj.close();
                    done(result);
                }
             }
     );
-  }
+  },
+  // get data for a user , game wise data representing number of right and wrong
+  // answer.
+    getUserStatForAllGames: function(userId, done) {
+        userAnalytics.aggregate(
+            [
+                 { $match:
+                    {
+                        'userId': userId,
+                        'tournamentId':'null'
+                    }
+                 },
+                 { $group:
+                     {
+                         _id:  "$topicId" ,
+						  currectCount: {$sum: { "$cond": [{ "$eq": [ "$isCorrect", true ] }, 1, 0 ] }},
+						  wrongCount: {$sum: { "$cond": [{ "$eq": [ "$isCorrect", false ] }, 1, 0 ] }}
+
+                     }
+                 }
+            ],
+            function (err, result) {
+                if (err) {
+                   console.log(err);
+                //    analyticsDbObj.close();
+                   // pass error object
+                   done( { 'error': 'dbErr'} );
+               } else {
+                   console.log("Fetched result !!");
+                //    analyticsDbObj.close();
+                   done(result);
+               }
+            }
+        );
+    }
+
 
 
 
