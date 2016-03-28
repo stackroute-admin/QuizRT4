@@ -21,7 +21,8 @@ module.exports = {
                      {
                          _id:  "$topicId" ,
 						  currectCount: {$sum: { "$cond": [{ "$eq": [ "$isCorrect", true ] }, 1, 0 ] }},
-						  wrongCount: {$sum: { "$cond": [{ "$eq": [ "$isCorrect", false ] }, 1, 0 ] }}
+						  wrongCount: {$sum: { "$cond": [{ "$eq": [ "$isCorrect", false ] }, 1, 0 ] }},
+                          totalQuestionCount : {$sum: "$totalQuestionCount" }
 
                      }
                  }
@@ -105,9 +106,5 @@ module.exports = {
             }
         );
     }
-
-
-
-
 
 };

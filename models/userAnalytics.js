@@ -11,7 +11,8 @@ var mongoose = require('mongoose'),
         selectedOptionId : Number,
         isCorrect : Boolean,
         responseTime: Number,
-        gameTime: Date
+        gameTime: Date,
+        totalQuestionCount: Number
     });
 
  module.exports = userAnalyticsSchema;
