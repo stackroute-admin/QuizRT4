@@ -20,12 +20,28 @@ module.exports = {
                  { $group:
                      {
                          _id:  "$topicId" ,
-						  currectCount: {$sum: { "$cond": [{ "$eq": [ "$isCorrect", true ] }, 1, 0 ] }},
+						  correctCount: {$sum: { "$cond": [{ "$eq": [ "$isCorrect", true ] }, 1, 0 ] }},
 						  wrongCount: {$sum: { "$cond": [{ "$eq": [ "$isCorrect", false ] }, 1, 0 ] }},
                           totalQuestionCount : {$sum: "$totalQuestionCount" }
 
                      }
-                 }
+                 },
+                { "$project": {
+                     "correctCount": "$correctCount",
+                     "wrongCount" : "$wrongCount",
+                     "totalQuestionCount" : "$totalQuestionCount",
+                     "skipCount": {  $subtract:
+                                    [
+
+                                        "$totalQuestionCount",
+                                        {
+                                            $add: [ "$correctCount", "$wrongCount" ]
+                                        }
+                                    ]
+                            }
+                    }
+                }
+
             ], function(err, result){
                 if (err) {
                    console.log(err);
