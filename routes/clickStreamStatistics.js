@@ -15,7 +15,8 @@ var userAnalyticsSchema=require('../models/userAnalytics'),
             'responseTime': 10 - Number(data.responseTime),
             'gameTime': data.gameTime,
             'selectedOptionId': Number(data.selectedOption) + 1,
-            'isCorrect': isCorrect
+            'isCorrect': isCorrect,
+            'totalQuestionCount' : data.questionCount
         };
 
     if(type=='tournament') {

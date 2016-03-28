@@ -28,12 +28,13 @@ var GameManager = function() {
   this.games = new Map(); // holds all the games. Waiting, Live, and Finished
   this.players = new Map();// to map userId to [gameIds]
   this.topicsWaiting = {}; // holds only the games which are waiting for players. Maps topicId to gameId
+  this.questionCount = 0;
 
   /**
   ** @param topicId as String, playersNeeded as Number
   ** @return true if the new game was created, otherwise false
   */
-  this.createNewGame = function( topicId, levelId, playersNeeded ) {
+  this.createNewGame = function( topicId, levelId, playersNeeded, questionCount ) {
     var newGame = { // create a newGame, generate a new gameId using uuid and set the game into this.games
       topicId: topicId,
       levelId: levelId,
@@ -41,8 +42,11 @@ var GameManager = function() {
       playersNeeded: playersNeeded ? playersNeeded : 3,
       leaderBoard: [],
       players: [],
-      playersFinished: 0
+      playersFinished: 0,
+      questionCount : questionCount
     }
+
+    // this.games.set( 5, newGame );
     var gameId = uuid.v1(); // generate a unique gameId
     this.games.set( gameId, newGame );// set the game into this.games against the new gameId
     this.topicsWaiting[topicId] = gameId; // save topicId as key and gameId as value to track which topics are waiting for more players to join
@@ -68,7 +72,7 @@ var GameManager = function() {
       }
       return false;
     } else {
-      var gameId = this.createNewGame( topicId, levelId, playersNeeded ); // create a new game
+      var gameId = this.createNewGame( topicId, levelId, playersNeeded, 1 ); // create a new game
       if ( gameId ) { // if the game was created successfully
         var isPlayerAdded = this.addPlayerToGame( gameId, topicId, incomingPlayer );
         if ( isPlayerAdded ) {
@@ -181,10 +185,12 @@ var GameManager = function() {
   ** @param gameId as String
   ** @return true if everything is setup before starting a Game and 'startGame' events are emitted
   */
+
   this.startGame = function( gameId ) {
     var game = this.games.get( gameId ),
         self = this;
-    questionBank.getQuizQuestions( game.topicId, 1 , function( err, questions ) { // get questions from the questionBank
+        // console.log("^^^^^^^^^^^^^^ >> " + game.questionCount);
+    questionBank.getQuizQuestions( game.topicId, game.questionCount , function( err, questions ) { // get questions from the questionBank
       if ( err ) {
         console.log('ERROR: Failed to get quiz questions for ' + gameId + '. Cannot start the game. Terminating the game launch.');
         console.error(err);
