@@ -250,10 +250,7 @@ router.route('/topic/:topicId')
         }
       });
     } else {
-<<<<<<< HEAD
-=======
-        console.log();
->>>>>>> 0de3fbdd2dadafd8b0981fbd9179dce20cc10a63
+
         console.log('User not authenticated. Returning from topicsHandler.');
         res.writeHead(401);
         res.end( JSON.stringify({ error: 'User session does not exist. Kindly do a fresh Login.' }) );

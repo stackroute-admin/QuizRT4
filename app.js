@@ -51,7 +51,7 @@ var express = require('express'),
 
 //mongoose.connect('mongodb://quizart.stackroute.in/quizRT3');
  // mongoose.connect('mongodb://172.23.238.253/quizRT3');
-  }),
+//  }),
 mongoose.connection.on('error', console.error.bind(console, 'Failed to establish connection to MongoDB@StackRouteHost:PORT/quizRT3'));
 mongoose.connection.on('open', function() {
   console.log('Connected to MongoDB@StackRouteHost:PORT/quizRT3');
@@ -93,4 +93,4 @@ app.use('/',confTournamentHandler);
 // server.listen(8080, function() {
 // server.listen(7000, function() {
   console.log('App started for Quiz Play!! Please use ur IP e.g 123.23.123.23:2000');
-});
+//});
