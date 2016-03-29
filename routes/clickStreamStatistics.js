@@ -3,8 +3,10 @@ var userAnalyticsSchema=require('../models/userAnalytics'),
     questionAnalytics=require('../models/questionAnalytics'),
 
     userAnalyticsSave =  function(data,type){
-    var userAnalytics = analyticsDbObj.model('userAnalytics', userAnalyticsSchema);
-    var isCorrect = data.ans == 'correct' ? true : false,
+    var userAnalytics = analyticsDbObj.model('userAnalytics', userAnalyticsSchema),
+        responseTime = data.responseTime === null ? null : 10 - Number(data.responseTime),
+        selectedOptionId = data.selectedOption === null ? null : Number(data.selectedOption) + 1;
+
         analyticsObj =
         {
             'tournamentId': 'null',
@@ -12,14 +14,13 @@ var userAnalyticsSchema=require('../models/userAnalytics'),
             'gameId': data.gameId,
             'questionId': data.questionId,
             'topicId': data.topicId,
-            'responseTime': 10 - Number(data.responseTime),
+            'responseTime': responseTime,
             'gameTime': data.gameTime,
-            'selectedOptionId': Number(data.selectedOption) + 1,
-            'isCorrect': isCorrect,
-            'totalQuestionCount' : data.questionCount
+            'selectedOptionId': selectedOptionId,
+            'responseType': data.ans
         };
 
-    if(type=='tournament') {
+    if(type == 'tournament') {
         analyticsObj.tournamentId=data.tournamentId;
     }
     new userAnalytics(analyticsObj).save(function(err,storeData){

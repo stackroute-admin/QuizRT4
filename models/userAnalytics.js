@@ -9,10 +9,9 @@ var mongoose = require('mongoose'),
         topicId: String,
         questionId: String,
         selectedOptionId : Number,
-        isCorrect : Boolean,
+        responseType : String,
         responseTime: Number,
-        gameTime: Date,
-        totalQuestionCount: Number
+        gameTime: Date
     });
 
  module.exports = userAnalyticsSchema;

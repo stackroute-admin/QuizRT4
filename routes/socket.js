@@ -74,8 +74,8 @@ module.exports = function(server,sessionMiddleware) {
 
         client.on('confirmAnswer',function(data){
             // call save on collected  data
-          var questionCount = GameManager.games.get( data.gameId ).questionCount;
-          data.questionCount = questionCount;
+        //   var questionCount = GameManager.games.get( data.gameId ).questionCount;
+        //   data.questionCount = questionCount;
           userAnalyticsSave(data,'quiz');
 
           if(data.ans =='correct'){
@@ -85,7 +85,7 @@ module.exports = function(server,sessionMiddleware) {
               player.client.emit('isCorrect');
             });
           }
-          else{
+          else if (data.ans =='wrong'){
             //increment wrong of allplayers
             //decrement unsawered of all players
             GameManager.getGamePlayers(data.gameId).forEach(function(player){
@@ -175,9 +175,9 @@ module.exports = function(server,sessionMiddleware) {
 
 
             client.on('confirmAnswer',function( data ){
-                var gm = TournamentManager.getGameManager( data.tournamentId )
-                var questionCount = gm.games.get( data.gameId ).questionCount;
-                data.questionCount = questionCount;
+                // var gm = TournamentManager.getGameManager( data.tournamentId )
+                // var questionCount = gm.games.get( data.gameId ).questionCount;
+                // data.questionCount = questionCount;
                 userAnalyticsSave(data,'tournament');
               if(data.ans == 'correct') {
                 var gameManager = TournamentManager.getGameManager( data.tournamentId ),

@@ -81,6 +81,9 @@ angular.module('quizRT')
             $scope.questionCounter = 0; // reset the questionCounter for each game
             $scope.question = "Starting Game ...";
             $scope.time = 3;
+            // define initial value for skip flag
+            $scope.skipFlag = 'initial';
+
 
             $scope.timeInterval = $interval( function() {
                 $scope.time--;
@@ -110,6 +113,28 @@ angular.module('quizRT')
                         $scope.options = $scope.currentQuestion.options;
                         $scope.questionCounter++;
                         $scope.question = $scope.questionCounter + ". " +$scope.currentQuestion.question;
+
+                        // check if game is in 2nd question and still we see
+                        // skig flag has same initial value
+                        if($scope.questionCounter > 1 && $scope.skipFlag === "initial"){
+                            // call emit for skipped vals
+                            $rootScope.socket.emit('confirmAnswer', $scope.skipData);
+                        }
+                        else if($scope.questionCounter > 1 && $scope.skipFlag != "initial") {
+                            $scope.skipFlag = 'initial';
+                        }
+                        // set data for skip entry
+                        $scope.skipData =  {
+                            ans: "skip",
+                            gameId: startGameData.gameId,
+                            topicId: startGameData.topicId,
+                            userId: $rootScope.loggedInUser.userId,
+                            responseTime: null,
+                            selectedOption:null,
+                            questionId : $scope.currentQuestion.questionId,
+                            gameTime: new Date().toString()
+                        };
+
                         if ($scope.currentQuestion.image != "null")
                             $scope.questionImage = $scope.currentQuestion.image;
                         else {
@@ -120,6 +145,8 @@ angular.module('quizRT')
                             if (id == $scope.currentQuestion.correctIndex) {
                                 $(element.target).addClass('btn-success');
                                 $scope.myscore = $scope.myscore + $scope.time + 10;
+                                $scope.skipFlag = false;
+                                $scope.skipFlag = "modified";
                                 $rootScope.socket.emit('confirmAnswer', {
                                     ans: "correct",
                                     gameId: startGameData.gameId,
@@ -134,6 +161,8 @@ angular.module('quizRT')
                                 $(element.target).addClass('btn-danger');
                                 $('#' + $scope.currentQuestion.correctIndex).addClass('btn-success');
                                 $scope.myscore = $scope.myscore - 5;
+                                $scope.skipFlag = false;
+                                $scope.skipFlag = "modified";
                                 $rootScope.socket.emit('confirmAnswer', {
                                     ans: "wrong",
                                     gameId: startGameData.gameId,
@@ -156,6 +185,11 @@ angular.module('quizRT')
                             });
                         };
                     }
+                }
+                // last time check for skipped question
+                if ( $scope.time === 0  && $scope.skipFlag === 'initial'){
+                    // emit skipped data
+                    $rootScope.socket.emit('confirmAnswer', $scope.skipData);
                 }
 
             }, 1000);// to create 1s timer

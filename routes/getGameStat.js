@@ -20,33 +20,24 @@ module.exports = {
                  { $group:
                      {
                          _id:  "$topicId" ,
-						  correctCount: {$sum: { "$cond": [{ "$eq": [ "$isCorrect", true ] }, 1, 0 ] }},
-						  wrongCount: {$sum: { "$cond": [{ "$eq": [ "$isCorrect", false ] }, 1, 0 ] }},
-                          totalQuestionCount : {$sum: "$totalQuestionCount" }
-
+						  correctCount: {$sum: { "$cond": [{ "$eq": [ "$responseType", 'correct' ] }, 1, 0 ] }},
+						  wrongCount: {$sum: { "$cond": [{ "$eq": [ "$responseType", 'wrong' ] }, 1, 0 ] }},
+                          skipCount: {$sum: { "$cond": [{ "$eq": [ "$responseType", 'skip' ] }, 1, 0 ] }}
                      }
                  },
                 { "$project": {
+                     _id : 0, //excludes the _id field
+                     "topicId" : "$_id",
                      "correctCount": "$correctCount",
                      "wrongCount" : "$wrongCount",
-                     "totalQuestionCount" : "$totalQuestionCount",
-                     "skipCount": {  $subtract:
-                                    [
-
-                                        "$totalQuestionCount",
-                                        {
-                                            $add: [ "$correctCount", "$wrongCount" ]
-                                        }
-                                    ]
-                            }
+                    //  "totalQuestionCount" : "$totalQuestionCount",
+                     "skipCount": "$skipCount"
                     }
                 }
 
             ], function(err, result){
                 if (err) {
                    console.log(err);
-                //    analyticsDbObj.close();
-                   // pass error object
                    done( { 'error': 'dbErr'} );
                } else {
                    console.log("Fetched result !!");
@@ -71,8 +62,15 @@ module.exports = {
                      {
                          _id:  "$topicId" ,
 						  responseTime: {$sum: "$responseTime"}
-
                      }
+                 },
+                 { $project:
+                     {
+                         _id : 0,
+                         "topicId" : "$_id",
+                         "responseTime" : "$responseTime"
+                     }
+
                  }
             ],function(err, result){
                 if (err) {
@@ -95,16 +93,25 @@ module.exports = {
             [
                  { $match:
                     {
-                        'userId': userId,
-                        'tournamentId':'null'
+                        'userId': userId
+                        // 'tournamentId':'null'
                     }
                  },
                  { $group:
                      {
                          _id:  "$topicId" ,
-						  currectCount: {$sum: { "$cond": [{ "$eq": [ "$isCorrect", true ] }, 1, 0 ] }},
-						  wrongCount: {$sum: { "$cond": [{ "$eq": [ "$isCorrect", false ] }, 1, 0 ] }}
-
+						  correctCount: {$sum: { "$cond": [{ "$eq": [ "$responseType", 'correct' ] }, 1, 0 ] }},
+						  wrongCount: {$sum: { "$cond": [{ "$eq": [ "$responseType", 'wrong' ] }, 1, 0 ] }},
+                          skipCount: {$sum: { "$cond": [{ "$eq": [ "$responseType", 'skip' ] }, 1, 0 ] }}
+                     }
+                 },
+                 { "$project": {
+                     _id : 0, //excludes the _id field
+                     "topicId" : "$_id",
+                      "correctCount": "$correctCount",
+                      "wrongCount" : "$wrongCount",
+                     //  "totalQuestionCount" : "$totalQuestionCount",
+                      "skipCount": "$skipCount"
                      }
                  }
             ],

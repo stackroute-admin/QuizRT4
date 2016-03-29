@@ -15,6 +15,7 @@
 //
 //   Name of Developers  Raghav Goel, Kshitij Jain, Lakshay Bansal, Ayush Jain, Saurabh Gupta, Akshay Meher
 //                       + Anil Sawant
+//  + Abhishek Kumar , Ghulam Rabbani
 
 var express = require('express'),
     router = express.Router(),
@@ -25,7 +26,7 @@ router.get('/getCurrentGameStat', function(req, res, next) {
     console.log('Authenticated user: ' + req.session.user);
     if( !(req.session.user == null) ){
       var usr = req.session.user;
-        getGameStatObj.getCurrentGameStat(req.param("userId"),req.param("gameId"),function(result){
+        getGameStatObj.getCurrentGameStat(req.query.userId,req.query.gameId,function(result){
             // check if the returned data has error
               if ('error' in result) {
                 console.log('Database error. Could not load user Analytics.');
@@ -33,9 +34,28 @@ router.get('/getCurrentGameStat', function(req, res, next) {
                 res.end(JSON.stringify({ error:'error fetching data!'}) );
               }
               else {
-                // res.json({ error: null, user:profileData });
-                 res.json(result);
+                var resultArr = [];
+                result.forEach(function(val){
+                    resultArr.push(
+                        {
+                            'legendLabel' : 'Correct',
+                            'magnitude' : val.correctCount,
+                            'TopicId' : val.topicId
+                        },
+                        {
+                            'legendLabel' : 'Wrong',
+                            'magnitude' : val.wrongCount,
+                            'TopicId' : val.topicId
+                        },
+                        {
+                            'legendLabel' : 'Skip',
+                            'magnitude' : val.skipCount,
+                            'TopicId' : val.topicId
+                        }
 
+                    );
+                })
+                 res.json(resultArr);
               }
         });
     }

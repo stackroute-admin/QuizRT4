@@ -72,7 +72,7 @@ var GameManager = function() {
       }
       return false;
     } else {
-      var gameId = this.createNewGame( topicId, levelId, playersNeeded, 1 ); // create a new game
+      var gameId = this.createNewGame( topicId, levelId, playersNeeded, 2 ); // create a new game
       if ( gameId ) { // if the game was created successfully
         var isPlayerAdded = this.addPlayerToGame( gameId, topicId, incomingPlayer );
         if ( isPlayerAdded ) {
@@ -189,7 +189,6 @@ var GameManager = function() {
   this.startGame = function( gameId ) {
     var game = this.games.get( gameId ),
         self = this;
-        // console.log("^^^^^^^^^^^^^^ >> " + game.questionCount);
     questionBank.getQuizQuestions( game.topicId, game.questionCount , function( err, questions ) { // get questions from the questionBank
       if ( err ) {
         console.log('ERROR: Failed to get quiz questions for ' + gameId + '. Cannot start the game. Terminating the game launch.');
