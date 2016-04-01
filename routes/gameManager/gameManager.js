@@ -38,7 +38,7 @@ var GameManager = function() {
       topicId: topicId,
       levelId: levelId,
       state: 'WAITING', // can be 'WAITING', 'LIVE', "FINISHED"
-      playersNeeded: playersNeeded ? playersNeeded : 3,
+      playersNeeded: playersNeeded ? playersNeeded : 1,
       leaderBoard: [],
       players: [],
       playersFinished: 0

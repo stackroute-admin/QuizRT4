@@ -109,6 +109,7 @@ angular.module('quizRT')
                     } else {
                         $scope.currentQuestion = startGameData.questions[$scope.questionCounter];
                         $scope.options = $scope.currentQuestion.options;
+                        console.log($scope.options);
                         $scope.questionCounter++;
                         $scope.question = $scope.questionCounter + ". " +$scope.currentQuestion.question;
                         if ($scope.currentQuestion.image != "null")
@@ -116,48 +117,52 @@ angular.module('quizRT')
                         else {
                             $scope.questionImage = null;
                         }
-                        $scope.time = 15;
+                        $scope.time = 5;
                         $scope.changeColor = function(id, clickEvent) {
-                            $scope.isDisabled = true;
-                            if (id == $scope.currentQuestion.correctIndex ) {
-                                $(clickEvent.target).addClass('btn-success');
-                                $scope.myscore = $scope.myscore + $scope.time + 10;
-                                $rootScope.tournamentSocket.emit('confirmAnswer', {
-                                    ans: "correct",
-                                    gameId: startGameData.gameId,
-                                    tournamentId: $scope.tournamentId,
-                                    topicId: startGameData.topicId,
-                                    userId: $rootScope.loggedInUser.userId,
-                                    responseTime: $scope.time,
-                                    selectedOption:id,
-                                    questionId : $scope.currentQuestion.questionId,
-                                    gameTime: new Date().toString()
-                                });
-                            } else {
-                                $(clickEvent.target).addClass('btn-danger');
-                                $('#' + $scope.currentQuestion.correctIndex).addClass('btn-success');
-                                $scope.myscore = $scope.myscore - 5;
-                                $rootScope.tournamentSocket.emit('confirmAnswer', {
-                                    ans: "wrong",
-                                    gameId: startGameData.gameId,
-                                    tournamentId: $scope.tournamentId,
-                                    topicId: startGameData.topicId,
-                                    userId: $rootScope.loggedInUser.userId,
-                                    responseTime: $scope.time,
-                                    selectedOption:id,
-                                    questionId : $scope.currentQuestion.questionId,
-                                    gameTime: new Date().toString()
-                                });
-                            }
-                            $rootScope.tournamentSocket.emit('updateStatus', {
-                                gameId: startGameData.gameId,
-                                tournamentId: $scope.tournamentId,
-                                topicId: startGameData.topicId,
-                                userId: $rootScope.loggedInUser.userId,
-                                playerScore: $scope.myscore,
-                                playerName: $rootScope.loggedInUser.name,
-                                playerPic: $rootScope.loggedInUser.imageLink
-                            });
+                          $scope.isDisabled = true;
+
+                          console.log("Inside Change Color -  ClickEventTarget",clickEvent.target);
+                          $(clickEvent.target).addClass('selectedOptionTournament');
+                          $('#'+$scope.currentQuestion.correctIndex).addClass('btn-success');
+                          var obj = {
+                            gameId: startGameData.gameId,
+                            topicId: startGameData.topicId,
+                            selectedId:id,
+                            tournamentId: $scope.tournamentId,
+                            questionId : $scope.currentQuestion.questionId,
+                            // selectedElm:element,
+                            correctIndex:$scope.currentQuestion.correctIndex,
+                            // myScore:$scope.myscore,
+                            responseTime:$scope.time,
+                            userId:$rootScope.loggedInUser.userId,
+                            gameTime:new Date().toString()
+                          };
+                          console.log(obj);
+                          $rootScope.tournamentSocket.emit('confirmAnswer', {
+
+                              gameId: startGameData.gameId,
+                              topicId: startGameData.topicId,
+                              selectedId:id,
+                              tournamentId: $scope.tournamentId,
+                              questionId : $scope.currentQuestion.questionId,
+                              // selectedElm:element,
+                              correctIndex:$scope.currentQuestion.correctIndex,
+                              // myScore:$scope.myscore,
+                              responseTime:$scope.time,
+                              userId:$rootScope.loggedInUser.userId,
+                              gameTime:new Date().toString()
+                          });
+
+
+                      $rootScope.tournamentSocket.emit('updateStatus', {
+
+                          gameId: startGameData.gameId,
+                          topicId: startGameData.topicId,
+                          userId: $rootScope.loggedInUser.userId,
+                          tournamentId: $scope.tournamentId,
+                          playerName: $rootScope.loggedInUser.name,
+                          playerPic: $rootScope.loggedInUser.imageLink
+                      });
                         };
                     }
                 }
@@ -168,6 +173,23 @@ angular.module('quizRT')
             $scope.question = 'Selected topic does not have any questions in our QuestionBank :(';
           }
         });
+
+        $rootScope.tournamentSocket.on('highLightOption', function(data) {
+          $scope.myscore=data.myScore;
+          console.log('hello my score is......'+$scope.myscore);
+          if(data.correct){
+            console.log('hello');
+            // $(data.elem.target).addClass('btn-success');
+            $('.selectedOptionTournament').addClass('btn-success');
+          }
+          else{
+              console.log('hello');
+            // $(data.elem.target).addClass('btn-danger');
+
+            $('.selectedOptionTournament').addClass('btn-danger');
+          }
+        });
+
         $scope.leaveGame = function() {
           $rootScope.tournamentSocket.emit('leaveGame', {userId: $rootScope.loggedInUser.userId, tournamentId: $scope.tournamentId, gameId: $scope.gameId}, function( leaveData ) {
             if ( !leaveData.error ) {

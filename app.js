@@ -47,7 +47,7 @@ var express = require('express'),
       },
       secret: 'keyboard cat'
     });
-    mongoose.connect('mongodb://localhost/quizRT4');
+    mongoose.connect('mongodb://localhost/quizRT3');
 
 //mongoose.connect('mongodb://quizart.stackroute.in/quizRT3');
  // mongoose.connect('mongodb://172.23.238.253/quizRT3');
@@ -91,6 +91,6 @@ app.use('/tournamentHandler', tournamentHandler);
 app.use('/',confTournamentHandler);
 // server.listen(8080, function() {
 // server.listen(8080, function() {
-var listener = server.listen(3000, function() {
+var listener = server.listen(8080, function() {
   console.log('App started for Quiz Play!! Please use ur IP e.g 123.23.123.23:'+listener.address().port);
 });

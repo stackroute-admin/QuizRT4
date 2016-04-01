@@ -21,6 +21,7 @@ var TournamentManager = function() {
   this.managePlayer = function( playerData, gamePlayer ) {
     if ( this.tournaments.has( playerData.tournamentId ) ) {
       var gameManager = this.tournaments.get( playerData.tournamentId );
+      playerData.playersNeeded = 2;
       var addedSuccessfully = gameManager.managePlayer( playerData.topicId, playerData.levelId, playerData.playersNeeded, gamePlayer );
       if ( addedSuccessfully ) {
         if ( this.playerTournaments.has( gamePlayer.userId )) {
@@ -52,7 +53,9 @@ var TournamentManager = function() {
     }
   };
   this.getGameManager = function( tournamentId ) {
-    return this.tournaments.get( tournamentId );
+    console.log("-----------------------------------------------------------------------------------"+tournamentId);
+    console.log(this.tournaments.get(tournamentId));
+    return this.tournaments.get(tournamentId);
   };
   this.getPlayerTournaments = function( userId ) {
     return this.playerTournaments.get( userId );

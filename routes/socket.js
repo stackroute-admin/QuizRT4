@@ -18,8 +18,8 @@
 // var GameManager = require('./gameManager/GameManager.js'),
 var GameManagerClass = require('./gameManager/gameManager.js'),
     GameManager = new GameManagerClass(),
-    TournamentManager = require('./tournamentManager/tournamentManager.js'),
-    userAnalyticsSave = require('./clickStreamStatistics');
+    TournamentManager = require('./tournamentManager/tournamentManager.js');
+
 module.exports = function(server,sessionMiddleware) {
   var io = require('socket.io')(server);
   io.use(function(socket,next){
@@ -57,7 +57,10 @@ module.exports = function(server,sessionMiddleware) {
               userId: playerData.userId,
               playerName: playerData.playerName,
               playerPic: playerData.playerPic,
-              client: client
+              client: client,
+              score: 0,
+              timer: 10
+
             };
 
             var addedSuccessfully = GameManager.managePlayer( playerData.topicId, playerData.levelId, playerData.playersPerMatch, gamePlayer ); // add the player against the topicId.
@@ -73,10 +76,24 @@ module.exports = function(server,sessionMiddleware) {
 
 
         client.on('confirmAnswer',function(data){
-          if(data.ans =='correct'){
+          console.log(new Date());
+          console.log("Invookeddddddddd");
+          console.log("Invoking Confirm Answer",data.selectedId);
+          console.log(data.correctIndex);
+          if (data.selectedId == data.correctIndex){
+            // console.log();
             //increment correct of allplayers
             //decrement unsawered of all players
-            userAnalyticsSave(data,'quiz');
+            GameManager.getGamePlayers(data.gameId).forEach( function( player, index) {
+
+              if(player.userId==data.userId){
+                console.log("insude if getGame...................................");
+                player.score+=data.scopeTime+10;
+                console.log("score is..................."+player.score);
+                player.client.emit('highLightOption',{correct:true,myScore:player.score,correctInd:data.correctIndex});
+              }
+
+            });
             GameManager.getGamePlayers(data.gameId).forEach(function(player){
               player.client.emit('isCorrect');
             });
@@ -84,6 +101,13 @@ module.exports = function(server,sessionMiddleware) {
           else{
             //increment wrong of allplayers
             //decrement unsawered of all players
+            GameManager.getGamePlayers(data.gameId).forEach(function( player, index) {
+              if(player.userId==data.userId){
+                player.score-=5;
+                player.client.emit('highLightOption',{correct:false,myScore:player.score});
+              }
+
+            });
             GameManager.getGamePlayers(data.gameId).forEach(function(player){
               player.client.emit('isWrong');
             });
@@ -91,6 +115,15 @@ module.exports = function(server,sessionMiddleware) {
         });
 
         client.on('updateStatus',function( gameData ){
+          console.log("-----------------------"+new Date());
+          console.log("Update Status Got Invvoked");
+          GameManager.getGamePlayers(gameData.gameId).forEach( function( player, index) {
+            if(player.userId==gameData.userId){
+              console.log("updated game player.score......"+player.score);
+              gameData.playerScore=player.score;
+              console.log("updated game player score......"+gameData.playerScore);
+            }
+          });
           if ( client.request.session && gameData.userId == client.request.session.user ) {
             GameManager.updateScore( gameData.gameId, gameData.userId, gameData.playerScore );
 
@@ -113,10 +146,6 @@ module.exports = function(server,sessionMiddleware) {
 
         client.on( 'gameFinished', function( game ) {
           GameManager.finishGame( game );
-          console.log("----------------------"+util.inspect(game, false, null));
-        //   getUserAnalyticsForGame(client.request.session.user, game.gameId);
-        // getUserAnalyticsForGame(client.request.session.user, game.topicId,'null');
-        // getUserAnalyticsForGame(client.request.session.userId, game.gameId);
         });
 
         client.on('leaveGame', function( gameId ){
@@ -156,6 +185,7 @@ module.exports = function(server,sessionMiddleware) {
                   userId: playerData.userId,
                   playerName: playerData.playerName,
                   playerPic: playerData.playerPic,
+                  score:0,
                   client: client
                 };
 
@@ -172,12 +202,22 @@ module.exports = function(server,sessionMiddleware) {
 
 
             client.on('confirmAnswer',function( data ){
-                userAnalyticsSave(data,'tournament');
-              if(data.ans == 'correct') {
+              console.log("Printingg Data Blahhhhh",data);
+              if(data.selectedId == data.correctIndex) {
                 var gameManager = TournamentManager.getGameManager( data.tournamentId ),
                     gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
+                  gamePlayers.forEach( function( player, index) {
+                    console.log("------------------------   ------------------------------------   ------------------------------------"+player.userId+" "+player.score);
+                      if(player.userId==data.userId){
+                        console.log("inside if getGameTournament...................................");
+                        player.score+=data.responseTime+10;
+                        console.log("tournament score is..................."+player.score);
+                        player.client.emit('highLightOption',{correct:true,myScore:player.score,correctInd:data.correctIndex});
+                      }
+
+                    });
                 if ( gamePlayers && gamePlayers.length ) {
-                  gamePlayers.forEach( function(player) {
+                  gamePlayers.forEach( function(player, index) {
                     player.client.emit('isCorrect');
                   });
                 } else {
@@ -185,7 +225,16 @@ module.exports = function(server,sessionMiddleware) {
                 }
               } else {
                 var gameManager = TournamentManager.getGameManager( data.tournamentId ),
-                    gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
+
+                     gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
+                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"+gamePlayers);
+                    gamePlayers.forEach(function( player, index) {
+                      if(player.userId==data.userId){
+                        player.score-=5;
+                        player.client.emit('highLightOption',{correct:false,myScore:player.score});
+                      }
+
+                    });
                 if ( gamePlayers && gamePlayers.length ) {
                   gamePlayers.forEach( function(player) {
                     player.client.emit('isWrong');
@@ -199,6 +248,12 @@ module.exports = function(server,sessionMiddleware) {
             client.on('updateStatus',function( gameData ){
               var gameManager = TournamentManager.getGameManager( gameData.tournamentId ),
                   gamePlayers = gameManager ? gameManager.getGamePlayers( gameData.gameId ) : null ;
+                  gamePlayers.forEach(function( player, index) {
+                    if(player.userId==gameData.userId){
+                      gameData.playerScore=player.score;
+                    }
+
+                  });
               if ( gameManager ) {
                 gameManager.updateScore( gameData.gameId, gameData.userId, gameData.playerScore );
                 var intermediateGameBoard = gameManager.getLeaderBoard( gameData.gameId ),
