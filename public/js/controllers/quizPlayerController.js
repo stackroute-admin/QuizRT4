@@ -137,7 +137,7 @@ angular.module('quizRT')
                                 $rootScope.socket.emit('confirmAnswer', {
                                     ans: "wrong",
                                     gameId: startGameData.gameId,
-                                    topicId: startGameData.topicId
+                                    topicId: startGameData.topicId,
                                     userId: $rootScope.loggedInUser.userId,
                                     responseTime:$scope.time,
                                     selectedOption:id,

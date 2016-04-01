@@ -101,9 +101,9 @@ angular.module('quizRT', ['ngRoute', 'ngCookies'])
     .factory('socket', function ($rootScope) {
 
       return function($rootScope, type) {
-        // var socket = io.connect('http://192.168.0.103:8082' + type, {'forceNew':true } );
-        var socket = io.connect('http://172.23.238.176:8082' + type, {'forceNew':true } );
-        // var socket = io.connect('http://quizart.stackroute.in:2000' + type, {'forceNew':true } );
+       var socket = io.connect('http://127.0.0.1:3000' + type, {'forceNew':true } );
+      //  var socket = io.connect('http://172.23.238.176:8082' + type, {'forceNew':true } );
+        //var socket = io.connect('http://quizart.stackroute.in:2000' + type, {'forceNew':true } );
         console.log('Socket initialized for ' + type);
 
         return {
@@ -259,6 +259,10 @@ angular.module('quizRT', ['ngRoute', 'ngCookies'])
         })
         .when('/createTournament' , {
           'templateUrl': 'html/tournamentCreation.html',
+          'controller': 'tournamentCreationController'
+        })
+        .when('/createConfTournament' , {
+          'templateUrl': 'html/createConfTournament.html',
           'controller': 'tournamentCreationController'
         })
         .otherwise({

@@ -40,7 +40,9 @@ var mongoose = require('mongoose'),
       topics: [{
           levelId:String,
           topicId:{type: String, ref: 'Topic'},
-          games:[{type: String, ref: 'Game'}]
+          games:[{type: String, ref: 'Game'}],
+          isRandom: Boolean,
+          difficultyLevel:Number
        }],
        registration : {
         startDate : {type: Date},
