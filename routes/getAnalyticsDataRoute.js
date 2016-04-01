@@ -87,9 +87,9 @@ router.get('/getCurrentGameStat', function(req, res, next) {
                  result.forEach(function(val){
                      resultArr.push(
                          {
-                             'legendLabelX' : 'ResponseTime',
-                             'legendLabelY' : 'QuestionNumber',
-                             'magnitude' : val.responseTime,
+                             'legendLabel-X' : 'Question Number',
+                             'legendLabel-Y' : 'Response Time',
+                             'responseTime' : val.responseTime,
                              'questionNumber' : val.questionNumber
                          }
                      );
