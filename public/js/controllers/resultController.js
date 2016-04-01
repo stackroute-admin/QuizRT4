@@ -16,13 +16,21 @@
 //												+ Anil Sawant
 
 angular.module('quizRT')
-	.controller('resultController', function( $scope, $rootScope, $route, $location, $timeout) {
-		$scope.dataSet = [
-            {"legendLabel":"Correct", "magnitude":50},
-            {"legendLabel":"Wrong", "magnitude":20},
-            {"legendLabel":"UnSolved", "magnitude":30}
-
-    ];
+	.controller('resultController', function( $scope, $rootScope, $route, $location, $timeout,$http) {
+    $scope.currentGameData=function(userId){
+			$http({
+			method: 'GET',
+			url: '/analyticsDataHandler/getCurrentGameStat',
+			params:{userId:userId,gameId:$scope.gameId}
+		}).then(function successCallback(response) {
+				// $scope.chartGameData.push(response.data[0]);
+				$scope.gameTopper.data=[response.data[0],response.data[1],response.data[2]];
+				$scope.gameTopper.load=true;
+				//console.log(response.data);
+		}, function errorCallback(response) {
+				console.log('server response with an error status for currentGameData');
+	});
+	};
 		$scope.gameId = $route.current.params.gameId;
 		if ( !$rootScope.recentGames || !$rootScope.recentGames[$scope.gameId] ) {
 			$location.path( '/404');
@@ -47,7 +55,25 @@ angular.module('quizRT')
 					if ( $rootScope.recentGames[$scope.gameId].gameBoard ) {
 						$scope.gameTopper = $rootScope.recentGames[$scope.gameId].gameBoard[0];
 					}
-					$scope.gameBoard = $rootScope.recentGames[$scope.gameId].gameBoard; // show the results
+					$scope.gameBoard = $rootScope.recentGames[$scope.gameId].gameBoard;
+					$scope.gameBoard.forEach(function(datum) {
+						$http({
+							method: 'GET',
+							url: '/analyticsDataHandler/getCurrentGameStat',
+							params:{userId:datum.userId,gameId:$scope.gameId}
+						})
+						.then(function successCallback(response) {
+    				// $scope.chartGameData.push(response.data[0]);
+							datum.data = [response.data[0],response.data[1],response.data[2]];
+							datum.load=true;
+  					},
+						function errorCallback(response) {
+	    				console.log('server response with an error status for currentGameData');
+  					});
+					});
+					console.log("Gameboard",$scope.gameBoard.length);
+					console.log($scope.gameBoard);
+					 // show the results
 					$scope.lastGameName = $rootScope.recentGames[$scope.gameId].tournamentId ? $rootScope.recentGames[$scope.gameId].tournamentId : $rootScope.recentGames[$scope.gameId].topicName;
 					$scope.msg = 'Result of your last ' + $scope.lastGameName + ' quiz.'; // display the name of the topic played
 
@@ -62,7 +88,6 @@ angular.module('quizRT')
 				}
 			};
 		}
-
 		$scope.$on( '$routeChangeStart', function(args) {
 			$rootScope.playGame = {}; // reset the playGame object so that new game can be mapped to it
 		});

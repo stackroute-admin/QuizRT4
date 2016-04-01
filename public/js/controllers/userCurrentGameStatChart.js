@@ -1,17 +1,37 @@
 angular.module('quizRT')
     .directive('gameStatPieChart', function(){
         return{
+            replace:true,
             restrict:'EA',
             link: function(scope, elem, attrs){
                 var canvasWidth = 300, //width
                     canvasHeight = 300,   //height
-                    outerRadius = 100,   //radius
-                    color = d3.scale.category20(); //builtin range of colors
+                    outerRadius = 100;   //radius
                 var dataSet=JSON.parse(attrs.chartData);
+                var filterDataSet=[];
+                var color=[];
+                var len=dataSet.length;
+                for (i=0;i<len;i++){
+                  if(dataSet[i]["magnitude"]!=0){
+                    if (dataSet[i]["legendLabel"]=="Correct")
+                      color.push("#0F802D");
+                    else if(dataSet[i]["legendLabel"]=="Wrong")
+                        color.push("#DE0F0F");
+                    else
+                        color.push("#009688");
+
+                    filterDataSet.push(dataSet[i]);
+                  }
+                }
+                console.log(filterDataSet);
                 console.log(elem[0]);
                 var vis = d3.select(elem[0])
+                    // .classed("svg-container", true)
                     .append("svg") //create the SVG element inside the <body>
-                    .data([dataSet]) //associate our data with the document
+                    // .attr("preserveAspectRatio", "xMinYMin meet")
+                    // .attr("viewBox", "0 0"+" "+canvasWidth+" "+canvasHeight)
+                    .classed("svg-content-responsive", true)
+                    .data([filterDataSet]) //associate our data with the document
                     .attr("width", canvasWidth) //set the width of the canvas
                     .attr("height", canvasHeight) //set the height of the canvas
                     .append("g") //make a group to hold our pie chart
@@ -21,7 +41,7 @@ angular.module('quizRT')
                     .outerRadius(outerRadius);
 
                 var pie = d3.layout.pie() //this will create arc data for us given a list of values
-                    .value(function(d) { return d.magnitude; }) // Binding each value to the pie
+                    .value(function(d) { return d.magnitude.toFixed(2); }) // Binding each value to the pie
                     .sort( function(d) { return null; } );
 
                 // Select all <g> elements with class slice (there aren't any yet)
@@ -39,7 +59,7 @@ angular.module('quizRT')
 
                 arcs.append("path")
                     //set the color for each slice to be chosen from the color function defined above
-                    .attr("fill", function(d, i) { return color(i); } )
+                    .attr("fill", function(d, i) { return color[i]; } )
                     //this creates the actual SVG path using the associated data (pie) with the arc drawing function
                     .attr("d", arc);
 
@@ -52,9 +72,9 @@ angular.module('quizRT')
                         return "translate(" + arc.centroid(d) + ")";
                     })
                     .attr("text-anchor", "middle") //center the text on it's origin
-                    .style("fill", "Purple")
+                    .style("fill", "white")
                     .style("font", "bold 12px Arial")
-                    .text(function(d, i) { return dataSet[i].legendLabel; }); //get the label from our original data array
+                    .text(function(d, i) { return "%" + filterDataSet[i].legendLabel; }); //get the label from our original data array
 
                 // Add a magnitude value to the larger arcs, translated to the arc centroid and rotated.
                 arcs.filter(function(d) { return d.endAngle - d.startAngle > .2; }).append("svg:text")
@@ -69,7 +89,7 @@ angular.module('quizRT')
                     })
                     .style("fill", "White")
                     .style("font", "bold 12px Arial")
-                    .text(function(d) { return d.data.magnitude; });
+                    .text(function(d) { return d.data.magnitude.toFixed(2); });
 
                 // Computes the angle of an arc, converting from radians to degrees.
                 function angle(d) {
