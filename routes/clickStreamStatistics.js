@@ -17,6 +17,7 @@ var userAnalyticsSchema=require('../models/userAnalytics'),
             'responseTime': responseTime,
             'gameTime': data.gameTime,
             'selectedOptionId': selectedOptionId,
+            'questionNumber': data.questionNumber,
             'responseType': data.ans
         };
 

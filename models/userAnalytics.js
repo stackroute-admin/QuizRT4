@@ -11,6 +11,7 @@ var mongoose = require('mongoose'),
         selectedOptionId : Number,
         responseType : String,
         responseTime: Number,
+        questionNumber : Number,
         gameTime: Date
     });
 

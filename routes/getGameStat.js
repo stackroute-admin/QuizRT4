@@ -3,7 +3,10 @@
 //  require model and db conf file to analytics db
 var userAnalyticsSchema = require('../models/userAnalytics'),
     analyticsDbObj = require('./analyticsDbConObj'),
-    userAnalytics = analyticsDbObj.model('userAnalytics', userAnalyticsSchema);
+    userAnalytics = analyticsDbObj.model('userAnalytics', userAnalyticsSchema),
+    Profile = require("../models/profile");
+    // var mongoose = require('mongoose');
+    // mongoose.connect('mongodb://localhost/quizRT3');
 
 module.exports = {
     // function to return game stat for a given game and a user
@@ -30,7 +33,6 @@ module.exports = {
                      "topicId" : "$_id",
                      "correctCount": "$correctCount",
                      "wrongCount" : "$wrongCount",
-                    //  "totalQuestionCount" : "$totalQuestionCount",
                      "skipCount": "$skipCount"
                     }
                 }
@@ -47,15 +49,15 @@ module.exports = {
             });
   }, // end of function getCurrentGameStat
 
-  getAnsStat: function(userId, gameId, isCorrect, done) {
+  getAnsStat: function(userId, gameId, responseType, done) {
     userAnalytics.aggregate(
             [
                  { $match:
                     {
                         'userId': userId,
                         'tournamentId':'null',
-						gameId: gameId,
-						'isCorrect': isCorrect
+						'gameId': gameId,
+						'responseType': responseType
                     }
                  },
                  { $group:
@@ -75,12 +77,49 @@ module.exports = {
             ],function(err, result){
                 if (err) {
                    console.log(err);
-                //    analyticsDbObj.close();
-                   // pass error object
                    done( { 'error': 'dbErr'} );
                } else {
                    console.log("Fetched result !!");
-                //    analyticsDbObj.close();
+                   done(result);
+               }
+            }
+    );
+  },
+
+  getAnsStatForUser: function(userId, gameId, responseType, done) {
+    userAnalytics.aggregate(
+            [
+                 { $match:
+                    {
+                        'userId': userId,
+                        'tournamentId':'null',
+						'gameId': gameId,
+						'responseType': responseType
+                    }
+                 },
+                //  { $group:
+                //      {
+                //          _id:  "$topicId" ,
+				// 		  responseTime: {$sum: "$responseTime"}
+                //      }
+                //  },
+                 { $project:
+                     {
+                         _id : 0,
+                         "topicId" : "$topicId",
+                         "questionNumber" : "$questionNumber",
+                         "responseTime" : "$responseTime",
+                         "responseType" :"$responseType"
+
+                     }
+
+                 }
+            ],function(err, result){
+                if (err) {
+                   console.log(err);
+                   done( { 'error': 'dbErr'} );
+               } else {
+                   console.log("Fetched result !!");
                    done(result);
                }
             }
@@ -110,7 +149,6 @@ module.exports = {
                      "topicId" : "$_id",
                       "correctCount": "$correctCount",
                       "wrongCount" : "$wrongCount",
-                     //  "totalQuestionCount" : "$totalQuestionCount",
                       "skipCount": "$skipCount"
                      }
                  }
@@ -118,16 +156,35 @@ module.exports = {
             function (err, result) {
                 if (err) {
                    console.log(err);
-                //    analyticsDbObj.close();
-                   // pass error object
                    done( { 'error': 'dbErr'} );
                } else {
                    console.log("Fetched result !!");
-                //    analyticsDbObj.close();
                    done(result);
                }
             }
         );
+    },
+
+    //  Get win count ascending for all the user presnt in db
+    getAllUsersWinStat: function(done) {
+        Profile.find(
+                        {} ,
+                        {
+                            _id : 0,
+                            userId : 1,
+                            wins : 1
+                        },
+                        function (err, result) {
+                            if (err) {
+                               console.log(err);
+                               done( { 'error': 'dbErr'} );
+                           } else {
+                               console.log("Fetched resultWW !!");
+                               done(result);
+                           }
+                        }
+                    ).sort({ wins : -1 });  // sort ascending
     }
+
 
 };

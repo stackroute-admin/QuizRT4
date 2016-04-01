@@ -14,7 +14,7 @@ var userAnalytics=require('../models/userAnalytics'),
                  },
                  { $group:
                      {
-                         _id: "$isCorrect",
+                         _id: "$responseType",
                          total: { $sum: "$responseTime" }
                      }
                  },
@@ -29,10 +29,10 @@ var userAnalytics=require('../models/userAnalytics'),
                         // console.log(userData);
                         console.log("I am here fetching data");
                         userData.forEach(function(res){
-                            if ( res._id === true ){
+                            if ( res._id === 'correct' ){
                                 { resObj['correctAns'] = res.total };
                             }
-                            else {
+                            else if(res._id === 'wrong') {
                                 { resObj['wrongAns'] = res.total };
                             }
 

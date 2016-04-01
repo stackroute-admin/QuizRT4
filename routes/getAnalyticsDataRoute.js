@@ -36,20 +36,21 @@ router.get('/getCurrentGameStat', function(req, res, next) {
               else {
                 var resultArr = [];
                 result.forEach(function(val){
+                    var totalCount = val.correctCount + val.wrongCount + val.skipCount;
                     resultArr.push(
                         {
                             'legendLabel' : 'Correct',
-                            'magnitude' : val.correctCount,
+                            'magnitude' : (val.correctCount*100)/totalCount,
                             'TopicId' : val.topicId
                         },
                         {
                             'legendLabel' : 'Wrong',
-                            'magnitude' : val.wrongCount,
+                            'magnitude' : (val.wrongCount*100)/totalCount,
                             'TopicId' : val.topicId
                         },
                         {
                             'legendLabel' : 'Skip',
-                            'magnitude' : val.skipCount,
+                            'magnitude' : (val.skipCount*100)/totalCount,
                             'TopicId' : val.topicId
                         }
 
@@ -65,5 +66,43 @@ router.get('/getCurrentGameStat', function(req, res, next) {
     res.end(JSON.stringify({ error: 'Failed to get user session. Kindly do a fresh Login.' }) );
   }
  });
+
+
+
+
+ router.get('/getAnsStatForUser', function(req, res, next) {
+   if ( req.session && req.session.user ) {
+     console.log('Authenticated user: ' + req.session.user);
+     if( !(req.session.user == null) ){
+       var usr = req.session.user;
+         getGameStatObj.getAnsStatForUser(req.query.userId,req.query.gameId,req.query.responseType, function(result){
+             // check if the returned data has error
+               if ('error' in result) {
+                 console.log('Database error. Could not load user Analytics.');
+                 res.writeHead(500, {'Content-type': 'application/json'});
+                 res.end(JSON.stringify({ error:'error fetching data!'}) );
+               }
+               else {
+                 var resultArr = [];
+                 result.forEach(function(val){
+                     resultArr.push(
+                         {
+                             'legendLabelX' : 'ResponseTime',
+                             'legendLabelY' : 'QuestionNumber',
+                             'magnitude' : val.responseTime,
+                             'questionNumber' : val.questionNumber
+                         }
+                     );
+                 })
+                  res.json(resultArr);
+               }
+         });
+     }
+   } else {
+     console.log('User not authenticated. Returning.');
+     res.writeHead(401);
+     res.end(JSON.stringify({ error: 'Failed to get user session. Kindly do a fresh Login.' }) );
+   }
+  });
 
 module.exports = router;

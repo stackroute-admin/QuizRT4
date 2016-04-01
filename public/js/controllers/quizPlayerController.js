@@ -132,6 +132,7 @@ angular.module('quizRT')
                             responseTime: null,
                             selectedOption:null,
                             questionId : $scope.currentQuestion.questionId,
+                            questionNumber : $scope.questionCounter,
                             gameTime: new Date().toString()
                         };
 
@@ -155,6 +156,7 @@ angular.module('quizRT')
                                     responseTime: $scope.time,
                                     selectedOption:id,
                                     questionId : $scope.currentQuestion.questionId,
+                                    questionNumber : $scope.questionCounter,
                                     gameTime: new Date().toString()
                                 });
                             } else {
@@ -171,6 +173,7 @@ angular.module('quizRT')
                                     responseTime:$scope.time,
                                     selectedOption:id,
                                     questionId : $scope.currentQuestion.questionId,
+                                    questionNumber : $scope.questionCounter,
                                     gameTime: new Date().toString()
                                 });
                             }

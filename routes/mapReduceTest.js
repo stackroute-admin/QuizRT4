@@ -17,7 +17,7 @@ o.map = function () {
                        var value = {
                            responseTime : this.responseTime,
                            count :1,
-                           isCorrect : this.isCorrect
+                           responseType : this.responseType
                        }
 
                         emit(key, value);
@@ -39,10 +39,10 @@ o.reduce = function (key, values ) {
         values.forEach( function(value) {
                               reducedObject.totalResponseTime += value.responseTime;
                               reducedObject.numOfQuesAttempted += value.count;
-                              if ( value.isCorrect == true ){
+                              if ( value.responseType == 'correct' ){
                                   reducedObject.correctResponseCount += 1;
                               }
-                              else {
+                              else if ( value.responseType == 'wrong' ) {
                                   reducedObject.wrongResponseCount += 1;
                               }
                         }
