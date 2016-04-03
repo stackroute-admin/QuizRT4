@@ -183,8 +183,9 @@ function saveTournament(req, res, tournament) {
           var topic = {};
           topic['levelId'] = tournamentId + '_' + (cnt + 1);
           topic['topicId'] = slug(levelsTopicArray[cnt].topicId);
-          topic['isRandom'] = levelsTopicArray[cnt].isRandom
-          topic['difficultyLevel'] = levelsTopicArray[cnt].difficultyLevel
+          topic['isRandom'] = levelsTopicArray[cnt].isRandom;
+          topic['difficultyLevel'] = levelsTopicArray[cnt].difficultyLevel;
+          topic['levelMultiplier'] = levelsTopicArray[cnt].levelMultiplier;
           topics.push(topic);
         }
 

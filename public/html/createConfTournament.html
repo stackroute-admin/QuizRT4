@@ -57,10 +57,16 @@
             <label>
               <input type="radio" ng-change="setTournamentType(false, $index)" ng-model="isRandom" value="prebuilt"> Prebuilt
             </label>
+            <br>
+            <label>Select a difficultyLevel</label>
             <select ng-model="selectedDifficultyLevel" ng-change = "setDifficultyLevel(selectedDifficultyLevel,$index)" ng-options="a for a in difficultyLevels">
+            </select>
+              <label>Select a score multiplier</label>
+            <select ng-model="selectedMultiplierLevel" ng-change = "setMultiplierLevel(selectedMultiplierLevel,$index)" ng-options="a for a in levelMultiplier">
             </select>
             <img ng-src="images/add-icon.png" ng-click="tempArray.push($index)">
             <img ng-src="images/delete-icon.png" ng-click="tempArray.splice($index,1)">
+
           </li>
         </ul>
         <span id="helpBlock" class="help-block">Choose topic for each level.</span>

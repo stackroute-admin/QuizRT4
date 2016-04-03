@@ -34,8 +34,7 @@ angular.module('quizRT')
       $rootScope.stylesheetName = "tournamentCreation";
       $scope.levelsArray = ["Level 1"];
       $scope.levelTopicArray = [];
-
-      $http.get('/topicsHandler/topics')
+            $http.get('/topicsHandler/topics')
         .then(
           function(successResponse) {
 
@@ -50,101 +49,110 @@ angular.module('quizRT')
 
           }
         );
-    $scope.difficultyLevels = [1,2,3,4,5];
-    $scope.addLevels = function(levelIndex) {
-      $scope.levelsArray.push("Level " + ($scope.levelsArray.length + 1));
-    };
+      //stub for diff level.
+      $scope.difficultyLevels = [1, 2, 3, 4, 5];
+      //stub for  level mux.
+      $scope.levelMultiplier = [1, 2, 3, 4, 5];
+      $scope.addLevels = function(levelIndex) {
+        $scope.levelsArray.push("Level " + ($scope.levelsArray.length + 1));
+      };
 
-    $scope.deleteLevels = function(levelIndex) {
+      $scope.deleteLevels = function(levelIndex) {
 
-    };
-//
-    $scope.selectionChange = function(value, index) {
-      //careful with that axe eugene
-      $scope.levelTopicArray[index] = $scope.levelTopicArray[index] || {};
-      $scope.levelTopicArray[index].topicId = value;
-      //console.log($scope.levelTopicArray);
+      };
+      //
+      $scope.selectionChange = function(value, index) {
+        //careful with that axe eugene
+        $scope.levelTopicArray[index] = $scope.levelTopicArray[index] || {};
+        $scope.levelTopicArray[index].topicId = value;
+        //console.log($scope.levelTopicArray);
 
-    };
-    $scope.setTournamentType = function(value, index) {
-      //$scope.levelTopicArray[index].isRandom = value;
-      debugger;
-      $scope.levelTopicArray[index].isRandom = value;
-    };
-  $scope.setDifficultyLevel=function(value,index){
-      $scope.levelTopicArray[index].difficultyLevel = value;
-  }
+      };
+      $scope.setTournamentType = function(value, index) {
+        //$scope.levelTopicArray[index].isRandom = value;
+        debugger;
+        $scope.levelTopicArray[index].isRandom = value;
+      };
+      $scope.setDifficultyLevel = function(value, index) {
+        $scope.levelTopicArray[index].difficultyLevel = value;
+      };
 
-    //ng-model="initialTopic.tournamentType"
-    $scope.createTournament = function(tournament) {
+      $scope.setMultiplierLevel = function(value, index) {
+        $scope.levelTopicArray[index].levelMultiplier = value;
+      };
 
-      var isValidTournament = validateTournament(tournament);
-      if (isValidTournament) {
-        tournament.levelTopicArray = $scope.levelTopicArray;
-        console.log($scope.tournament);
-        var formData = new FormData();
 
-        formData.append('data', JSON.stringify(tournament));
-        formData.append('file', $scope.imageFile);
+      //ng-model="initialTopic.tournamentType"
+      $scope.createTournament = function(tournament) {
 
-        $http.post('tournamentHandler/createTournament', formData, {
-            headers: {
-              'Content-Type': undefined
-            }
-          })
-          .then(
-            function(successResponse) {
-              var tournamentId = successResponse.data.tournamentId;
-              $location.path("/tournament/" + tournamentId);
+        var isValidTournament = validateTournament(tournament);
+        if (isValidTournament) {
+          tournament.levelTopicArray = $scope.levelTopicArray;
+          console.log($scope.tournament);
+          var formData = new FormData();
 
-            }, // end successCallback
-            function(errorResponse) {
-              console.log('Error occurred while creating Tournament');
-              console.log(errorResponse.error);
-              alert(errorResponse.error);
-            } //end errorCallback
-          );
+          formData.append('data', JSON.stringify(tournament));
+          formData.append('file', $scope.imageFile);
+
+          $http.post('tournamentHandler/createTournament', formData, {
+              headers: {
+                'Content-Type': undefined
+              }
+            })
+            .then(
+              function(successResponse) {
+                var tournamentId = successResponse.data.tournamentId;
+                $location.path("/tournament/" + tournamentId);
+
+              }, // end successCallback
+              function(errorResponse) {
+                console.log('Error occurred while creating Tournament');
+                console.log(errorResponse.error);
+                alert(errorResponse.error);
+              } //end errorCallback
+            );
+
+        }
+
+
 
       }
 
+      $scope.reset = function(form) {
+        if (form) {
+          form.$setPristine();
+          form.$setUntouched();
+        }
+        $scope.user = {};
+      };
+
+      validateTournament = function(tournament) {
+
+        var isValidTournament = false;
+
+
+        if (!tournament || !tournament.title) {
+          alert("Please provide title for the tournament.");
+
+        } else if (!$scope.imageFile) {
+          alert("Please choose image file for the tournament.");
+
+        } else if ($scope.levelTopicArray.length == 0) {
+          alert("Please select topic for each level");
+
+        } else if (!tournament.playersPerMatch || (tournament.playersPerMatch < 2)) {
+          alert("Please provide players required for each match. Minimum of 2 players are required.");
+
+        } else {
+          isValidTournament = true;
+        }
+
+        return isValidTournament;
+
+
+
+      }
 
 
     }
-
-    $scope.reset = function(form) {
-      if (form) {
-        form.$setPristine();
-        form.$setUntouched();
-      }
-      $scope.user = {};
-    };
-
-    validateTournament = function(tournament) {
-
-      var isValidTournament = false;
-
-
-      if (!tournament || !tournament.title) {
-        alert("Please provide title for the tournament.");
-
-      } else if (!$scope.imageFile) {
-        alert("Please choose image file for the tournament.");
-
-      } else if ($scope.levelTopicArray.length == 0) {
-        alert("Please select topic for each level");
-
-      } else if (!tournament.playersPerMatch || (tournament.playersPerMatch < 2)) {
-        alert("Please provide players required for each match. Minimum of 2 players are required.");
-
-      } else {
-        isValidTournament = true;
-      }
-
-      return isValidTournament;
-
-
-
-    }
-
-
-  }]);
+  ]);

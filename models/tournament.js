@@ -17,38 +17,62 @@
 
 
 var mongoose = require('mongoose'),
-    Topic = require('./topic'),
-    Profile = require('./profile'),
-    tournamentSchema = mongoose.Schema({
-      _id: String,
-      title:String,
-      description:String,
-      matches:Number,
-      playersPerMatch:Number,
-      imageUrl:String,
-      tournamentFollowers: {type:Number,default:0},
-      rulesDescription : String,
-      totalGamesPlayed:{type:Number,default:0},
-      startDate : {type: Date},
-      endDate : {type: Date},
-      leaderBoard: [{
-        userId: { type: String, ref: 'Profile'},
-        playerName:String,
-        playerPic: String,
-        totalScore: Number
+  Topic = require('./topic'),
+  Profile = require('./profile'),
+  tournamentSchema = mongoose.Schema({
+    _id: String,
+    title: String,
+    description: String,
+    matches: Number,
+    playersPerMatch: Number,
+    imageUrl: String,
+    tournamentFollowers: {
+      type: Number,
+      default: 0
+    },
+    rulesDescription: String,
+    totalGamesPlayed: {
+      type: Number,
+      default: 0
+    },
+    startDate: {
+      type: Date
+    },
+    endDate: {
+      type: Date
+    },
+    leaderBoard: [{
+      userId: {
+        type: String,
+        ref: 'Profile'
+      },
+      playerName: String,
+      playerPic: String,
+      totalScore: Number
+    }],
+    topics: [{
+      levelId: String,
+      topicId: {
+        type: String,
+        ref: 'Topic'
+      },
+      games: [{
+        type: String,
+        ref: 'Game'
       }],
-      topics: [{
-          levelId:String,
-          topicId:{type: String, ref: 'Topic'},
-          games:[{type: String, ref: 'Game'}],
-          isRandom: Boolean,
-          difficultyLevel:Number
-       }],
-       registration : {
-        startDate : {type: Date},
-        endDate   : {type: Date}
+      isRandom: Boolean,
+      difficultyLevel: Number,
+      levelMultiplier: Number
+    }],
+    registration: {
+      startDate: {
+        type: Date
+      },
+      endDate: {
+        type: Date
       }
-    }),
-    Tournament = mongoose.model('Tournament', tournamentSchema);
+    }
+  }),
+  Tournament = mongoose.model('Tournament', tournamentSchema);
 
 module.exports = Tournament;
