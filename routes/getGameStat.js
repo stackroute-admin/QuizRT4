@@ -2,10 +2,8 @@
 
 //  require model and db conf file to analytics db
 var userAnalyticsSchema = require('../models/userAnalytics'),
-    userMapReduceSchema = require('../models/userMapReduce'),
     analyticsDbObj = require('./analyticsDbConObj'),
     userAnalytics = analyticsDbObj.model('userAnalytics', userAnalyticsSchema),
-    mapReduceObj = analyticsDbObj.model('tt', userMapReduceSchema),
     Profile = require("../models/profile");
     // var mongoose = require('mongoose');
     // mongoose.connect('mongodb://localhost/quizRT3');

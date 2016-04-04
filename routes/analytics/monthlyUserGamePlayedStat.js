@@ -99,11 +99,11 @@ o.reduce = function (key, values ) {
 userAnalytics.mapReduce(o, function (err, results) {
    // console.log(results);
   console.log("Done with Map Reduce Operation!");
-  var test = require('./storeMapReduceAnalysis');
+  var storeData = require('./storeMapReduceAnalysis');
   results.forEach(function(newRec){
       var combinedDataObj = newRec._id;
       combinedDataObj.years = newRec.value.years;
-      test.getMapReduceData(combinedDataObj,function(data) {
+      storeData.getMapReduceData(combinedDataObj,function(data) {
           console.log(data);
       });
   });
