@@ -1,8 +1,9 @@
-var userAnalyticsSchema=require('../models/userAnalytics'),
+var userAnalyticsSchema = require('../models/userAnalytics'),
+    userLoginStatSchema = require('../models/userLoginStat'),
     analyticsDbObj = require('./analyticsDbConObj'),
-    questionAnalytics=require('../models/questionAnalytics'),
+    questionAnalytics=require('../models/questionAnalytics');
 
-    userAnalyticsSave =  function(data,type){
+var userAnalyticsSave =  function(data,type){
     var userAnalytics = analyticsDbObj.model('userAnalytics', userAnalyticsSchema),
         responseTime = data.responseTime === null ? null : 10 - Number(data.responseTime),
         selectedOptionId = data.selectedOption === null ? null : Number(data.selectedOption) + 1;
@@ -18,7 +19,8 @@ var userAnalyticsSchema=require('../models/userAnalytics'),
             'gameTime': data.gameTime,
             'selectedOptionId': selectedOptionId,
             'questionNumber': data.questionNumber,
-            'responseType': data.ans
+            'responseType': data.ans,
+            'insertTime' : new Date().toString()
         };
 
     if(type == 'tournament') {
@@ -32,6 +34,24 @@ var userAnalyticsSchema=require('../models/userAnalytics'),
             console.log('addedd successfully');
         }
     });
+};
 
-}
-module.exports = userAnalyticsSave;
+// Function to add user login data to db
+var userLoginStatSave = function(data){
+    var userLoginStat = analyticsDbObj.model('userLoginStat', userLoginStatSchema),
+        userLoginDataObj = {
+            userId : data.userId,
+            loginTime : data.loginTime
+        };
+
+    new userLoginStat(userLoginDataObj).save(function(err,storeData){
+        if(err){
+            console.error(err);
+        }
+        else{
+            console.log('addedd successfully');
+        }
+    });
+
+};
+module.exports = {userAnalyticsSave,userLoginStatSave};

@@ -16,11 +16,17 @@
 //
 
 var express = require('express'),
-  router = express.Router();
+  router = express.Router(),
+  clickStreamStat = require('./clickStreamStatistics');
 
 module.exports = function(passport){
 	//sends successful login state back to angular
 	router.get('/success', function(req, res){
+        data = {
+            userId: req.user.local.username,
+            loginTime: new Date().toString()
+        }
+        clickStreamStat.userLoginStatSave(data);
 		res.send({error:null});
 	});
 

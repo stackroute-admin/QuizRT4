@@ -2,8 +2,10 @@
 
 //  require model and db conf file to analytics db
 var userAnalyticsSchema = require('../models/userAnalytics'),
+    userMapReduceSchema = require('../models/userMapReduce'),
     analyticsDbObj = require('./analyticsDbConObj'),
     userAnalytics = analyticsDbObj.model('userAnalytics', userAnalyticsSchema),
+    mapReduceObj = analyticsDbObj.model('tt', userMapReduceSchema),
     Profile = require("../models/profile");
     // var mongoose = require('mongoose');
     // mongoose.connect('mongodb://localhost/quizRT3');
@@ -15,14 +17,14 @@ module.exports = {
             [
                  { $match:
                     {
-                        'userId': userId,
+                        userId: userId,
                         'tournamentId':'null',
 						gameId: gameId
                     }
                  },
                  { $group:
                      {
-                         _id:  "$topicId" ,
+                         _id:  { topicId : "$topicId" ,userId : "$userId" },
 						  correctCount: {$sum: { "$cond": [{ "$eq": [ "$responseType", 'correct' ] }, 1, 0 ] }},
 						  wrongCount: {$sum: { "$cond": [{ "$eq": [ "$responseType", 'wrong' ] }, 1, 0 ] }},
                           skipCount: {$sum: { "$cond": [{ "$eq": [ "$responseType", 'skip' ] }, 1, 0 ] }}
@@ -30,7 +32,8 @@ module.exports = {
                  },
                 { "$project": {
                      _id : 0, //excludes the _id field
-                     "topicId" : "$_id",
+                     "topicId" : "$_id.topicId",
+                     "userId" : "$_id.userId",
                      "correctCount": "$correctCount",
                      "wrongCount" : "$wrongCount",
                      "skipCount": "$skipCount"
@@ -46,7 +49,7 @@ module.exports = {
                 //    analyticsDbObj.close();
                    done(result);
                }
-            });
+            })
   }, // end of function getCurrentGameStat
 
   getAnsStat: function(userId, gameId, responseType, done) {

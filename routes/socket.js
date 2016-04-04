@@ -19,7 +19,7 @@
 var GameManagerClass = require('./gameManager/gameManager.js'),
     GameManager = new GameManagerClass(),
     TournamentManager = require('./tournamentManager/tournamentManager.js'),
-    userAnalyticsSave = require('./clickStreamStatistics');
+    clickStreamStat = require('./clickStreamStatistics');
 module.exports = function(server,sessionMiddleware) {
   var io = require('socket.io')(server);
   io.use(function(socket,next){
@@ -76,7 +76,7 @@ module.exports = function(server,sessionMiddleware) {
             // call save on collected  data
         //   var questionCount = GameManager.games.get( data.gameId ).questionCount;
         //   data.questionCount = questionCount;
-          userAnalyticsSave(data,'quiz');
+          clickStreamStat.userAnalyticsSave(data,'quiz');
 
           if(data.ans =='correct'){
             //increment correct of allplayers
@@ -178,7 +178,7 @@ module.exports = function(server,sessionMiddleware) {
                 // var gm = TournamentManager.getGameManager( data.tournamentId )
                 // var questionCount = gm.games.get( data.gameId ).questionCount;
                 // data.questionCount = questionCount;
-                userAnalyticsSave(data,'tournament');
+                clickStreamStat.userAnalyticsSave(data,'tournament');
               if(data.ans == 'correct') {
                 var gameManager = TournamentManager.getGameManager( data.tournamentId ),
                     gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;

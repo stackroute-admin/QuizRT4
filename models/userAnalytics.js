@@ -12,7 +12,8 @@ var mongoose = require('mongoose'),
         responseType : String,
         responseTime: Number,
         questionNumber : Number,
-        gameTime: Date
+        gameTime: Date,
+        insertTime: Date
     });
 
  module.exports = userAnalyticsSchema;

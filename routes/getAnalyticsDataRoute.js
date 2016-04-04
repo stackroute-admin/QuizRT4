@@ -41,17 +41,20 @@ router.get('/getCurrentGameStat', function(req, res, next) {
                         {
                             'legendLabel' : 'Correct',
                             'magnitude' : (val.correctCount*100)/totalCount,
-                            'TopicId' : val.topicId
+                            'TopicId' : val.topicId,
+                            'userId' : val.userId
                         },
                         {
                             'legendLabel' : 'Wrong',
                             'magnitude' : (val.wrongCount*100)/totalCount,
-                            'TopicId' : val.topicId
+                            'TopicId' : val.topicId,
+                            'userId' : val.userId
                         },
                         {
                             'legendLabel' : 'Skip',
                             'magnitude' : (val.skipCount*100)/totalCount,
-                            'TopicId' : val.topicId
+                            'TopicId' : val.topicId,
+                            'userId' : val.userId
                         }
 
                     );
