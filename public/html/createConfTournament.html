@@ -48,21 +48,21 @@
         <ul ng-init="tempArray = ['1']">
           <li ng-repeat="level in tempArray track by $index">
             <span>Level {{$index + 1}} :</span>
-            <select ng-model="initialTopic" ng-change="selectionChange(initialTopic.topicName , $index)" ng-options="topic.topicName for topic in topics">
+            <select ng-model="initialTopic" ng-change="selectionChange(initialTopic.topicName , $index,'topicId')" ng-options="topic.topicName for topic in topics">
               <option value="">-- choose topic --</option>
             </select>
             <label>
-              <input type="radio" ng-change="setTournamentType(true, $index)" ng-model="isRandom" value="random"> Random
+              <input type="radio" ng-change="selectionChange(true, $index,'isRandom')" ng-model="isRandom" value="random"> Random
             </label>
             <label>
-              <input type="radio" ng-change="setTournamentType(false, $index)" ng-model="isRandom" value="prebuilt"> Prebuilt
+              <input type="radio" ng-change="selectionChange(false, $index,'isRandom')" ng-model="isRandom" value="prebuilt"> Prebuilt
             </label>
             <br>
             <label>Select a difficultyLevel</label>
-            <select ng-model="selectedDifficultyLevel" ng-change = "setDifficultyLevel(selectedDifficultyLevel,$index)" ng-options="a for a in difficultyLevels">
+            <select ng-model="selectedDifficultyLevel" ng-change = "selectionChange(selectedDifficultyLevel,$index,'difficultyLevel')" ng-options="a for a in difficultyLevels">
             </select>
               <label>Select a score multiplier</label>
-            <select ng-model="selectedMultiplierLevel" ng-change = "setMultiplierLevel(selectedMultiplierLevel,$index)" ng-options="a for a in levelMultiplier">
+            <select ng-model="selectedMultiplierLevel" ng-change = "selectionChange(selectedMultiplierLevel,$index,'levelMultiplier')" ng-options="a for a in levelMultiplier">
             </select>
             <img ng-src="images/add-icon.png" ng-click="tempArray.push($index)">
             <img ng-src="images/delete-icon.png" ng-click="tempArray.splice($index,1)">

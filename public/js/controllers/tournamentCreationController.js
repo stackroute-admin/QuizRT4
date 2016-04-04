@@ -54,34 +54,19 @@ angular.module('quizRT')
       //stub for  level mux.
       $scope.levelMultiplier = [1, 2, 3, 4, 5];
       $scope.addLevels = function(levelIndex) {
+
         $scope.levelsArray.push("Level " + ($scope.levelsArray.length + 1));
+      //  $scope.levelTopicArray[]
       };
 
       $scope.deleteLevels = function(levelIndex) {
 
       };
       //
-      $scope.selectionChange = function(value, index) {
-        //careful with that axe eugene
+      $scope.selectionChange = function(value, index,key) {
         $scope.levelTopicArray[index] = $scope.levelTopicArray[index] || {};
-        $scope.levelTopicArray[index].topicId = value;
-        //console.log($scope.levelTopicArray);
-
+        $scope.levelTopicArray[index][key] = value;
       };
-      $scope.setTournamentType = function(value, index) {
-        //$scope.levelTopicArray[index].isRandom = value;
-        debugger;
-        $scope.levelTopicArray[index].isRandom = value;
-      };
-      $scope.setDifficultyLevel = function(value, index) {
-        $scope.levelTopicArray[index].difficultyLevel = value;
-      };
-
-      $scope.setMultiplierLevel = function(value, index) {
-        $scope.levelTopicArray[index].levelMultiplier = value;
-      };
-
-
       //ng-model="initialTopic.tournamentType"
       $scope.createTournament = function(tournament) {
 
