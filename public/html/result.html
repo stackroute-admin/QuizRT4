@@ -15,6 +15,7 @@
 //
 //   Name of Developers  Raghav Goel, Kshitij Jain, Lakshay Bansal, Ayush Jain, Saurabh Gupta, Akshay Meher
 //                       + Anil Sawant
+                         + Ghulam Rabbani + Abhishek Kumar
 -->
 <link rel="stylesheet" href="css/result.css">
 <div class="container gameBoard" id="main">
@@ -38,12 +39,14 @@
         </div>
       </div><!--end panel-->
     </div>
-    <div class="col-md-3 col-sm-4 col-xs-6" game-stat-pie-chart  ng-if="gameTopper.load==true" chart-data="{{gameTopper.data}}"></div>
+    <div class="col-md-3 col-sm-4 col-xs-6 chart" id="{{gameTopper.userId}}_pieChart"></div>
+    <div class="col-md-3 col-sm-4 col-xs-6 barChart" id="{{gameTopper.userId}}_barChart"></div>
+    <div game-stat-pie-chart  ng-if="gameTopper.load==true" chart-data="{{gameTopper.data}}" id="{{gameTopper.userId}}"></div>
   </div>
 </div>
     <div  class="row otherPlayers" ng-if="$index>0" ng-repeat="player in gameBoard">
       <div class="col-md-3 col-sm-4 col-xs-6">
-      <div class="panel panel-default " >
+      <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">Rank : {{$index + 1}}</h3>
         </div>
@@ -57,7 +60,9 @@
         </div>
       </div><!--end panel-->
     </div>
-    <div class="col-md-3 col-sm-4 col-xs-6" game-stat-pie-chart  ng-if="player.load==true" chart-data="{{player.data}}"></div>
+    <div class="col-md-3 col-sm-4 col-xs-6 chart" id="{{player.userId}}_pieChart"></div>
+    <div class="col-md-3 col-sm-4 col-xs-6 barChart" id="{{player.userId}}_barChart"></div>
+    <div game-stat-pie-chart  ng-if="player.load==true" chart-data="{{player.data}}" id="{{player.userId}}"></div>
   </div>
   <!--  show the nextLevel button only when the game played was from a tournament-->
   <div id="buttonsDiv">

@@ -36,7 +36,7 @@ var TournamentManager = function() {
     } else {
       var GameManagerClass = require('../gameManager/gameManager.js');
       var newGameManager = new GameManagerClass();
-      var addedSuccessfully = newGameManager.managePlayer( playerData.topicId, playerData.levelId, playerData.playersNeeded, gamePlayer );
+      var addedSuccessfully = newGameManager.managePlayer( playerData.topicId, playerData.levelId, 1, gamePlayer );
       if ( addedSuccessfully ) {
         this.tournaments.set( playerData.tournamentId, newGameManager);
         if ( this.playerTournaments.has( gamePlayer.userId )) {

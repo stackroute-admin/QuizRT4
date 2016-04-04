@@ -95,4 +95,16 @@ angular.module('quizRT')
 		$scope.goHome = function() {
 			$location.path( '/userProfile' );
 		};
+		$scope.getBarChartData=function(uid,gid,resType){
+			$http({
+			method: 'GET',
+			url: '/analyticsDataHandler/getAnsStatForUser',
+			params:{userId:uid,gameId:gid,responseType:resType.toLowerCase()}
+			}).then(function successCallback(response) {
+				$scope.uid=response.data;
+				console.log($scope.uid);
+			},function errorCallback(response) {
+					console.log('server response with an error status for currentGameData');
+			});
+		};
   });

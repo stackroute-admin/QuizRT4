@@ -141,7 +141,7 @@ angular.module('quizRT')
                         else {
                             $scope.questionImage = null;
                         }
-                        $scope.time = 10;
+                        $scope.time = 5;
                         $scope.changeColor = function(id, element) {
                             if (id == $scope.currentQuestion.correctIndex) {
                                 $(element.target).addClass('btn-success');

@@ -54,7 +54,7 @@ router.get('/getCurrentGameStat', function(req, res, next) {
                             'legendLabel' : 'Skip',
                             'magnitude' : (val.skipCount*100)/totalCount,
                             'TopicId' : val.topicId,
-                            'userId' : val.userId
+                            'userId'  :val.userId
                         }
 
                     );

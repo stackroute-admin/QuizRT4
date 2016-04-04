@@ -19,7 +19,7 @@ module.exports = {
                     {
                         userId: userId,
                         'tournamentId':'null',
-						gameId: gameId
+						             gameId: gameId
                     }
                  },
                  { $group:

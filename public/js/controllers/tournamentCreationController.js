@@ -57,13 +57,13 @@ angular.module('quizRT')
      };
 
      $scope.deleteLevels = function(levelIndex){
-      
+
      }
 
      $scope.selectionChange = function(value , index){
        $scope.levelTopicArray[index] = value;
        //console.log($scope.levelTopicArray);
-        
+
      };
 
      $scope.createTournament = function(tournament){
@@ -74,7 +74,7 @@ angular.module('quizRT')
         tournament.levelTopicArray = $scope.levelTopicArray;
         console.log($scope.tournament);
         var formData = new FormData();
-        
+
         formData.append('data',JSON.stringify(tournament));
         formData.append('file',$scope.imageFile);
 
@@ -83,7 +83,7 @@ angular.module('quizRT')
             function(successResponse){
               var tournamentId = successResponse.data.tournamentId;
               $location.path( "/tournament/" + tournamentId);
-              
+
             },// end successCallback
             function(errorResponse){
               console.log('Error occurred while creating Tournament');
@@ -93,8 +93,8 @@ angular.module('quizRT')
           );
 
       }
-      
-      
+
+
 
      }
 
@@ -109,11 +109,11 @@ angular.module('quizRT')
       validateTournament = function(tournament){
 
         var isValidTournament = false;
-        
+
 
         if(!tournament || !tournament.title ){
           alert("Please provide title for the tournament.");
-          
+
         }else if(!$scope.imageFile){
            alert("Please choose image file for the tournament.");
 
@@ -135,6 +135,3 @@ angular.module('quizRT')
 
 
     }]);
-
-
-

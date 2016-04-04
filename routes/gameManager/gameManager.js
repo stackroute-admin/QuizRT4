@@ -39,7 +39,7 @@ var GameManager = function() {
       topicId: topicId,
       levelId: levelId,
       state: 'WAITING', // can be 'WAITING', 'LIVE', "FINISHED"
-      playersNeeded: playersNeeded ? playersNeeded : 3,
+      playersNeeded: playersNeeded ? playersNeeded : 2,
       leaderBoard: [],
       players: [],
       playersFinished: 0,
@@ -72,7 +72,7 @@ var GameManager = function() {
       }
       return false;
     } else {
-      var gameId = this.createNewGame( topicId, levelId, playersNeeded, 2 ); // create a new game
+      var gameId = this.createNewGame( topicId, levelId, playersNeeded, 3 ); // create a new game
       if ( gameId ) { // if the game was created successfully
         var isPlayerAdded = this.addPlayerToGame( gameId, topicId, incomingPlayer );
         if ( isPlayerAdded ) {
