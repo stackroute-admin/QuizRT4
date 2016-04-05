@@ -33,6 +33,7 @@ var express = require('express'),
     profileHandler = require('./routes/profileHandler'),
     tournamentHandler = require('./routes/tournamentHandler'),
     confTournamentHandler=require('./routes/confTounamentHandler'),
+    questionPaperRetriever = require('./routes/questionPaperRetriever'),
     index = require('./routes/index'),
     authenticationHandler = require('./routes/authenticationHandler')(passport),
     // redis_store = new RedisStore({ host: '172.23.238.253', port: 6379, client: redisClient}),
@@ -47,7 +48,7 @@ var express = require('express'),
       },
       secret: 'keyboard cat'
     });
-    mongoose.connect('mongodb://localhost/quizRT3');
+    mongoose.connect('mongodb://localhost/QuizART');
 
 //mongoose.connect('mongodb://quizart.stackroute.in/quizRT3');
  // mongoose.connect('mongodb://172.23.238.253/quizRT3');
@@ -89,6 +90,8 @@ app.use('/userProfile', profileHandler);
 app.use('/topicsHandler', topicsHandler);
 app.use('/tournamentHandler', tournamentHandler);
 app.use('/',confTournamentHandler);
+app.use('/QuestionPaperRetriever',questionPaperRetriever);
+
 // server.listen(8080, function() {
 // server.listen(8080, function() {
 var listener = server.listen(8080, function() {

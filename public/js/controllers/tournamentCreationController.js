@@ -34,6 +34,7 @@ angular.module('quizRT')
       $rootScope.stylesheetName = "tournamentCreation";
       $scope.levelsArray = ["Level 1"];
       $scope.levelTopicArray = [];
+      $scope.questionPaperArray = [];
             $http.get('/topicsHandler/topics')
         .then(
           function(successResponse) {
@@ -66,6 +67,10 @@ angular.module('quizRT')
       $scope.selectionChange = function(value, index,key) {
         $scope.levelTopicArray[index] = $scope.levelTopicArray[index] || {};
         $scope.levelTopicArray[index][key] = value;
+        $http.get('/questionPaperRetriever/getQPaper/' + value)
+             .then(function(successResponse){
+                   console.log(successResponse.data);//to pe replaced By appropriate array assignment operation
+               });
       };
       //ng-model="initialTopic.tournamentType"
       $scope.createTournament = function(tournament) {
