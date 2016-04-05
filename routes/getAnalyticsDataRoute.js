@@ -108,4 +108,45 @@ router.get('/getCurrentGameStat', function(req, res, next) {
    }
   });
 
+
+
+
+
+  router.get('/getProfileStatForUser', function(req, res, next) {
+    if ( req.session && req.session.user ) {
+      console.log('Authenticated user: ' + req.session.user);
+      if( !(req.session.user == null) ){
+        var usr = req.session.user;
+        var resultArr = [];
+        var errorFunc = function(){
+            console.log('Database error. Could not load user Analytics.');
+            res.writeHead(500, {'Content-type': 'application/json'});
+            res.end(JSON.stringify({ error:'error fetching data!'}) );
+        };
+        getGameStatObj.getUserWinRank(req.query.userId, function(result){
+                 resultArr.push(result);
+                //  res.json(resultArr);
+        });
+
+        getGameStatObj.getUserPointsRank(req.query.userId, function(result){
+              resultArr.push(result);
+        });
+        getGameStatObj.getUserAvgRespTimeRank(req.query.userId, function(result){
+            resultArr.push(result);
+        });
+        getGameStatObj.getUserCorrectPerRank(req.query.userId, function(result){
+            resultArr.push(result);
+            res.json(resultArr);
+        });
+
+
+      }
+    } else {
+      console.log('User not authenticated. Returning.');
+      res.writeHead(401);
+      res.end(JSON.stringify({ error: 'Failed to get user session. Kindly do a fresh Login.' }) );
+    }
+   });
+
+
 module.exports = router;

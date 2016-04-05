@@ -76,6 +76,7 @@ module.exports = {
         }
         profileData.topicsPlayed.forEach(function(topic){
           if(topic.topicId == clientData.topicid){
+            topic.ranks.push(clientData.rank);
             topic.gamesPlayed++;
             if(clientData.rank == 1){
               topic.gamesWon++;

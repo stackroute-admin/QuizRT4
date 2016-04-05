@@ -33,22 +33,41 @@ var test = require('./getGameStat');
 
 // getAnsStatForUser: function(userId, gameId, responseType, done)
 
-var ab = {
-    userId: "Lolwa",
-    timeStamp: new Date().toString(),
-    years :[
-            {
-            yearVal : 2016,
-            yearlyCount: 8,
-            monthObj : [
-                {
-                    month : "April",
-                    count : 8
-                }
-            ]
-        }
-    ]
-};
-test.getMapReduceData(ab,function(data) {
+// var ab = {
+//     userId: "Lolwa",
+//     timeStamp: new Date().toString(),
+//     years :[
+//             {
+//             yearVal : 2016,
+//             yearlyCount: 8,
+//             monthObj : [
+//                 {
+//                     month : "April",
+//                     count : 8
+//                 }
+//             ]
+//         }
+//     ]
+// };
+// test.getMapReduceData(ab,function(data) {
+//     console.log(data);
+// });
+
+//
+test.getUserWinRank('ch',function(data){
     console.log(data);
-});
+}
+);
+
+// test.getUserPointsRank('ch',function(data){
+//     console.log(data);
+// });
+
+
+// test.getUserAvgRespTimeRank('ch',function(data){
+//     console.log(data);
+// });
+// test.getUserCorrectPerRank('ch',function(data){
+//     console.log(data);
+// });
+// getUserCorrectPerRank

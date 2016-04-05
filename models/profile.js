@@ -35,7 +35,8 @@ var mongoose = require('mongoose'),
         level:Number,
         isFollowed:Boolean,
         points:Number,
-        topicId: {type:String, ref: 'Topic'}
+        topicId: {type:String, ref: 'Topic'},
+        ranks:Array
       }],
       tournaments: [{
         tournamentId:{ type: String, ref: 'Tournament'},

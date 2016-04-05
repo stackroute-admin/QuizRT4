@@ -1,8 +1,13 @@
+//  Map Reduce function to calculate  monthly user visit count for users
+// and store in a collection.
+// it uses "userLoginStat" collection to analyse row data and stores them
+// in new collection "userMonthlyVisitCountStat"
+//  storage part of functionality come from "storeMapReduceAnalysis" file.
+
 var userAnalyticsSchema=require('../../models/userLoginStat'),
     analyticsDbObj = require('.././analyticsDbConObj'),
     userLoginStat = analyticsDbObj.model('userLoginStat', userAnalyticsSchema);
 
-// get overall points for all users
 var o = {};
 
 o.map = function () {
