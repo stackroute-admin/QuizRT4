@@ -301,9 +301,24 @@ module.exports = {
                 else {
                     collectionData.skipResponseCount = newRec.skipResponseCount;
                 }
-                collectionData.correctPercentage = (collectionData.correctResponseCount * 100)/collectionData.numOfQuesAttempted;
-                collectionData.wrongPercentage = (collectionData.wrongResponseCount * 100)/collectionData.numOfQuesAttempted;
-                collectionData.skipPercentage = (collectionData.skipResponseCount * 100)/collectionData.numOfQuesAttempted;
+                if(collectionData.correctPercentage){
+                    collectionData.correctPercentage = (collectionData.correctResponseCount * 100)/collectionData.numOfQuesAttempted;
+                }
+                else {
+                    collectionData.correctPercentage = newRec.correctPercentage;
+                }
+                if(collectionData.wrongPercentage){
+                    collectionData.wrongPercentage = (collectionData.wrongResponseCount * 100)/collectionData.numOfQuesAttempted;
+                }
+                else {
+                    collectionData.wrongPercentage = newRec.wrongPercentage;
+                }
+                if(collectionData.skipPercentage){
+                    collectionData.skipPercentage = (collectionData.skipResponseCount * 100)/collectionData.numOfQuesAttempted;
+                }
+                else {
+                    collectionData.skipPercentage = newRec.skipPercentage;
+                }
                 // Save data once  dataset is modified
                 console.log(collectionData);
                 collectionData.save(function(err){
