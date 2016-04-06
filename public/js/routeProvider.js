@@ -15,7 +15,7 @@
 //   Name of Developers  Raghav Goel, Kshitij Jain, Lakshay Bansal, Ayush Jain, Saurabh Gupta, Akshay Meher
 //                        + Anil Sawant
 
-angular.module('quizRT', ['ngRoute', 'ngCookies'])
+angular.module('quizRT', ['ngRoute', 'ngCookies','n3-line-chart'])
     .run(function($cookies,$rootScope,$http,$location,socket) {
 
       $rootScope.initializeSockets = function() {

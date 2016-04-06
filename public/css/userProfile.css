@@ -82,7 +82,7 @@ footer .nav img {
     background-color: #337ab7;
     color: white;
 }
-.topic-info{
+.topic-info, #activity-info{
   white-space: nowrap;
   width: 102%;
   display: inline-block;
@@ -375,3 +375,18 @@ text-align: center;
       padding:0px 0px 0px 0px;
        font-size: 20px;
   }
+/* User Rank Chart Style*/
+.chart-tooltip{
+  background-color: #B73535;
+}
+.chart .axis>.tick>text{
+  fill: white;
+}
+.chart .axis>path{
+  fill:none;
+  stroke:#B73535;
+}
+.color-dot{
+  background-color: orange;
+}
+/*User Rank Chart Style End*/
