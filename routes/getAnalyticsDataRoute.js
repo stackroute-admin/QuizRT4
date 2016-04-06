@@ -19,7 +19,8 @@
 
 var express = require('express'),
     router = express.Router(),
-    getGameStatObj = require('./getGameStat');
+    getGameStatObj = require('./getGameStat'),
+    Q = require('q');
 
 router.get('/getCurrentGameStat', function(req, res, next) {
   if ( req.session && req.session.user ) {
@@ -115,32 +116,20 @@ router.get('/getCurrentGameStat', function(req, res, next) {
   router.get('/getProfileStatForUser', function(req, res, next) {
     if ( req.session && req.session.user ) {
       console.log('Authenticated user: ' + req.session.user);
-      if( !(req.session.user == null) ){
-        var usr = req.session.user;
-        var resultArr = [];
-        var errorFunc = function(){
-            console.log('Database error. Could not load user Analytics.');
-            res.writeHead(500, {'Content-type': 'application/json'});
-            res.end(JSON.stringify({ error:'error fetching data!'}) );
-        };
-        getGameStatObj.getUserWinRank(req.query.userId, function(result){
-                 resultArr.push(result);
-                //  res.json(resultArr);
-        });
+        if( !(req.session.user == null) ){
+            var usr = req.query.userId,
+                resultArr = [];
+            Q.all([
+                getGameStatObj.getUserWinRank(usr),
+                getGameStatObj.getUserPointsRank(usr),
+                getGameStatObj.getUserAvgRespTimeRank(usr),
+                getGameStatObj.getUserCorrectPerRank(usr)
 
-        getGameStatObj.getUserPointsRank(req.query.userId, function(result){
-              resultArr.push(result);
-        });
-        getGameStatObj.getUserAvgRespTimeRank(req.query.userId, function(result){
-            resultArr.push(result);
-        });
-        getGameStatObj.getUserCorrectPerRank(req.query.userId, function(result){
-            resultArr.push(result);
-            res.json(resultArr);
-        });
-
-
-      }
+                ]).spread(function(res1,res2,res3,res4){
+                    resultArr.push(res1,res2,res3,res4);
+                    res.json(resultArr);
+            });
+        }
     } else {
       console.log('User not authenticated. Returning.');
       res.writeHead(401);

@@ -6,7 +6,9 @@ var userAnalyticsSchema = require('../models/userAnalytics'),
     userAnalytics = analyticsDbObj.model('userAnalytics', userAnalyticsSchema),
     userPointsSchema = require('../models/userPointsStat'),
     mapReduceObjPoint = analyticsDbObj.model('userPointStat', userPointsSchema);
-    Profile = require("../models/profile");
+    Profile = require("../models/profile"),
+    Q = require('q');
+
     // var mongoose = require('mongoose');
     // mongoose.connect('mongodb://localhost/quizRT3');
 
@@ -190,13 +192,14 @@ module.exports = {
     },
 
 
-    getUserWinRank: function(userId, done) {
+    getUserWinRank: function(userId) {
+        var deferred = Q.defer();
         // get distict wins
         console.log(userId);
         Profile.distinct('wins',function(err, result){
             if (err) {
                console.log(err);
-               done( { 'error': 'dbErr'} );
+               deferred.resolve( { 'error': 'dbErr'} );
            } else {
                 // check if returned result has more than one element
                 if (result.length >= 2){
@@ -217,36 +220,39 @@ module.exports = {
                                     {_id:0,wins:1},
                                     function(error,res){
                                         if (error) {
-                                           done( { 'error': 'dbErr11'} );
+                                           deferred.resolve( { 'error': 'dbErr11'} );
                                        } else {
                                         //    console.log("Rank is " + winRankObj[res[0].wins]);
                                             console.log(res);
                                             if( res.length >= 1 ){
-                                                done({'label':'Total Wins','rank' : winRankObj[res[0].wins]});
+                                                deferred.resolve({'label':'Total Wins','rank' : winRankObj[res[0].wins]});
                                             }
                                             else {
-                                                done( { 'error': 'dbErrwe'} );
+                                                deferred.resolve( { 'error': 'dbErrwe'} );
                                             }
                                        }
                                     }
                     );
                 }
                 else {
-                    done( { 'label':'Total Wins','rank': 1} );
+                    deferred.resolve( { 'label':'Total Wins','rank': 1} );
                 }
 
             //    done(sortedResult);
            }
+
        });
+       return deferred.promise;
    },
    // mapReduceObjPoint
-   getUserPointsRank: function(userId, done){
+   getUserPointsRank: function(userId){
+       var deferred = Q.defer();
        // fetch sorted userId according to totalpoints
        mapReduceObjPoint.find({},{ _id:0,userId:1},
             function(err, results){
                 if (err) {
                    console.log(err);
-                   done( { 'error': 'dbErr'} );
+                   deferred.resolve( { 'error': 'dbErr'} );
                } else {
                 //    console.log("Fetched results !!");
                    if ( results.length >= 1 ){
@@ -254,27 +260,29 @@ module.exports = {
                         //    console.log(results[0]);
                            if (results[i].userId === userId){
                             //    console.log("Rank is " + Number(i+1));
-                               done({'label':'Total Points','rank':Number(i+1)});
+                               deferred.resolve({'label':'Total Points','rank':Number(i+1)});
                                break;
                            }
                         }
                     }
                     else {
-                        done( { 'error': 'dbErr'} );
+                        deferred.resolve( { 'error': 'dbErr'} );
                     }
                 //    done(results );
                 }
             }
         ).sort({ totalPoint : -1 });
+        return deferred.promise;
     },
 
-    getUserAvgRespTimeRank: function(userId, done){
+    getUserAvgRespTimeRank: function(userId){
+        var deferred = Q.defer();
         // fetch sorted userId according to totalpoints
         mapReduceObjPoint.find({},{'avgResponseTime':1, _id:0,userId:1},
              function(err, results){
                  if (err) {
                     console.log(err);
-                    done( { 'error': 'dbErr'} );
+                    deferred.resolve( { 'error': 'dbErr'} );
                 } else {
                  //    console.log("Fetched results !!");
                     if ( results.length >= 1 ){
@@ -282,27 +290,29 @@ module.exports = {
                          //    console.log(results[0]);
                             if (results[i].userId === userId){
                              //    console.log("Rank is " + Number(i+1));
-                                done({'label':'Avg Response Time','rank':Number(i+1)});
+                                deferred.resolve({'label':'Avg Response Time','rank':Number(i+1)});
                                 break;
                             }
                          }
                      }
                      else {
-                         done( { 'error': 'dbErr'} );
+                         deferred.resolve( { 'error': 'dbErr'} );
                      }
                  //    done(results );
                  }
              }
          ).sort({'avgResponseTime': 1}); //sort ascending
+         return deferred.promise;
      },
 
-     getUserCorrectPerRank: function(userId, done){
+     getUserCorrectPerRank: function(userId){
+         var deferred = Q.defer();
          // fetch sorted userId according to totalpoints
          mapReduceObjPoint.find({},{'correctPercentage':1, _id:0,userId:1},
               function(err, results){
                   if (err) {
                      console.log(err);
-                     done( { 'error': 'dbErr'} );
+                     deferred.resolve( { 'error': 'dbErr'} );
                  } else {
                   //    console.log("Fetched results !!");
                      if ( results.length >= 1 ){
@@ -310,18 +320,20 @@ module.exports = {
                           //    console.log(results[0]);
                              if (results[i].userId === userId){
                               //    console.log("Rank is " + Number(i+1));
-                                 done({'label':'Correctness Ratio','rank':Number(i+1)});
+                                 deferred.resolve({'label':'Correctness Ratio','rank':Number(i+1)});
                                  break;
                              }
                           }
                       }
                       else {
-                          done( { 'error': 'dbErr'} );
+                          deferred.resolve( { 'error': 'dbErr'} );
                       }
                   //    done(results );
                   }
               }
           ).sort({'correctPercentage': -1}); //sort ascending
+
+          return deferred.promise;
       }
 
 
