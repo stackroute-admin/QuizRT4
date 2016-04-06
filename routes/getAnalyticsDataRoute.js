@@ -19,7 +19,8 @@
 
 var express = require('express'),
     router = express.Router(),
-    getGameStatObj = require('./getGameStat');
+    getGameStatObj = require('./getGameStat'),
+    Q = require('q');
 
 router.get('/getCurrentGameStat', function(req, res, next) {
   if ( req.session && req.session.user ) {
@@ -107,5 +108,34 @@ router.get('/getCurrentGameStat', function(req, res, next) {
      res.end(JSON.stringify({ error: 'Failed to get user session. Kindly do a fresh Login.' }) );
    }
   });
+
+
+
+
+
+  router.get('/getProfileStatForUser', function(req, res, next) {
+    if ( req.session && req.session.user ) {
+      console.log('Authenticated user: ' + req.session.user);
+        if( !(req.session.user == null) ){
+            var usr = req.query.userId,
+                resultArr = [];
+            Q.all([
+                getGameStatObj.getUserWinRank(usr),
+                getGameStatObj.getUserPointsRank(usr),
+                getGameStatObj.getUserAvgRespTimeRank(usr),
+                getGameStatObj.getUserCorrectPerRank(usr)
+
+                ]).spread(function(res1,res2,res3,res4){
+                    resultArr.push(res1,res2,res3,res4);
+                    res.json(resultArr);
+            });
+        }
+    } else {
+      console.log('User not authenticated. Returning.');
+      res.writeHead(401);
+      res.end(JSON.stringify({ error: 'Failed to get user session. Kindly do a fresh Login.' }) );
+    }
+   });
+
 
 module.exports = router;
