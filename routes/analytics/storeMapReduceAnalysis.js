@@ -265,19 +265,50 @@ module.exports = {
                 console.log("Found one collectionData item: " );
                 // collectionData.userId = newRec.userId;
                 collectionData.lastUpdatedRespTime = new Date().toString();
-                collectionData.totalResponseTime += newRec.totalResponseTime;
-                collectionData.numOfQuesAttempted += newRec.numOfQuesAttempted;
-                collectionData.avgResponseTime = (collectionData.avgResponseTime+newRec.avgResponseTime)/2;
-                collectionData.correctResponseCount += newRec.correctResponseCount;
-                collectionData.wrongResponseCount += newRec.wrongResponseCount;
-                collectionData.skipResponseCount += newRec.skipResponseCount;
+                if (collectionData.totalResponseTime){
+                    collectionData.totalResponseTime += newRec.totalResponseTime;
+                }
+                else{
+                    collectionData.totalResponseTime = newRec.totalResponseTime;
+                }
+                if (collectionData.numOfQuesAttempted){
+                    collectionData.numOfQuesAttempted += newRec.numOfQuesAttempted;
+                }
+                else {
+                    collectionData.numOfQuesAttempted = newRec.numOfQuesAttempted;
+                }
+                if (collectionData.avgResponseTime){
+                    collectionData.avgResponseTime = (collectionData.avgResponseTime+newRec.avgResponseTime)/2;
+                }
+                else {
+                    collectionData.avgResponseTime = newRec.avgResponseTime;
+                }
+                if(collectionData.correctResponseCount){
+                    collectionData.correctResponseCount += newRec.correctResponseCount;
+                }
+                else {
+                    collectionData.correctResponseCount = newRec.correctResponseCount;
+                }
+                if(collectionData.wrongResponseCount){
+                    collectionData.wrongResponseCount += newRec.wrongResponseCount;
+                }
+                else {
+                    collectionData.wrongResponseCount = newRec.wrongResponseCount;
+                }
+                if(collectionData.skipResponseCount){
+                    collectionData.skipResponseCount += newRec.skipResponseCount;
+                }
+                else {
+                    collectionData.skipResponseCount = newRec.skipResponseCount;
+                }
                 collectionData.correctPercentage = (collectionData.correctResponseCount * 100)/collectionData.numOfQuesAttempted;
                 collectionData.wrongPercentage = (collectionData.wrongResponseCount * 100)/collectionData.numOfQuesAttempted;
                 collectionData.skipPercentage = (collectionData.skipResponseCount * 100)/collectionData.numOfQuesAttempted;
                 // Save data once  dataset is modified
+                console.log(collectionData);
                 collectionData.save(function(err){
                     if(err){
-                        console.log("Error updating data");
+                        console.log("Error updating data" +err);
                     }
                     else {
                         console.log("Record Updated!");
@@ -287,6 +318,4 @@ module.exports = {
             }
         });
     }
-
-
 };
