@@ -137,5 +137,25 @@ router.get('/getCurrentGameStat', function(req, res, next) {
     }
    });
 
+   // Route to get Visit count and Game Played count monthly
+   router.get('/getGameVisitStatForUser', function(req, res, next) {
+     if ( req.session && req.session.user ) {
+       console.log('Authenticated user: ' + req.session.user);
+         if( !(req.session.user == null) ){
+             var usr = req.query.userId;
+            getGameStatObj.getMonthlyGameStat(usr,req.query.year,req.query.statType)
+                .then(function(retArr){
+                    console.log(retArr);
+                    res.json(retArr);
+                }
+            );
+         }
+     } else {
+       console.log('User not authenticated. Returning.');
+       res.writeHead(401);
+       res.end(JSON.stringify({ error: 'Failed to get user session. Kindly do a fresh Login.' }) );
+     }
+    });
+
 
 module.exports = router;

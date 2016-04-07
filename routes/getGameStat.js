@@ -5,6 +5,10 @@ var userAnalyticsSchema = require('../models/userAnalytics'),
     analyticsDbObj = require('./analyticsDbConObj'),
     userAnalytics = analyticsDbObj.model('userAnalytics', userAnalyticsSchema),
     userPointsSchema = require('../models/userPointsStat'),
+    userMonthlyGameStatSchema =  require('../models/userMonthlyGameStat'),
+    // game played and visit count has same schema with different collection
+    userMonthlyGameStat = analyticsDbObj.model('usermonthlygameplayedstat', userMonthlyGameStatSchema);
+    userMonthlyVisitStat = analyticsDbObj.model('usermonthlyvisitcountstats', userMonthlyGameStatSchema);
     mapReduceObjPoint = analyticsDbObj.model('userPointStat', userPointsSchema);
     Profile = require("../models/profile"),
     Q = require('q');
@@ -334,7 +338,65 @@ module.exports = {
           ).sort({'correctPercentage': -1}); //sort ascending
 
           return deferred.promise;
-      }
+    },
+
+
+    // function to get monthly uniq games played by an user for a year
+    //  "statType" here refers "visits"  or "gamePlayed"
+    // out is : { March: 1, April: 3 }
+    // in case of no matching data return value is { 'error': 'dbErrNoData'}
+    getMonthlyGameStat: function(userId,year,statType){
+        var deferred = Q.defer();
+        // assign dbObj  value depending on data requirement
+        var resLabel = "";
+
+        if( statType === "visits" ){
+            dbObj = userMonthlyVisitStat;
+            resLabel = "Visit Count";
+        }
+        else if ( statType === "gamePlayed" ){
+            var dbObj = userMonthlyGameStat;
+            resLabel = "Game Played Count";
+        }
+        else {
+            // wrong value received return
+            deferred.resolve([ { 'error': 'wrongInputValue'} ]);
+            return deferred.promise;
+        }
+        dbObj.find(
+            { 'userId' : userId, 'years.yearVal' : year },
+            { 'years.monthObj' : 1, _id : 0 },
+             function(err, results){
+                 if (err) {
+                    console.log(err);
+                    deferred.resolve([ { 'error': 'dbErr'}] );
+                } else {
+                 //    console.log("Fetched results !!");
+                    if ( results.length >= 1 ){
+                        var retArr = [];
+                        results.forEach(function(doc){
+                            doc.years.forEach(function(mObj){
+                                mObj.monthObj.forEach(function(mVal){
+                                    retArr.push(
+                                        {
+                                            'Month' : mVal.month
+                                        }
+                                    );
+                                    retArr[retArr.length-1][resLabel]=mVal.count;
+                                });
+                            });
+                        });
+                        deferred.resolve( retArr );
+                     }
+                     else {
+                         deferred.resolve([ { 'error': 'dbErrNoData'} ]);
+                     }
+                 //    done(results );
+                 }
+             }
+         );
+         return deferred.promise;
+    }
 
 
 
