@@ -50,6 +50,7 @@ module.exports = function(server,sessionMiddleware) {
         });
 
         client.on('join',function( playerData ) {
+          levelMultiplier =playerData.levelMultiplier;
           console.log( playerData.userId + ' joined. Wants to play ' + playerData.topicId );
           // check if the user is authenticated and his session exists, if so add him to the game
           if ( client.request.session && (playerData.userId == client.request.session.user) ) {//req.session.user
@@ -178,6 +179,7 @@ module.exports = function(server,sessionMiddleware) {
             });
 
             client.on('joinTournament',function( playerData ) {
+              levelMultiplier = playerData.levelMultiplier;
               console.log( playerData.userId + ' joined. Wants to play ' + playerData.topicId + ' of tournament ' + playerData.levelId  );
 
               if ( client.request.session && (playerData.userId == client.request.session.user) ) {//req.session.user
@@ -225,7 +227,6 @@ module.exports = function(server,sessionMiddleware) {
                 }
               } else {
                 var gameManager = TournamentManager.getGameManager( data.tournamentId ),
-
                      gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
                     console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"+gamePlayers);
                     gamePlayers.forEach(function( player, index) {
@@ -250,10 +251,14 @@ module.exports = function(server,sessionMiddleware) {
                   gamePlayers = gameManager ? gameManager.getGamePlayers( gameData.gameId ) : null ;
                   gamePlayers.forEach(function( player, index) {
                     if(player.userId==gameData.userId){
-                      gameData.playerScore=player.score;
+                      if (levelMultiplier && player.score>0) {
+                        gameData.playerScore=player.score * levelMultiplier;
+                      }else {
+                        gameData.playerScore = player.score;
+                      }
                     }
-
                   });
+
               if ( gameManager ) {
                 gameManager.updateScore( gameData.gameId, gameData.userId, gameData.playerScore );
                 var intermediateGameBoard = gameManager.getLeaderBoard( gameData.gameId ),
@@ -262,12 +267,19 @@ module.exports = function(server,sessionMiddleware) {
                 intermediateGameBoard.some( function(player, index ) {
                   if ( player.userId == gameData.userId ) {
                     myRank = index + 1;
+                    // gameData.playerScore = player.score ;
                     return true;
                   }
                 });
                 if ( gamePlayers && gamePlayers.length ) {
                   gamePlayers.forEach( function( player, index) {
-                    player.client.emit('takeScore', {myRank: myRank, userId: client.request.session.user, topperName:gameTopper.playerName, topperScore:gameTopper.score, topperImage:gameTopper.playerPic });
+
+                  if (levelMultiplier && gameTopper.score>0) {
+                    tempTopperScore = gameTopper.score/levelMultiplier;
+                  }else {
+                     tempTopperScore =  gameTopper.score;
+                    }
+                    player.client.emit('takeScore', {myRank: myRank, userId: client.request.session.user, topperName:gameTopper.playerName, topperScore:tempTopperScore, topperImage:gameTopper.playerPic });
                   });
                 }
               } else {

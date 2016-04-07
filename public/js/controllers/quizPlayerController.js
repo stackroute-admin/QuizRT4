@@ -115,11 +115,13 @@ angular.module('quizRT')
                         else {
                             $scope.questionImage = null;
                         }
-                        $scope.time = 10;
+                        $scope.time = 5;
                         $scope.changeColor = function(id, element) {
-                          // alert('hello i am clicked');
-                          $(element.target).addClass('selectedOption');
+                          alert('hello i am c.licked');
+                          $(element.target).attr('id','selectedOption');
                           $('#'+$scope.currentQuestion.correctIndex).addClass('btn-success');
+                          $scope.isDisabled = true;
+
                           var obj = {
                             gameId: startGameData.gameId,
                             topicId: startGameData.topicId,
@@ -143,7 +145,6 @@ angular.module('quizRT')
                               userId:$rootScope.loggedInUser.userId
                           });
 
-                      $scope.isDisabled = true;
                       $rootScope.socket.emit('updateStatus', {
 
                           gameId: startGameData.gameId,
@@ -152,7 +153,6 @@ angular.module('quizRT')
                           playerName: $rootScope.loggedInUser.name,
                           playerPic: $rootScope.loggedInUser.imageLink
                       });
-
                         };
                     }
                 }
@@ -165,18 +165,17 @@ angular.module('quizRT')
 
         });
         $rootScope.socket.on('highLightOption', function(data) {
-          $scope.myscore=data.myScore;
-          console.log('hello my score is......'+$scope.myscore);
+        //  $scope.myscore=data.myScore;
+        //  console.log('hello my score is......'+$scope.myscore);
           if(data.correct){
             console.log('hello');
             // $(data.elem.target).addClass('btn-success');
-            $('.selectedOption').addClass('btn-success');
+            $('#selectedOption').addClass('btn-success');
           }
           else{
-              console.log('hello');
+              console.log('hello  selected wrong option');
             // $(data.elem.target).addClass('btn-danger');
-
-            $('.selectedOption').addClass('btn-danger');
+            $('#selectedOption').addClass('btn-danger');
           }
         });
         $rootScope.socket.on('takeScore', function(data) {

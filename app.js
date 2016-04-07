@@ -48,8 +48,8 @@ var express = require('express'),
       },
       secret: 'keyboard cat'
     });
-    mongoose.connect('mongodb://localhost/QuizART');
-
+    // mongoose.connect('mongodb://localhost/QuizART');
+    mongoose.connect('mongodb://localhost/quizRT3');
 //mongoose.connect('mongodb://quizart.stackroute.in/quizRT3');
  // mongoose.connect('mongodb://172.23.238.253/quizRT3');
 //  }),

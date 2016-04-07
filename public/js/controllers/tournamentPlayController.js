@@ -26,6 +26,7 @@ angular.module('quizRT')
         $rootScope.hideFooterNav = true;
         $scope.gameId = '';
         $scope.levelId = $rootScope.playGame.levelId;
+        $scope.levelMultiplier = $rootScope.playGame.levelMultiplier;
         $scope.tournamentId = $rootScope.playGame.tournamentId;
         $scope.topicId = $rootScope.playGame.topicId;
         $scope.topicName = $rootScope.playGame.topicName;
@@ -59,6 +60,7 @@ angular.module('quizRT')
         // create the playerData obj for the quiz gameManager to identify the player and his client
         var playerData = {
             levelId: $scope.levelId, // defined only for Tournaments
+            levelMultiplier: $scope.levelMultiplier,
             tournamentId: $scope.tournamentId,
             topicId: $scope.topicId,
             userId: $rootScope.loggedInUser.userId,
@@ -119,11 +121,12 @@ angular.module('quizRT')
                         }
                         $scope.time = 5;
                         $scope.changeColor = function(id, clickEvent) {
-                          $scope.isDisabled = true;
 
                           console.log("Inside Change Color -  ClickEventTarget",clickEvent.target);
                           $(clickEvent.target).addClass('selectedOptionTournament');
                           $('#'+$scope.currentQuestion.correctIndex).addClass('btn-success');
+                          $scope.isDisabled = true;
+
                           var obj = {
                             gameId: startGameData.gameId,
                             topicId: startGameData.topicId,
