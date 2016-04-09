@@ -83,6 +83,12 @@ module.exports = {
             }
             topic.points+=clientData.score;
             topic.level = self.findLevel(topic.points);
+            topic.gameInfo.push({
+                gameId:clientData.gameId,
+                score:clientData.score,
+                rank:clientData.rank,
+                gameDate:new Date().toString()
+            });
           }
         });
         self.validateAndSaveProfile( profileData, done );

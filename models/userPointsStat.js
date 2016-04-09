@@ -17,7 +17,14 @@ var mongoose = require('mongoose'),
         skipResponseCount: Number,
         correctPercentage: Number,
         wrongPercentage: Number,
-        skipPercentage: Number
+        skipPercentage: Number,
+        userStreak : {
+            streakDates :Array,
+            gamePlayedCount:Number,
+            score:Number,
+            bestRank:Number,
+            winCount:Number
+        }
     });
 
  module.exports = userPointsSchema;

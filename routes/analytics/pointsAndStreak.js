@@ -1,0 +1,185 @@
+var userProfile = require('../../models/profile');
+var mongoose = require('mongoose');
+var moment = require('moment');
+mongoose.connect('mongodb://localhost/quizRT3');
+
+// get overall points for all users across different topics and tournaments
+
+var o = {};
+o.map = function () {
+                    //    var key = this.userId;
+                       var key = {
+                           'userId' : this.userId,
+                           'timeStamp': new Date().toString()
+                       };
+                       // get level points
+                       var val = {
+                           value :0,
+                           gameInfo:[]
+                       }
+                       for (var idx = 0; idx < this.tournaments.length; idx++) {
+                           val.value = 0;
+                            this.tournaments[idx].levelPoints.forEach(function(levelPoint){
+                                val.value += levelPoint
+                            });
+                             emit(key, val);
+                       }
+                       // get points for topics played
+                       for (var idx = 0; idx < this.topicsPlayed.length; idx++) {
+                            val.value = this.topicsPlayed[idx].points;
+                            if ( this.topicsPlayed[idx].hasOwnProperty("gameInfo")){
+                                val.gameInfo = this.topicsPlayed[idx].gameInfo;
+                            }else {
+                                val.gameInfo = [];
+                            }
+                            emit(key, val);
+                       }
+                   }
+
+
+
+
+o.reduce = function (key, values ) {
+        var retObj = {
+            value:0,
+            gameInfo:[]
+        } ;
+        var arr1 =[];
+        values.forEach(function(vals){
+            var dateStr,rank,score;
+            arr1.push(vals.value);
+            if( vals.gameInfo.length != 0 ){
+                // retObj.gameInfo.push(vals.gameInfo);
+                vals.gameInfo.forEach(function(data){
+                    // retObj.gameInfo.push(data.gameDate.getFullYear());
+                    dateStr = data.gameDate.getFullYear() + '-' +                                                      data.gameDate.getMonth()+1 + '-'
+                        + data.gameDate.getDate() ;
+                    rank = data.rank;
+                    score = data.score;
+                    retObj.gameInfo.push({'dateStr': dateStr,
+                                            'rank':rank,
+                                            'score':score
+                                        });
+                    dateStr = null;
+                    rank = null;
+                    score = null;
+                });
+            }
+        });
+        retObj.value = Array.sum(arr1);
+        return retObj;
+     }
+// o.sort = { points: -1 }
+
+// o.query = { 'userId' : 'ch'}
+// o.out = {replace:'testMapReduceOutput22'}
+
+userProfile.mapReduce(o, function (err, results) {
+  console.log(results)
+  console.log(results[0].value.gameInfo);
+  var storeData = require('./storeMapReduceAnalysis');
+  results.forEach(function(newRec){
+    dataObj = {};
+    newRec.value.gameInfo.forEach(function(data){
+        if ( data.dateStr in dataObj ){
+            dataObj[data.dateStr].score += data.score;
+            if (dataObj[data.dateStr].bestRank > data.rank){
+                dataObj[data.dateStr].bestRank = data.rank;
+            }
+            if ( data.rank === 1 ){
+                dataObj[data.dateStr].winCount += 1;
+            }
+        }
+        else {
+            dataObj[data.dateStr] = {};
+            dataObj[data.dateStr].score = data.score;
+            dataObj[data.dateStr].bestRank = data.rank;
+            if ( data.rank === 1 ){
+                dataObj[data.dateStr].winCount = 1;
+            }
+            else {
+                dataObj[data.dateStr].winCount = 0;
+            }
+        }
+    });
+    // do streak calculation here
+    var finalStreak = {
+        streakDates :[],
+        gamePlayedCount:0,
+        score:0,
+        bestRank:0,
+        winCount:0
+    };
+    var tempStreak = {
+        streakDates :[],
+        gamePlayedCount:0,
+        score:0,
+        bestRank:0,
+        winCount:0
+    };
+    var nextDate,currentDate;
+    var i = 0;
+     for ( k in dataObj ){
+
+         currentDate = k;
+         if ( i === 0){
+             tempStreak.streakDates.push(currentDate);
+             tempStreak.gamePlayedCount += 1;
+             tempStreak.score += dataObj[k].score;
+             tempStreak.bestRank = dataObj[k].bestRank;
+             tempStreak.winCount = dataObj[k].winCount;
+         }
+         if ( currentDate == nextDate ){
+             tempStreak.streakDates.push(currentDate);
+             tempStreak.gamePlayedCount += 1;
+             tempStreak.score += dataObj[k].score;
+             tempStreak.bestRank = dataObj[k].bestRank;
+             tempStreak.winCount = dataObj[k].winCount;
+         }
+         else {
+             if ( tempStreak.streakDates.length >= finalStreak.streakDates.length ){
+                 finalStreak = tempStreak;
+             }
+             tempStreak = {
+                 streakDates :[],
+                 gamePlayedCount:0,
+                 score:0,
+                 bestRank:0,
+                 winCount:0
+             };
+            tempStreak.streakDates.push(currentDate);
+            tempStreak.gamePlayedCount += 1;
+            tempStreak.score += dataObj[k].score;
+            tempStreak.bestRank = dataObj[k].bestRank;
+            tempStreak.winCount = dataObj[k].winCount;
+         }
+         var dateVal = moment(currentDate);
+         nextDate = dateVal.add(1, 'days');
+         i++;
+     }
+     if ( tempStreak.streakDates.length >= finalStreak.streakDates.length ){
+         finalStreak = tempStreak;
+     }
+    console.log(dataObj);
+    console.log(finalStreak);
+        var combinedDataObj = newRec._id;
+        combinedDataObj.totalPoint = newRec.value.value;
+        combinedDataObj.userStreak = finalStreak;
+        storeData.saveMapReduceUserPoints(combinedDataObj,function(data) {
+            console.log(data);
+        });
+
+  });
+
+  // var storeData = require('./storeMapReduceAnalysis');
+  // results.forEach(function(newRec){
+  //     var combinedDataObj = newRec._id;
+  //     combinedDataObj.totalPoint = newRec.value;
+  //     storeData.saveMapReduceUserPoints(combinedDataObj,function(data) {
+  //         console.log(data);
+  //     });
+  // });
+
+
+  // mongoose.disconnect();
+});

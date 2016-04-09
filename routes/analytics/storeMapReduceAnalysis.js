@@ -208,6 +208,7 @@ module.exports = {
                 console.log("Found one collectionData item: " );
                 collectionData.timeStamp = newRec.timeStamp;
                 collectionData.totalPoint += newRec.totalPoint;
+                collectionData.userStreak = newRec.userStreak;
                 // Save data once  dataset is modified
                 collectionData.save(function(err){
                     if(err){
