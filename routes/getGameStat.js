@@ -249,10 +249,10 @@ module.exports = {
        return deferred.promise;
    },
    // mapReduceObjPoint
-   getUserPointsRank: function(userId){
+   getUserPointsRankAndStreak: function(userId){
        var deferred = Q.defer();
        // fetch sorted userId according to totalpoints
-       mapReduceObjPoint.find({},{ _id:0,userId:1},
+       mapReduceObjPoint.find({},{ _id:0,userId:1,userStreak:1},
             function(err, results){
                 if (err) {
                    console.log(err);
@@ -264,7 +264,12 @@ module.exports = {
                         //    console.log(results[0]);
                            if (results[i].userId === userId){
                             //    console.log("Rank is " + Number(i+1));
-                               deferred.resolve({'label':'Total Points','rank':Number(i+1)});
+                               deferred.resolve(
+                                   {
+                                       'label':'Total Points','rank':Number(i+1),
+                                       'label':'User Streak', 'userStreak':results[i].userStreak
+                                   }
+                               );
                                break;
                            }
                         }

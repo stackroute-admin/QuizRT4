@@ -121,7 +121,7 @@ router.get('/getCurrentGameStat', function(req, res, next) {
                 resultArr = [];
             Q.all([
                 getGameStatObj.getUserWinRank(usr),
-                getGameStatObj.getUserPointsRank(usr),
+                getGameStatObj.getUserPointsRankAndStreak(usr),
                 getGameStatObj.getUserAvgRespTimeRank(usr),
                 getGameStatObj.getUserCorrectPerRank(usr)
 
