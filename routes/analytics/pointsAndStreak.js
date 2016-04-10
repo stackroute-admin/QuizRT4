@@ -52,7 +52,7 @@ o.reduce = function (key, values ) {
                 // retObj.gameInfo.push(vals.gameInfo);
                 vals.gameInfo.forEach(function(data){
                     // retObj.gameInfo.push(data.gameDate.getFullYear());
-                    dateStr = data.gameDate.getFullYear() + '-' +                                                      data.gameDate.getMonth()+1 + '-'
+                    dateStr = data.gameDate.getFullYear() + '-' +                                                      Number(data.gameDate.getMonth()+1) + '-'
                         + data.gameDate.getDate() ;
                     rank = data.rank;
                     score = data.score;
