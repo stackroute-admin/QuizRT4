@@ -19,20 +19,23 @@
 <link href='https://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
 	<div ng-if="loggedInUser" class="container" id="main">
 		<div class="row user">
-			<div class="col-xs-offset-1 col-xs-5 col-sm-offset-0	col-sm-2">
-				<img ng-src="{{loggedInUser.imageLink}}"  width="120px" height="120px"  class="img-circle img-responsive pull-left">
-			</div>
-			<div class="col-xs-6 col-sm-4 usermiddle">
-				<h4>{{loggedInUser.name}},
-			{{loggedInUser.age}}</h4>
-				<h5>{{loggedInUser.badge}}</h5>
-			<!--	<span id="flag"><img ng-src="{{data.flagLink}}" alt="user image" width="30px" height="30px" class="img-rounded">
-			</span> -->
+			<div class="col-xs-offset-1 col-xs-5 col-sm-offset-0	col-sm-2 profile">
+				<img ng-src="{{loggedInUser.imageLink}}"  width="140px" height="140px"  class="img-circle img-responsive pull-left">
+				<div class="row">
+					<div class="col-xs-12 col-md-6 col-lg-5">
+						<img ng-src="../images/badges/handshake.png"  width="40px" height="40px"  class="img-circle img-responsive pull-left">
+					</div>
+					<div class="col-xs-6 col-md-6 col-lg-7">
+						<h4>{{loggedInUser.badge}}</h4>
+					</div>
+				</div>
+				<h4>{{loggedInUser.name}}, {{loggedInUser.age}}</h4>
+			<!--<span id="flag"><img ng-src="{{data.flagLink}}" alt="user image" width="30px" height="30px" class="img-rounded">
+			</span>-->
 				<h6 id="country">{{loggedInUser.country}}</h6>
 
 			</div>
-
-			<div class="col-xs-12 col-sm-6" id="GamesInfo">
+			<div class="col-xs-12 col-sm-6 col-md-offset-2" id="GamesInfo">
 				<div class="row info">
 				<div class=" col-xs-4" id="games">
 					<span class="glyphicon glyphicon-tower glyph"></span>
@@ -49,8 +52,31 @@
 					<p>Win%<br>{{loggedInUser.wins/loggedInUser.totalGames*100 | number : 2}}%
 					</p>
 				</div>
+
 		</div>
 		</div>
+	</div>
+	<div class="row user rankInfo">
+					<div class=" col-xs-3" id="winRank">
+				<span class="glyphicon glyphicon-king glyphRank"></span>
+				<p>Wins Rank</br>{{loggedInUser.winRank}}
+				</p>
+			</div>
+			<div class="col-xs-3" id="pointsRank">
+				<span class="glyphicon glyphicon-fire glyphRank"></span>
+				<p>Points Rank</br>{{loggedInUser.pointsRank}}
+				</p>
+			</div>
+			<div class="col-xs-3" id="speedRank">
+				<span class="glyphicon glyphicon-knight glyphRank"></span>
+				<p>Speed Rank<br>{{loggedInUser.speedRank}}
+				</p>
+			</div>
+			<div class="col-xs-3" id="accuracyRank">
+				<span class="glyphicon glyphicon-ok-circle glyphRank"></span>
+				<p>Accuracy Rank<br>{{loggedInUser.accuracyRank}}
+				</p>
+			</div>
 	</div>
 		<!-- User Game Activity -->
 		<section id="gameActivity">

@@ -82,7 +82,15 @@ footer .nav img {
     background-color: #337ab7;
     color: white;
 }
-.topic-info, #activity-info{
+.topic-info{
+  white-space: nowrap;
+  width: 102%;
+  display: inline-block;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin-top: 20px;
+}
+#activity-info{
   white-space: nowrap;
   width: 102%;
   display: inline-block;
@@ -112,9 +120,12 @@ footer .nav img {
   padding-bottom: 10px;
 }
 #GamesInfo{
-  border-left: 2px red solid;
   padding-top:5px;
   color:white;
+}
+.rankInfo{
+  padding-top:10px;
+  color:orange;
 }
 .sectionHeader{
   background-color:lightyellow;
@@ -164,8 +175,11 @@ height:100%;
   background-color:rgb(67, 73, 74);
   padding-top: 30px;
 }
-
-#win, #games, #age, #winpercentage{
+.profile{
+  border: 1px solid white;
+  padding: 15px 15px 15px 15px;
+}
+#win, #games, #age, #winpercentage,#winRank,#pointsRank,#speedRank,#accuracyRank{
 text-align: center;
 }
 
@@ -197,12 +211,20 @@ text-align: center;
   }
 
   .glyph {
-    font-size: 4em;
+    font-size: 3em;
   }
 
-  .user {
+    .glyphRank {
+      font-size: 2em;
+    }
+
+  .user{
     padding-top: 15px;
     padding-bottom: 15px;
+  }
+  .profile{
+    border: 1px solid white;
+    padding: 15px 15px 15px 15px;
   }
 
 }
@@ -255,6 +277,9 @@ text-align: center;
     color:white;
     border:none;
   }
+  .rankInfo{
+    padding-top:5px;
+  }
 
   #topics {
     background-color:lightyellow;
@@ -265,7 +290,10 @@ text-align: center;
   .user {
       padding-top: 15px;
    }
-
+   .profile{
+     border: 1px solid white;
+     padding: 15px 15px 15px 15px;
+   }
    .container {
      width: 100%;
      margin: 0px;
@@ -330,7 +358,9 @@ text-align: center;
     color:white;
     border:none;
   }
-
+  .rankInfo {
+    padding-top:5px;
+  }
   #topics {
     background-color:lightyellow;
     color:black;
@@ -340,7 +370,10 @@ text-align: center;
   .user {
       padding-top: 15px;
    }
-
+   .profile{
+     border: 1px solid white;
+     padding: 15px 15px 15px 15px;
+   }
    .container {
      width: 100%;
      margin: 0px;
@@ -377,7 +410,7 @@ text-align: center;
   }
 /* User Rank Chart Style*/
 .chart-tooltip{
-  background-color: #B73535;
+  background-color: #e9f6fb;
 }
 .chart .axis>.tick>text{
   fill: white;
@@ -388,5 +421,8 @@ text-align: center;
 }
 .color-dot{
   background-color: orange;
+}
+.tooltip-item,.abscissas{
+  color:black;
 }
 /*User Rank Chart Style End*/
