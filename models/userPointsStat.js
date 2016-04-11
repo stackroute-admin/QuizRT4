@@ -21,7 +21,7 @@ var mongoose = require('mongoose'),
         userStreak : {
             streakDates :Array,
             gamePlayedCount:Number,
-            score:Number,
+            bestScore:Number,
             bestRank:Number,
             winCount:Number
         }

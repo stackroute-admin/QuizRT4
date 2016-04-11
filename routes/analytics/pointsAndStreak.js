@@ -82,7 +82,13 @@ userProfile.mapReduce(o, function (err, results) {
     dataObj = {};
     newRec.value.gameInfo.forEach(function(data){
         if ( data.dateStr in dataObj ){
-            dataObj[data.dateStr].score += data.score;
+            // can give best score instead
+            // dataObj[data.dateStr].score += data.score;
+            if (dataObj[data.dateStr].bestScore < data.score){
+                dataObj[data.dateStr].bestScore = data.score;
+            }
+
+            dataObj[data.dateStr].gamePlayedCount += 1;
             if (dataObj[data.dateStr].bestRank > data.rank){
                 dataObj[data.dateStr].bestRank = data.rank;
             }
@@ -92,7 +98,9 @@ userProfile.mapReduce(o, function (err, results) {
         }
         else {
             dataObj[data.dateStr] = {};
-            dataObj[data.dateStr].score = data.score;
+            // dataObj[data.dateStr].score = data.score;
+            dataObj[data.dateStr].bestScore = data.score;
+            dataObj[data.dateStr].gamePlayedCount = 1;
             dataObj[data.dateStr].bestRank = data.rank;
             if ( data.rank === 1 ){
                 dataObj[data.dateStr].winCount = 1;
@@ -106,14 +114,14 @@ userProfile.mapReduce(o, function (err, results) {
     var finalStreak = {
         streakDates :[],
         gamePlayedCount:0,
-        score:0,
+        bestScore:0,
         bestRank:0,
         winCount:0
     };
     var tempStreak = {
         streakDates :[],
         gamePlayedCount:0,
-        score:0,
+        bestScore:0,
         bestRank:0,
         winCount:0
     };
@@ -124,15 +132,15 @@ userProfile.mapReduce(o, function (err, results) {
          currentDate = k;
          if ( i === 0){
              tempStreak.streakDates.push(currentDate);
-             tempStreak.gamePlayedCount += 1;
-             tempStreak.score += dataObj[k].score;
+             tempStreak.gamePlayedCount += dataObj[k].gamePlayedCount;
+             tempStreak.bestScore = dataObj[k].bestScore;
              tempStreak.bestRank = dataObj[k].bestRank;
              tempStreak.winCount = dataObj[k].winCount;
          }
          if ( currentDate == nextDate ){
              tempStreak.streakDates.push(currentDate);
-             tempStreak.gamePlayedCount += 1;
-             tempStreak.score += dataObj[k].score;
+             tempStreak.gamePlayedCount += dataObj[k].gamePlayedCount;
+             tempStreak.bestScore = dataObj[k].bestScore;
              tempStreak.bestRank = dataObj[k].bestRank;
              tempStreak.winCount = dataObj[k].winCount;
          }
@@ -143,13 +151,13 @@ userProfile.mapReduce(o, function (err, results) {
              tempStreak = {
                  streakDates :[],
                  gamePlayedCount:0,
-                 score:0,
+                 bestScore:0,
                  bestRank:0,
                  winCount:0
              };
             tempStreak.streakDates.push(currentDate);
-            tempStreak.gamePlayedCount += 1;
-            tempStreak.score += dataObj[k].score;
+            tempStreak.gamePlayedCount += dataObj[k].gamePlayedCount;
+            tempStreak.bestScore = dataObj[k].bestScore;
             tempStreak.bestRank = dataObj[k].bestRank;
             tempStreak.winCount = dataObj[k].winCount;
          }
@@ -165,6 +173,7 @@ userProfile.mapReduce(o, function (err, results) {
         var combinedDataObj = newRec._id;
         combinedDataObj.totalPoint = newRec.value.value;
         combinedDataObj.userStreak = finalStreak;
+        console.log(finalStreak);
         storeData.saveMapReduceUserPoints(combinedDataObj,function(data) {
             console.log(data);
         });
