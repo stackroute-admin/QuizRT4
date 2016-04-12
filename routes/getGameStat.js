@@ -13,8 +13,8 @@ var userAnalyticsSchema = require('../models/userAnalytics'),
     Profile = require("../models/profile"),
     Q = require('q');
 
-    // var mongoose = require('mongoose');
-    // mongoose.connect('mongodb://localhost/quizRT3');
+    var mongoose = require('mongoose');
+    mongoose.connect('mongodb://localhost/quizRT3');
 
 module.exports = {
     // function to return game stat for a given game and a user
@@ -258,20 +258,39 @@ module.exports = {
                    console.log(err);
                    deferred.resolve( { 'error': 'dbErr'} );
                } else {
-                //    console.log("Fetched results !!");
+                   console.log("Fetched results !!");
                    if ( results.length >= 1 ){
+                       var dataFound = false;
                        for ( i = 0; i < results.length; i+=1){
                         //    console.log(results[0]);
                            if (results[i].userId === userId){
                             //    console.log("Rank is " + Number(i+1));
+                                dataFound = true;
                                deferred.resolve(
                                    {
-                                       'label':'Total Points','rank':Number(i+1),
-                                       'label':'User Streak', 'userStreak':results[i].userStreak
+                                       'label':'Total Points',
+                                       'rank':Number(i+1),
+                                       'labelStreak':'User Streak', 'userStreak':results[i].userStreak
                                    }
                                );
                                break;
                            }
+                        }
+                        if (!dataFound){
+                            // sent empty data
+
+                            deferred.resolve(
+                            {
+                                'label':'Total Points',
+                                'rank':"--",
+                                'labelStreak':'User Streak',
+                                'userStreak':
+                                   { streakDates: [],
+                                     winCount: "--",
+                                     bestRank:"--",
+                                     bestScore: "--",
+                                     gamePlayedCount: "--" }
+                            });
                         }
                     }
                     else {
