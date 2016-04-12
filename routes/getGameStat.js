@@ -13,8 +13,8 @@ var userAnalyticsSchema = require('../models/userAnalytics'),
     Profile = require("../models/profile"),
     Q = require('q');
 
-    var mongoose = require('mongoose');
-    mongoose.connect('mongodb://localhost/quizRT3');
+    // var mongoose = require('mongoose');
+    // mongoose.connect('mongodb://localhost/quizRT3');
 
 module.exports = {
     // function to return game stat for a given game and a user
@@ -232,7 +232,7 @@ module.exports = {
                                                 deferred.resolve({'label':'Total Wins','rank' : winRankObj[res[0].wins]});
                                             }
                                             else {
-                                                deferred.resolve( { 'error': 'dbErrwe'} );
+                                                deferred.resolve( {'label':'Total Wins','rank':'--' } );
                                             }
                                        }
                                     }
@@ -322,6 +322,7 @@ module.exports = {
                                 break;
                             }
                          }
+                         deferred.resolve( {'label':'Avg Response Time','rank':'--'} );
                      }
                      else {
                          deferred.resolve( { 'error': 'dbErr'} );
@@ -352,6 +353,7 @@ module.exports = {
                                  break;
                              }
                           }
+                          deferred.resolve( {'label':'Correctness Ratio','rank':"--"} );
                       }
                       else {
                           deferred.resolve( { 'error': 'dbErr'} );
