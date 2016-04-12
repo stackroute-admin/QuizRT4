@@ -72,7 +72,7 @@ o.reduce = function (key, values ) {
      }
 // o.sort = { points: -1 }
 
-// o.query = { 'userId' : 'ch'}
+// o.query = { 'userId' : 'qw'}
 // o.out = {replace:'testMapReduceOutput22'}
 
 userProfile.mapReduce(o, function (err, results) {
@@ -82,6 +82,16 @@ userProfile.mapReduce(o, function (err, results) {
   results.forEach(function(newRec){
     dataObj = {};
     newRec.value.gameInfo.forEach(function(data){
+        // check if the data has directly come from map function
+        // here we are checking for "gameDate" as in map phase
+        // we have this value but in reduce we are dropping this value.
+        if( data.hasOwnProperty('gameDate') ){
+            // we are here mean data did not reach to reducer function so
+            // need to create dateStr so that we can do manupulation
+            var dateStr = data.gameDate.getFullYear() + '-' +                                                      ("0" + Number(data.gameDate.getMonth()+1)).slice(-2) + '-'
+                + data.gameDate.getDate() ;
+            data.dateStr = dateStr;
+        }
         if ( data.dateStr in dataObj ){
             // can give best score instead
             // dataObj[data.dateStr].score += data.score;
@@ -98,6 +108,7 @@ userProfile.mapReduce(o, function (err, results) {
             }
         }
         else {
+
             dataObj[data.dateStr] = {};
             // dataObj[data.dateStr].score = data.score;
             dataObj[data.dateStr].bestScore = data.score;
