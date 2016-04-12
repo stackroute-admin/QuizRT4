@@ -63,6 +63,7 @@ angular.module('quizRT')
             levelMultiplier: $scope.levelMultiplier,
             tournamentId: $scope.tournamentId,
             topicId: $scope.topicId,
+            difficultyLevel:  $rootScope.playGame.difficultyLevel,
             userId: $rootScope.loggedInUser.userId,
             playerName: $rootScope.loggedInUser.name,
             playerPic: $rootScope.loggedInUser.imageLink,

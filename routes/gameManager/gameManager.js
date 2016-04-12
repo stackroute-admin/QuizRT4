@@ -53,13 +53,14 @@ var GameManager = function() {
   ** @param topicId as String, playersNeeded as Number, incomingPlayer as Object
   ** @return true if player was added to a game, otherwise false
   */
-  this.managePlayer = function( topicId, levelId, playersNeeded, incomingPlayer ) {
+  this.managePlayer = function( topicId, levelId, playersNeeded, incomingPlayer,difficultyLevel ) {
+    console.log("inside----------managePlayer---------"+difficultyLevel);
     var gameId4TopicInWaitStack = this.topicsWaiting[topicId];
     if ( gameId4TopicInWaitStack ) { // if the game is waiting in the wait stack
       var isPlayerAdded = this.addPlayerToGame( gameId4TopicInWaitStack, topicId, incomingPlayer );
       if ( isPlayerAdded ) {
         if ( this.isGameReady( gameId4TopicInWaitStack ) ) {
-          this.startGame( gameId4TopicInWaitStack ); //start the game
+          this.startGame( gameId4TopicInWaitStack,difficultyLevel ); //start the game
           delete this.topicsWaiting[topicId]; //remove the topic from wait stack
           return true;
         }
@@ -73,7 +74,7 @@ var GameManager = function() {
         var isPlayerAdded = this.addPlayerToGame( gameId, topicId, incomingPlayer );
         if ( isPlayerAdded ) {
           if ( this.isGameReady( gameId ) ) {
-            this.startGame( gameId ); //start the game
+            this.startGame( gameId,difficultyLevel ); //start the game
             delete this.topicsWaiting[topicId]; //remove the topic from wait stack
             return true;
           }
@@ -181,11 +182,14 @@ var GameManager = function() {
   ** @param gameId as String
   ** @return true if everything is setup before starting a Game and 'startGame' events are emitted
   */
-  this.startGame = function( gameId ) {
+  this.startGame = function( gameId,difficultyLevel ) {
+    console.log("start gameeeeeeeeeeeeeeeeeee----------------"+difficultyLevel);
     var game = this.games.get( gameId ),
         self = this;
-    questionBank.getQuizQuestions( game.topicId, 5 , function( err, questions ) { // get questions from the questionBank
+        console.log("inside start game........................................"+game);
+    questionBank.getQuizQuestions( game.topicId, difficultyLevel, 5 , function( err, questions ) { // get questions from the questionBank
       if ( err ) {
+
         console.log('ERROR: Failed to get quiz questions for ' + gameId + '. Cannot start the game. Terminating the game launch.');
         console.error(err);
         // return false;

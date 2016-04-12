@@ -99,13 +99,10 @@ angular.module('quizRT', ['ngRoute', 'ngCookies'])
       };
     })
     .factory('socket', function ($rootScope) {
-
       return function($rootScope, type) {
-
-        // var socket = io.connect('http://192.168.1.14:7071' + type, {'forceNew':true } );
-        var socket = io.connect('http://172.23.238.169:7071' + type, {'forceNew':true } );
+        // var socket = io.connect('http://192.168.0.103:8082' + type, {'forceNew':true } );
+        var socket = io.connect('http://172.23.238.203:8081' + type, {'forceNew':true } );
         // var socket = io.connect('http://quizart.stackroute.in:2000' + type, {'forceNew':true } );
-
         console.log('Socket initialized for ' + type);
 
         return {

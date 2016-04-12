@@ -65,7 +65,12 @@ angular.module('quizRT')
       };
       //
       $scope.selectionChange = function(value, index,key) {
+        alert(key);
+        //key=T1;
+        console.log(value);
+        console.log(index);
         $scope.levelTopicArray[index] = $scope.levelTopicArray[index] || {};
+        console.log($scope.levelTopicArray[index]);
         $scope.levelTopicArray[index][key] = value;
         $http.get('/questionPaperRetriever/getQPaper/' + value)
              .then(function(successResponse){
@@ -78,6 +83,7 @@ angular.module('quizRT')
         var isValidTournament = validateTournament(tournament);
         if (isValidTournament) {
           tournament.levelTopicArray = $scope.levelTopicArray;
+          console.log(tournament.levelTopicArray);
           console.log($scope.tournament);
           var formData = new FormData();
 
