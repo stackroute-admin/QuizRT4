@@ -179,6 +179,18 @@ height:100%;
   border: 1px solid white;
   padding: 15px 15px 15px 15px;
 }
+.streak{
+  color: white;
+  font-size: 1em;
+  border-bottom:1px solid white;
+  display: inline block;
+  margin-top: 40px;
+  margin-left:40px;
+}
+.streakScore,.streakDate{
+  padding-left:20px;
+  padding-top:5px;
+}
 #win, #games, #age, #winpercentage,#winRank,#pointsRank,#speedRank,#accuracyRank{
 text-align: center;
 }
@@ -226,7 +238,17 @@ text-align: center;
     border: 1px solid white;
     padding: 15px 15px 15px 15px;
   }
-
+  .streak{
+    color: white;
+    font-size: 2em;
+    border-bottom:1px solid white;
+    display: inline block;
+    margin-top: 40px;
+    margin-left:10px;
+  }
+  .streakDetails{
+    color: white;
+  }
 }
 
 @media (min-width:500px) and (max-width:768px){
@@ -293,6 +315,14 @@ text-align: center;
    .profile{
      border: 1px solid white;
      padding: 15px 15px 15px 15px;
+   }
+   .streak{
+     color: white;
+     font-size: 1em;
+     border-bottom:1px solid white;
+     display: inline block;
+     margin-top: 30px;
+     margin-left:10px;
    }
    .container {
      width: 100%;
@@ -373,6 +403,17 @@ text-align: center;
    .profile{
      border: 1px solid white;
      padding: 15px 15px 15px 15px;
+   }
+   .streak{
+     color: white;
+     font-size: 1em;
+     border-bottom:1px solid white;
+     display: inline block;
+     margin-top: 10px;
+   }
+   .streakScore,.streakDate{
+     padding-left:60px;
+     padding-top:5px;
    }
    .container {
      width: 100%;

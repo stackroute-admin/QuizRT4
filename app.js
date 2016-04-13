@@ -85,12 +85,10 @@ app.use( function( req, res, next ) {
     res.end( JSON.stringify( { error: 'User session does not exist. Kindly do a fresh login.'} ));
   }
 });
-
 app.use('/userProfile', profileHandler);
 app.use('/topicsHandler', topicsHandler);
 app.use('/tournamentHandler', tournamentHandler);
 app.use('/',confTournamentHandler);
-
 app.use('/analyticsDataHandler',analyticsDataHandler);
 // server.listen(8080, function() {
 // server.listen(8080, function() {

@@ -32,9 +32,9 @@
 				<h4>{{loggedInUser.name}}, {{loggedInUser.age}}</h4>
 			<!--<span id="flag"><img ng-src="{{data.flagLink}}" alt="user image" width="30px" height="30px" class="img-rounded">
 			</span>-->
-				<h6 id="country">{{loggedInUser.country}}</h6>
-
+				<span id="country" class="glyphicon glyphicon-map-marker">{{loggedInUser.country}}</span>
 			</div>
+
 			<div class="col-xs-12 col-sm-6 col-md-offset-2" id="GamesInfo">
 				<div class="row info">
 				<div class=" col-xs-4" id="games">
@@ -55,6 +55,31 @@
 
 		</div>
 		</div>
+
+
+		<div class="col-xs-12 col-sm-8 col-md-offset-2">
+			<div class="row streak">
+				<span class="glyphicon glyphicon-list streakIcon"></span>
+				&nbsp;QuizRT Streak
+			</div>
+			<div class="row streakDetails">
+					<div class="col-xs-5 streakScore">
+						<span>Game Streak:&nbsp;&nbsp;&nbsp;<strong>{{loggedInUser.gamePlayedCount}} Games</strong></span>
+					</div>
+					<div class="col-xs-7 streakDate">
+						<span>Day Streak:&nbsp;&nbsp;&nbsp;<strong>{{loggedInUser.streakDays}} Days&nbsp;&nbsp;{{loggedInUser.streakDate}}</strong></span>
+					</div>
+			</div>
+		</div>
+
+
+
+
+
+
+
+
+
 	</div>
 	<div class="row user rankInfo">
 					<div class=" col-xs-3" id="winRank">

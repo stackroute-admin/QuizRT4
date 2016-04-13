@@ -61,7 +61,7 @@ angular.module('quizRT')
                       .attr("text-anchor", "middle")
                       .style("fill", "white")
                       .style("font", "bold 12px Arial")
-                      .text(function(d, i) { return "  %" + filterDataSet[i].legendLabel; });
+                      .text(function(d, i) { return "  %" + filterDataSet[i].legendLabel+"   "; });
                   arcs.filter(function(d) { return d.endAngle - d.startAngle > .2; }).append("svg:text")
                       .attr("dy", ".35em")
                       .attr("text-anchor", "middle")
@@ -81,7 +81,7 @@ angular.module('quizRT')
                       var margin = {top: 40, right: 20, bottom: 20, left: 40},
                       width =300 - margin.left - margin.right,
                       height =300 - margin.top - margin.bottom,
-                      x = d3.scale.ordinal().rangeRoundBands([0, width],.4),
+                      x = d3.scale.ordinal().rangeRoundBands([0, width],0.85),
                       y = d3.scale.linear().range([height, 0]),
 
                       xAxis = d3.svg.axis()
@@ -91,9 +91,8 @@ angular.module('quizRT')
                       yAxis = d3.svg.axis()
                           .scale(y)
                           .orient("left")
-                          .ticks(15)
+                          .ticks(10)
                           .tickSize(2)
-                          .tickFormat(d3.format(".2s"));
                       if(angular.element("#"+uid+"_barChart").length)
                         d3.select("#"+uid+"_barChart").select("svg").remove();
                       var svg = d3.select("#"+uid+"_barChart").append("svg")
@@ -113,14 +112,14 @@ angular.module('quizRT')
                                     .attr('class', 'd3-tip')
                                     .offset([-10, 0])
                                     .html(function(d) {
-                                        return "<strong>ResponseTime:</strong> <span style='color:red'>" + d.responseTime + "</span>";
+                                        return "<strong>ResponseTime:</strong> <span style='color:white'>" + d.responseTime + "</span>";
                                     });
 
                                 svg.append("text")
                                     .attr("class", "x label")
                                     .attr("text-anchor", "end")
                                     .attr("x", width+10)
-                                    .attr("y", height - 6)
+                                    .attr("y", 260)
                                     .text("Question Number");
                                 svg.append("g")
                                     .attr("class", "x axis")
@@ -128,9 +127,8 @@ angular.module('quizRT')
                                     .call(xAxis)
                                     .selectAll("text")
                                     .style("text-anchor", "end")
-                                    .attr("dx", "-.8em")
-                                    .attr("dy", "-.55em")
-                                    .attr("transform", "rotate(-90)" );
+                                    .attr("dx", ".3em");
+
 
                                 //call tooltip
                                 svg.call(tip);
@@ -150,7 +148,7 @@ angular.module('quizRT')
                                 svg.selectAll("bar")
                                     .data(data)
                                     .enter().append("rect")
-                                    .style("fill", "green")
+                                    .style("fill", "#E64E4E")
                                     .attr("x", function(d) { return x(d.questionNumber); })
                                     .attr("width", x.rangeBand())
                                     .attr("y", function(d) { return y(d.responseTime); })

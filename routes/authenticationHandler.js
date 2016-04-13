@@ -18,7 +18,6 @@
 var express = require('express'),
   router = express.Router(),
   clickStreamStat = require('./clickStreamStatistics');
-
 module.exports = function(passport){
 	//sends successful login state back to angular
 	router.get('/success', function(req, res){

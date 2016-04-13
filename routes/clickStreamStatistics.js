@@ -52,6 +52,5 @@ var userLoginStatSave = function(data){
             console.log('addedd successfully');
         }
     });
-
 };
 module.exports = {userAnalyticsSave,userLoginStatSave};

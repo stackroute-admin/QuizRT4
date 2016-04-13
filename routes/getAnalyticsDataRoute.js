@@ -115,7 +115,7 @@ router.get('/getCurrentGameStat', function(req, res, next) {
 
   router.get('/getProfileStatForUser', function(req, res, next) {
     if ( req.session && req.session.user ) {
-      console.log('Authenticated user: ' + req.session.user);
+      console.log('Authenticated user rrrrrr: ' + req.session.user);
         if( !(req.session.user == null) ){
             var usr = req.query.userId,
                 resultArr = [];
@@ -130,6 +130,7 @@ router.get('/getCurrentGameStat', function(req, res, next) {
                     res.json(resultArr);
             });
         }
+        console.log(resultArr);
     } else {
       console.log('User not authenticated. Returning.');
       res.writeHead(401);

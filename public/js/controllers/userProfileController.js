@@ -106,8 +106,59 @@ angular.module('quizRT')
           },function errorCallback(err) {
               console.log("Error fetching data for visit and gamePlayed data " + err);
           });
+          //console.log($scope.topicsFollowed);
+          $http({
+              method: 'GET',
+              url: '/analyticsDataHandler/getProfileStatForUser',
+              params:{userId:$rootScope.loggedInUser.userId}
+            }).then(function successCallback(response) {
+              for (i=0;i<4;i++){
+                if (response.data[i].label==='Total Wins'){
+                  $rootScope.loggedInUser['winRank']=response.data[i].rank;
+                  // console.log('total wins');
+                }
+                if (response.data[i].label==='Total Points'){
+                  // console.log('total Points');
+                  $rootScope.loggedInUser['pointsRank']=response.data[i].rank;
+                  $rootScope.loggedInUser['gamePlayedCount']=((response.data[i].userStreak.gamePlayedCount==='--')?0:response.data[i].userStreak.gamePlayedCount);
+                  var len=response.data[i].userStreak.streakDates.length;
+                  if(len>=1){
+                    var monthNames = [
+                          "Jan", "Feb", "Mar",
+                          "Apr", "May", "Jun", "Jul",
+                          "Aug", "Sept", "Oct",
+                          "Nov", "Dec"
+                        ];
+                    var date = new Date(response.data[i].userStreak.streakDates[0]);
+                    var day = date.getDate();
+                    var monthIndex = date.getMonth();
+                    var year = date.getFullYear();
+                    var streakFromDate =day+" "+monthNames[monthIndex]+" "+year;
+                    date = new Date(response.data[i].userStreak.streakDates[len-1]);
+                    day = date.getDate();
+                    monthIndex = date.getMonth();
+                    year = date.getFullYear();
+                    var streakToDate =day+" "+monthNames[monthIndex]+" "+year;
+                    $rootScope.loggedInUser['streakDays']=len;
+                    $rootScope.loggedInUser['streakDate']='('+streakFromDate+' - '+streakToDate+')';
+                  }
+                  else{
+                    $rootScope.loggedInUser['streakDate']='';
+                    $rootScope.loggedInUser['streakDays']=0;
+                  }
 
-
+                }
+                if (response.data[i].label==='Avg Response Time'){
+                  $rootScope.loggedInUser['speedRank']=response.data[i].rank;
+                  // console.log('speed');
+                }
+                if (response.data[i].label==='Correctness Ratio'){
+                  $rootScope.loggedInUser['accuracyRank']=response.data[i].rank;
+                }
+              }
+            }, function errorCallback(response) {
+              console.log('server response with an error status for currentGameData');
+            });
         }, function( errorResponse ) {
           if ( errorResponse.status === 401 ) {
             $rootScope.isAuthenticatedCookie = false;
@@ -119,7 +170,6 @@ angular.module('quizRT')
           $location.path('/error');
           console.log('User profile could not be loaded!');
         });
-
         $scope.showFollowedTopic = function(topicID){
           var path = '/topic/'+topicID;
           $location.path(path);

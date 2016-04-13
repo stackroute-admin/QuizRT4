@@ -64,8 +64,51 @@
 .slice{
   cursor: pointer;
 }
+.chart{
+  margin-left:10px;
+}
 .barChart{
+  margin-left: 70px;
   width: auto;
   background-size: 10px 10px;
   background-image: linear-gradient(to right, rgba(0, 0, 53, 0.32) 1px, transparent 1px), linear-gradient(to bottom, rgba(160, 47, 255, 0.2) 1px, transparent 1px);
+}
+text{
+    fill: white;
+}
+.axis {
+  font: 12px sans-serif;
+}
+.axis path,
+.axis line {
+  fill: white;
+  shape-rendering: crispEdges;
+}
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(51, 42, 33, 0.74);
+  color: #ff911b;
+  border-radius: 2px;
+}
+
+/* Creates triangle for tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(180, 21, 16, 0.98);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
 }

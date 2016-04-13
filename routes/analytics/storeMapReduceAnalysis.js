@@ -257,7 +257,7 @@ module.exports = {
                 newRec.totalPoint = 0;
                 new mapReduceObjPoint(newRec).save(function(err){
                     if(err){
-                        console.log("Error updating data");
+                        console.log("Error updating data"+err);
                     }
                     else {
                         console.log("Updated Record!!");
