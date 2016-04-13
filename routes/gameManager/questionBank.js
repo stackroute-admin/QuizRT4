@@ -15,14 +15,15 @@
 //   Name of Developers  Anil Sawant
 
 var Reservoir = require('reservoir'),
-    Question = require("../../models/question.js");
-
+    Question = require("../../models/question.js"),
+    questionPaper = require('../../models/questionPaper.js'),
+    Q = require('q');
 module.exports = {
   getQuizQuestions: function( topicId, difficultyLevel, noOfQs, done ) {
     if ( isNaN(noOfQs) ) {
       done( 'noOfQs is not a number', null );
     } else {
-      Question.find( {$and:[{topicId:topicId},{difficultyLevel:{$in:[difficultyLevel]}}]} ) // retrieve questions from Question collection for topicId
+      Question.find( {$and:[{topicId:topicId},{difficultyLevel:{$in:difficultyLevel}}]} ) // retrieve questions from Question collection for topicId
       .exec( function(err, questions) {
         if ( err ) {
           done( 'Questions cannot be read from mongo.', null );
@@ -43,3 +44,47 @@ module.exports = {
     }
   }
 }
+
+
+
+
+//   getQuestionIds:function(questionPaperName) {
+//     var def = Q.defer();
+//     questionPaper.find({'Name':questionPaperName})
+//                    .select('Question')
+//                    .exec(function(err,selectedQuestions){
+//                      if(err){
+//                        return response.send(err);
+//                      }
+//                      else{
+//                        def.resolve(selectedQuestions);
+//                        return def.promise;
+//                      }
+//                    });
+//                  },
+//
+//   getQuestionsPrebuild:function( topicId,selectedQuestions, noOfQs, done ){
+//     if ( isNaN(noOfQs) ) {
+//       done( 'noOfQs is not a number', null );
+//     } else {
+//       Question.find( {questionId:{$in:selectedQuestions}} ) // retrieve questions from Question collection for topicId
+//       .exec( function(err, questions) {
+//         if ( err ) {
+//           done( 'Questions cannot be read from mongo.', null );
+//         } else {
+//           var myReservoir = Reservoir( noOfQs ),
+//               fewQuestions = [];
+//
+//           questions.forEach(function(e) {
+//             myReservoir.pushSome(e);
+//           });
+//
+//           for (var i = 0; i < noOfQs; i++) {
+//             fewQuestions.push(myReservoir[i]);
+//           }
+//           fewQuestions[0] ? done( null, fewQuestions) : done( 'No Questions in QuestionBank for ' + topicId + '.', null ); // if no questions send null else send the questions
+//         }
+//       });
+//     }
+//   }
+// }

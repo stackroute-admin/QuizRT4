@@ -63,8 +63,8 @@ module.exports = function(server,sessionMiddleware) {
               timer: 10
 
             };
-
-            var addedSuccessfully = GameManager.managePlayer( playerData.topicId, playerData.levelId, playerData.playersPerMatch, gamePlayer ); // add the player against the topicId.
+            var difficultyLevelTopic=[1,2,3,4,5];//for topics game fetch questions from all difficulty levels
+            var addedSuccessfully = GameManager.managePlayer( playerData.topicId, playerData.levelId, playerData.playersPerMatch, gamePlayer,difficultyLevelTopic); // add the player against the topicId.
             if ( addedSuccessfully === false ) {
               console.log('User is already playing the game ' + playerData.topicId + '. Cannot add him again.');
               client.emit('alreadyPlayingTheGame', { topicId: playerData.topicId });

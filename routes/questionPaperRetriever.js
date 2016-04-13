@@ -15,8 +15,13 @@
 //
 
 var questionPaper = require('../models/questionPaper'),
+    questionsFromQB=require('../models/question.js'),
+    prebuildQuestionBank=require('./gameManager/prebuildQuestions.js'),
     express = require('express'),
-    router = express.Router();
+    questionBank=require('./gameManager/questionBank.js'),
+    Q = require('q'),
+    router = express.Router(),
+    util = require('util');
 
 router.route('/getQPaper/:topicId')
       .get(function(request,response){
@@ -29,5 +34,23 @@ router.route('/getQPaper/:topicId')
                              return response.send(questionPaperNames);
                            });
       });
+
+router.route('/getQuestionsPrebuild/:questionPaperName')
+        .get(function(request,response){
+          prebuildQuestionBank.getPrebuildQuestions('Harry Potter Movies',request.params.questionPaperName,2,function( err, questions){
+            if (err) {
+              return response.send(err);
+            }
+            return response.send(questions);
+          });
+      });
+        // questionPaper.find(request.params.questionPaperName).populate('Question').exec(function(err,data) {
+        //   console.log(util.inspect(data,true,5));
+        //   console.log(err);
+
+        // questionBank.getQuestionIds(request.params.questionPaper).then(function(data){
+        //   console.log(data);
+        // });
+
 
 module.exports = router;

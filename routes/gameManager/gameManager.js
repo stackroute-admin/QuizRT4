@@ -16,8 +16,9 @@
 var uuid = require('node-uuid'), // used to generate unique game ids
     questionBank = require('./questionBank'),
     LeaderBoard = require('./leaderboard.js'),
+    prebuildQuestionBank=require('./prebuildQuestions.js'),
     MongoDB = require('./mongoService.js');
-
+    questionPaper=null;
 /**
 ** @param no constructor params
 ** @desc GameManager is a class that will handle all the games running in QuizRT.
@@ -53,14 +54,14 @@ var GameManager = function() {
   ** @param topicId as String, playersNeeded as Number, incomingPlayer as Object
   ** @return true if player was added to a game, otherwise false
   */
-  this.managePlayer = function( topicId, levelId, playersNeeded, incomingPlayer,difficultyLevel ) {
+  this.managePlayer = function( topicId, levelId, playersNeeded, incomingPlayer,difficultyLevel,questionPaper) {
     console.log("inside----------managePlayer---------"+difficultyLevel);
     var gameId4TopicInWaitStack = this.topicsWaiting[topicId];
     if ( gameId4TopicInWaitStack ) { // if the game is waiting in the wait stack
       var isPlayerAdded = this.addPlayerToGame( gameId4TopicInWaitStack, topicId, incomingPlayer );
       if ( isPlayerAdded ) {
         if ( this.isGameReady( gameId4TopicInWaitStack ) ) {
-          this.startGame( gameId4TopicInWaitStack,difficultyLevel ); //start the game
+          this.startGame( gameId4TopicInWaitStack,difficultyLevel,questionPaper); //start the game
           delete this.topicsWaiting[topicId]; //remove the topic from wait stack
           return true;
         }
@@ -74,7 +75,7 @@ var GameManager = function() {
         var isPlayerAdded = this.addPlayerToGame( gameId, topicId, incomingPlayer );
         if ( isPlayerAdded ) {
           if ( this.isGameReady( gameId ) ) {
-            this.startGame( gameId,difficultyLevel ); //start the game
+            this.startGame( gameId,difficultyLevel,questionPaper); //start the game
             delete this.topicsWaiting[topicId]; //remove the topic from wait stack
             return true;
           }
@@ -182,12 +183,14 @@ var GameManager = function() {
   ** @param gameId as String
   ** @return true if everything is setup before starting a Game and 'startGame' events are emitted
   */
-  this.startGame = function( gameId,difficultyLevel ) {
+  this.startGame = function( gameId,difficultyLevel,questionPaper) {
     console.log("start gameeeeeeeeeeeeeeeeeee----------------"+difficultyLevel);
     var game = this.games.get( gameId ),
         self = this;
         console.log("inside start game........................................"+game);
+        if(difficultyLevel!==null){
     questionBank.getQuizQuestions( game.topicId, difficultyLevel, 5 , function( err, questions ) { // get questions from the questionBank
+      console.log("popppppppppopokkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkoooooooooooo"+questions);
       if ( err ) {
 
         console.log('ERROR: Failed to get quiz questions for ' + gameId + '. Cannot start the game. Terminating the game launch.');
@@ -224,6 +227,49 @@ var GameManager = function() {
         return true;
       }); // create the leaderBoard for the game before starting
     });// end getQuizQuestions
+  }
+  else{
+    prebuildQuestionBank.getPrebuildQuestions('T1',"Question Paper 3",2,function( err, questions) { // get questions from the questionBank
+console.log("insideeeeeeeeeeeeeeeeee  prebuildQuestionBank");
+console.log("jkjkjkjkjkjkjkjkkjkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+questions);
+      if ( err ) {
+
+        console.log('ERROR: Failed to get quiz questions for ' + gameId + '. Cannot start the game. Terminating the game launch.');
+        console.error(err);
+        // return false;
+      }
+      //prepare the LeaderBoard for the game
+      var players = []
+      game.players.forEach( function(player) { // extra loop to exclude player.client from leaderBoard and prevent CallStack Overflow error
+        var gamePlayer = {
+          userId: player.userId,
+          playerName: player.playerName,
+          playerPic: player.playerPic,
+          score: 0 // add score to gamePlayer and initialize it to zero
+        }
+        players.push( gamePlayer );
+      });
+      LeaderBoard.createNewLeaderBoard( gameId, players,function(err, leaderBoardCreated) {
+        if ( err ) {
+          console.log('ERROR: Failed to create LeaderBoard for ' + gameId + '. Cannot start the game. Terminating the game launch.');
+          return false;
+        }
+        game.leaderBoard = players; // set the leaderBoard on game also. gives 2nd way to access it. other being getLeaderBoard()
+        console.log('\n');
+        console.log('Starting game: ' + gameId);
+        console.log('Questions:::'+questions.Question);
+        game.players.forEach( function(player) {
+          console.log('Starting game for ' + player.userId );
+          player.client.emit('startGame', {topicId: game.topicId, gameId: gameId, playersNeeded: game.playersNeeded, questions: questions[0].Question });
+        });
+        game.state = 'LIVE'; // change the state of the game from 'WAITING' to 'LIVE'
+        if ( !questions || !questions.length ) {
+          self.popGame( gameId );
+        }
+        return true;
+      }); // create the leaderBoard for the game before starting
+    });// end getQuizQuestions
+  }
   };
 
   /**

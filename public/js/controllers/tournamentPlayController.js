@@ -81,6 +81,7 @@ angular.module('quizRT')
         });
 
         $rootScope.tournamentSocket.once('startGame', function( startGameData ) {
+          console.log(startGameData);
           if ( startGameData.questions && startGameData.questions.length && startGameData.questions[0]) {
             $rootScope.freakgid = startGameData.gameId;
             $scope.playersCount = startGameData.playersNeeded;
