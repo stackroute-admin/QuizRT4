@@ -144,12 +144,47 @@ router.get('/getCurrentGameStat', function(req, res, next) {
        console.log('Authenticated user: ' + req.session.user);
          if( !(req.session.user == null) ){
              var usr = req.query.userId;
-            getGameStatObj.getMonthlyGameStat(usr,req.query.year,req.query.statType)
-                .then(function(retArr){
-                    console.log(retArr);
-                    res.json(retArr);
-                }
-            );
+             var resultArr = [];
+            Q.all([
+                    getGameStatObj.getMonthlyGameStat(usr,req.query.year,'visits'),
+                    getGameStatObj.getMonthlyGameStat(usr,req.query.year,'gamePlayed')
+                ]).spread(function( res1, res2 ){
+                    // merge result
+                    tempObj = {};
+                    res1.forEach(function(objs) {
+                        tempObj[objs.Month] = {
+                                                "Visit Count" : objs["Visit Count"],
+                                                "Game Played Count":0
+                                            };
+                    });
+                    res2.forEach(function (objs) {
+                        // check if month as key exists
+                        if(objs.Month in tempObj){
+                            tempObj[objs.Month]["Game Played Count"] =objs["Game Played Count"] ;
+                        }
+                        else {
+                            tempObj[objs.Month] = {
+                                                    "Visit Count" : 0,
+                                                    "Game Played Count":objs["Game Played Count"]
+                                                };
+                        }
+                    })
+                    // now final touchup to "tempObj"
+                    for (var k in tempObj){
+                        var vCount = tempObj[k]["Visit Count"];
+                        var gpCount = tempObj[k]["Game Played Count"];
+                        resultArr.push({
+                                        "Month": k,
+                                        "Visit Count": vCount,
+                                        "Game Played Count": gpCount
+                                    });
+                    }
+                    res.json([{"Month":"April","Visit Count":8,"Game Played Count":8},
+                        {"Month":"May","Visit Count":12,"Game Played Count":20},
+                        {"Month":"June","Visit Count":16,"Game Played Count":18}
+                        ]);
+                    // res.json(resultArr); 
+                });
          }
      } else {
        console.log('User not authenticated. Returning.');

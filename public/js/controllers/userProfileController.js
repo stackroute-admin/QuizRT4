@@ -75,58 +75,39 @@ angular.module('quizRT')
           $rootScope.fakeMyName = $rootScope.loggedInUser.name;
           $rootScope.topperImage = $rootScope.loggedInUser.imageLink;
           $rootScope.userIdnew = $rootScope.loggedInUser.userId;
-          //console.log($scope.topicsFollowed);
-          new Promise(function(reject,resolve){
-            $http({
-            method: 'GET',
-            url: '/analyticsDataHandler/getProfileStatForUser',
-            params:{userId:$rootScope.loggedInUser.userId}
-          }).then(function successCallback(response) {
-            //console.log("Hi from response");
-            //console.log(response.data[0].label+""+response.data[0].rank);
-            for (i=0;i<4;i++){
-              if (response.data[i].label==='Total Wins'){
-                $rootScope.loggedInUser['winRank']=response.data[i].rank;
+          $http({method : 'GET',url:'/analyticsDataHandler/getGameVisitStatForUser',
+                  params:{
+                              userId:$rootScope.userIdnew,
+                              year: new Date().getFullYear()
+                          }
+              })
+          .then(function successCallback(response){
+            $scope.visitAndGameData = response.data;
+            $scope.chart ={
+                data: {
+                      json: $scope.visitAndGameData,
+                      keys: {
+                          x: 'Month',
+                          value: ['Visit Count','Game Played Count']
+                      },
+                      type: 'spline'
+                  },
+                  axis: {
+                      x: {
+                          type: 'category', // this needed to load string x value
+                          tick: {
+                              fit: false
+                          }
+                      }
+                  }
               }
-              if (response.data[i].label==='Total Points'){
-                $rootScope.loggedInUser['pointsRank']=response.data[i].rank;
-              }
-              if (response.data[i].label==='Avg Response Time'){
-                $rootScope.loggedInUser['speedRank']=response.data[i].rank;
-              }
-              if (response.data[i].label==='Correctness Ratio'){
-                $rootScope.loggedInUser['accuracyRank']=response.data[i].rank;
-              }
-            }
-            $scope.dataActivity = {
-              dataset0:[
-               {x: 0, val_0:response.data[0].rank},
-               {x: 1, val_0:response.data[1].rank},
-               {x: 2, val_0:response.data[2].rank},
-               {x: 3, val_0:response.data[3].rank}
-             ]
-           };
-               $scope.optionsActivity = {
-           series: [
-             {
-               axis: "y",
-               dataset: "dataset0",
-               key: "val_0",
-               label: "Rank",
-               color: "#008000",
-               type: ['line', 'dot', 'area'],
-               id: 'mySeries0'
-             }
-           ],
-           axes: {x: {key: "x"}}
-         };
-           resolve();
-          }).then(function(){
-            $scope.loadUserStat=1;
+              $scope.loadVisitData = true;
+            console.log( $scope.visitAndGameData);
+          },function errorCallback(err) {
+              console.log("Error fetching data for visit and gamePlayed data " + err);
           });
-        }, function errorCallback(response) {
-            console.log('server response with an error status for currentGameData');
-      });
+
+
         }, function( errorResponse ) {
           if ( errorResponse.status === 401 ) {
             $rootScope.isAuthenticatedCookie = false;

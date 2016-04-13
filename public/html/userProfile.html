@@ -81,8 +81,8 @@
 		<!-- User Game Activity -->
 		<section id="gameActivity">
 			<div class="row sectionHeader">Game Activity</div>
-			<div class="row" id="activity-info">
-				<linechart data="dataActivity" options="optionsActivity"></linechart>
+			<div class="row" id="activity-info" ng-if="loadVisitData">
+				<c3-simple id="chart" config="chart"></c3-simple>
 			</div>
 		</section>
 		<!-- User Game Activity End-->
