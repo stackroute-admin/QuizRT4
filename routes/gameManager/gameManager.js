@@ -242,12 +242,14 @@ var GameManager = function() {
         game.timer = setTimeout( function() {
           console.log('\nSaving after 3s...');
           self.storeResult( gameData, gameBoard, game );
+          gameData.preserveObj.reset();
         }, 3000);
       }
       if ( game.playersFinished === game.players.length ) {
         console.log('\nSaving after all players finished..');
         clearTimeout( game.timer );
         this.storeResult( gameData, gameBoard, game );
+        gameData.preserveObj.reset();
       }
     } else {
       console.log('WARN: Failed to find the game ' + gameData.gameId );

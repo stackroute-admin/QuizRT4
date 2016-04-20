@@ -25,7 +25,7 @@ module.exports = {
                     {
                         userId: userId,
                         'tournamentId':'null',
-						             gameId: gameId
+						gameId: gameId
                     }
                  },
                  { $group:
@@ -94,6 +94,82 @@ module.exports = {
             }
     );
   },
+
+
+  getAnsStatForATopic: function(userIdArr, topicId, responseType) {
+      var deferred = Q.defer();
+      userAnalytics.aggregate(
+          [
+               { $match:
+                  {
+                      userId: {$in : userIdArr},
+                      topicId: topicId,
+                      responseType:responseType
+                  }
+               },
+               { $group:
+                   {
+                       _id:  { topicId : "$topicId" ,userId : "$userId" },
+                        correctCount: {$sum: 1}
+                   }
+               },
+              { "$project": {
+                   _id : 0, //excludes the _id field
+                   "topicId" : "$_id.topicId",
+                   "userId" : "$_id.userId",
+                   "correctCount": "$correctCount"
+                  }
+              }
+
+          ], function(err, result){
+              if (err) {
+                 console.log(err);
+                 deferred.resolve( { 'error': 'dbErr'} );
+             } else {
+                 console.log("Fetched result !!");
+              //    analyticsDbObj.close();
+                 deferred.resolve(result);
+             }
+         });
+         return deferred.promise;
+  },
+
+  getAllAnsStatForUser: function(userIdArr, responseType) {
+      var deferred = Q.defer();
+      userAnalytics.aggregate(
+          [
+               { $match:
+                  {
+                      userId: { $in: userIdArr},
+                      responseType:responseType
+                  }
+               },
+               { $group:
+                   {
+                       _id:  {userId : "$userId" },
+                        correctCount: {$sum: 1}
+                   }
+               },
+              { "$project": {
+                   _id : 0, //excludes the _id field
+                   "userId" : "$_id.userId",
+                   "correctCount": "$correctCount"
+                  }
+              }
+
+          ], function(err, result){
+              if (err) {
+                 console.log(err);
+                 deferred.resolve( { 'error': 'dbErr'} );
+             } else {
+                 console.log("Fetched result !!");
+              //    analyticsDbObj.close();
+                 deferred.resolve(result);
+             }
+         });
+         return deferred.promise;
+  },
+
 
   getAnsStatForUser: function(userId, gameId, responseType, done) {
     userAnalytics.aggregate(
@@ -194,6 +270,30 @@ module.exports = {
                        }
                    ).sort({ wins : -1 });  // sort ascending it sort alphabetically:(
     },
+
+    //  Get win count for given  user presnt in db
+    getWinCountForUser: function(userIdArr) {
+        var deferred = Q.defer();
+        Profile.find(
+                        {userId: { $in:userIdArr } } ,
+                        {
+                            _id : 0,
+                            userId : 1,
+                            wins : 1
+                        },
+                        function (err, result) {
+                            if (err) {
+                               console.log(err);
+                               deferred.resolve( { 'error': 'dbErr'} );
+                           } else {
+                               console.log("Fetched results !!");
+                               deferred.resolve(result);
+                           }
+                       }
+                   )
+        return deferred.promise;
+    },
+
 
 
     getUserWinRank: function(userId) {
@@ -423,7 +523,4 @@ module.exports = {
          );
          return deferred.promise;
     }
-
-
-
 };

@@ -207,7 +207,9 @@ module.exports = {
             else {
                 console.log("Found one collectionData item: " );
                 collectionData.timeStamp = newRec.timeStamp;
-                collectionData.totalPoint += newRec.totalPoint;
+                //
+                // collectionData.totalPoint += newRec.totalPoint;
+                collectionData.totalPoint = newRec.totalPoint;
                 if ( newRec.userStreak.streakDates.length >= collectionData.userStreak.streakDates.length){
                     collectionData.userStreak = newRec.userStreak;
                 }

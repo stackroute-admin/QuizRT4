@@ -180,11 +180,11 @@ router.get('/getCurrentGameStat', function(req, res, next) {
                                         "Game Played Count": gpCount
                                     });
                     }
-                    res.json([{"Month":"April","Visit Count":8,"Game Played Count":8},
-                        {"Month":"May","Visit Count":12,"Game Played Count":20},
-                        {"Month":"June","Visit Count":16,"Game Played Count":18}
-                        ]);
-                    // res.json(resultArr); 
+                    // res.json([{"Month":"April","Visit Count":8,"Game Played Count":8},
+                    //     {"Month":"May","Visit Count":12,"Game Played Count":20},
+                    //     {"Month":"June","Visit Count":16,"Game Played Count":18}
+                    //     ]);
+                    res.json(resultArr);
                 });
          }
      } else {

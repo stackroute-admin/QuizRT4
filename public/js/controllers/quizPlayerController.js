@@ -133,7 +133,8 @@ angular.module('quizRT')
                             selectedOption:null,
                             questionId : $scope.currentQuestion.questionId,
                             questionNumber : $scope.questionCounter,
-                            gameTime: new Date().toString()
+                            gameTime: new Date().toString(),
+                            score : $scope.myscore
                         };
 
                         if ($scope.currentQuestion.image != "null")
@@ -157,7 +158,8 @@ angular.module('quizRT')
                                     selectedOption:id,
                                     questionId : $scope.currentQuestion.questionId,
                                     questionNumber : $scope.questionCounter,
-                                    gameTime: new Date().toString()
+                                    gameTime: new Date().toString(),
+                                    score : $scope.myscore
                                 });
                             } else {
                                 $(element.target).addClass('btn-danger');
@@ -174,7 +176,8 @@ angular.module('quizRT')
                                     selectedOption:id,
                                     questionId : $scope.currentQuestion.questionId,
                                     questionNumber : $scope.questionCounter,
-                                    gameTime: new Date().toString()
+                                    gameTime: new Date().toString(),
+                                    score : $scope.myscore
                                 });
                             }
                             $scope.isDisabled = true;

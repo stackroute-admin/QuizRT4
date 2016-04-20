@@ -19,7 +19,9 @@
 var GameManagerClass = require('./gameManager/gameManager.js'),
     GameManager = new GameManagerClass(),
     TournamentManager = require('./tournamentManager/tournamentManager.js'),
-    clickStreamStat = require('./clickStreamStatistics');
+    clickStreamStat = require('./clickStreamStatistics'),
+    PreserveGameData = require('./preserveGameData');
+    var preserveData = new PreserveGameData();
 module.exports = function(server,sessionMiddleware) {
   var io = require('socket.io')(server);
   io.use(function(socket,next){
@@ -76,7 +78,9 @@ module.exports = function(server,sessionMiddleware) {
             // call save on collected  data
         //   var questionCount = GameManager.games.get( data.gameId ).questionCount;
         //   data.questionCount = questionCount;
+
           clickStreamStat.userAnalyticsSave(data,'quiz');
+          preserveData.addVal(data);
 
           if(data.ans =='correct'){
             //increment correct of allplayers
@@ -114,9 +118,12 @@ module.exports = function(server,sessionMiddleware) {
             console.log('User session does not exist for the user: ' + gameData.userId );
           }
         });
-
         client.on( 'gameFinished', function( game ) {
+            game.preserveObj=preserveData;
           GameManager.finishGame( game );
+          preserveData.show();
+        //   initialize the obj again
+        // var preserveData = new PreserveGameData();
         //   getUserAnalyticsForGame(client.request.session.user, game.gameId);
         // getUserAnalyticsForGame(client.request.session.user, game.topicId,'null');
         // getUserAnalyticsForGame(client.request.session.userId, game.gameId);
@@ -124,6 +131,7 @@ module.exports = function(server,sessionMiddleware) {
 
         client.on('leaveGame', function( gameId ){
           GameManager.leaveGame( gameId, client.request.session.user );
+          console.log("Leave called -------$$$$$$$$$$$");
         });
       });// end normalGameSocket
 
@@ -179,6 +187,7 @@ module.exports = function(server,sessionMiddleware) {
                 // var questionCount = gm.games.get( data.gameId ).questionCount;
                 // data.questionCount = questionCount;
                 clickStreamStat.userAnalyticsSave(data,'tournament');
+                preserveData.addVal(data);
               if(data.ans == 'correct') {
                 var gameManager = TournamentManager.getGameManager( data.tournamentId ),
                     gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
@@ -228,6 +237,10 @@ module.exports = function(server,sessionMiddleware) {
 
             client.on( 'gameFinished', function( finishGameData ) {
               TournamentManager.finishGame( finishGameData );
+              console.log("Showing preserved data --->>>>>");
+              preserveData.show();
+            //   initialize the obj again
+            // var preserveData = new PreserveGameData();
             });
 
 
