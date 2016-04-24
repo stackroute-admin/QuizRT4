@@ -52,7 +52,8 @@ o.reduce = function (key, values ) {
                 // retObj.gameInfo.push(vals.gameInfo);
                 vals.gameInfo.forEach(function(data){
                     // retObj.gameInfo.push(data.gameDate.getFullYear());
-                    dateStr = data.gameDate.getFullYear() + '-' +                                                      Number(data.gameDate.getMonth()+1) + '-'
+                    // adding leading zero in one digit month value
+                    dateStr = data.gameDate.getFullYear() + '-' +                                                      ("0" + Number(data.gameDate.getMonth()+1)).slice(-2) + '-'
                         + data.gameDate.getDate() ;
                     rank = data.rank;
                     score = data.score;
@@ -161,8 +162,9 @@ userProfile.mapReduce(o, function (err, results) {
             tempStreak.bestRank = dataObj[k].bestRank;
             tempStreak.winCount = dataObj[k].winCount;
          }
-         var dateVal = moment(currentDate);
+         var dateVal = moment(currentDate,"YYYY-MM-DD");
          nextDate = dateVal.add(1, 'days');
+         nextDate = nextDate.format('YYYY-MM-DD');
          i++;
      }
      if ( tempStreak.streakDates.length >= finalStreak.streakDates.length ){
@@ -173,11 +175,9 @@ userProfile.mapReduce(o, function (err, results) {
         var combinedDataObj = newRec._id;
         combinedDataObj.totalPoint = newRec.value.value;
         combinedDataObj.userStreak = finalStreak;
-        console.log(finalStreak);
         storeData.saveMapReduceUserPoints(combinedDataObj,function(data) {
             console.log(data);
         });
-
   });
 
   // var storeData = require('./storeMapReduceAnalysis');

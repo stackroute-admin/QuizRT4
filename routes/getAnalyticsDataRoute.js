@@ -138,6 +138,7 @@ router.get('/getCurrentGameStat', function(req, res, next) {
    });
 
    // Route to get Visit count and Game Played count monthly
+   //  "statType" here refers "visits"  or "gamePlayed"
    router.get('/getGameVisitStatForUser', function(req, res, next) {
      if ( req.session && req.session.user ) {
        console.log('Authenticated user: ' + req.session.user);
