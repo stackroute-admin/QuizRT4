@@ -4,11 +4,16 @@
 var getGameStat = require('./getGameStat');
 var PreserveGameData = function(){
     this.dataArr = [];
+    this.userRankObj = {};
 };
 
 PreserveGameData.prototype.addVal = function(newData){
     this.dataArr.push(newData);
 }
+PreserveGameData.prototype.addUserRank = function(userId,rank) {
+    this.userRankObj[userId] = rank + 1;
+}
+
 // defining a reset method for reseting the storage array
 // so that every game will have game values in this temp storage
 PreserveGameData.prototype.reset = function(newData){
@@ -45,10 +50,10 @@ PreserveGameData.prototype.show = function (){
         retObj[newData.userId].currentScore = newData.score;
         retObj[newData.userId].topicId = newData.topicId;
     });
-    var userIdArr = Object.keys(retObj);
+    // var userIdArr = Object.keys(retObj);
     // console.log(userIdArr);
     // @TODO: comment below line when in production, to avoid overwrite
-    var userIdArr = ['ch','mz'];
+    // var userIdArr = ['ch','mz'];
     // call function to get data from db pass userIdArr to the function
     // sample output
     //   [ [ { correctCount: 27, topicId: 'T1', userId: 'mz' },
@@ -56,8 +61,9 @@ PreserveGameData.prototype.show = function (){
     // [ { correctCount: 31, userId: 'mz' },
     //   { correctCount: 23, userId: 'ch' } ],
     // [ { wins: 11, userId: 'ch' }, { wins: 18, userId: 'mz' } ] ]
-    var a = self.getRequiredGameData(userIdArr);
-    console.log(a);
+    // var a = self.getRequiredGameData(userIdArr);
+    // console.log(a);
+    return retObj
 }
 
 PreserveGameData.prototype.getRequiredGameData = function(userIdArr){
@@ -128,7 +134,35 @@ PreserveGameData.prototype.getAnalysisData = function (){
         return retObj;
 }
 
-
+PreserveGameData.prototype.getStreakData = function (userIdArr){
+    var retObj = {},
+        gameObj = this.show();
+        self = this;
+    userIdArr.forEach(function(userId) {
+        var userStreakCurrentGame = {
+            streakDates :[],
+            gamePlayedCount:0,
+            bestScore:0,
+            bestRank:0,
+            winCount:0
+        }
+        var date = new Date();
+        var dateVal = date.getFullYear() + '-' + ("0" +     Number(date.getMonth()+1)).slice(-2) + '-'
+            + date.getDate();
+        var rank = self.userRankObj[userId];
+        var winCount = 0;
+        if(rank===1){
+            winCount = 1
+        }
+        userStreakCurrentGame.streakDates = [dateVal];
+        userStreakCurrentGame.gamePlayedCount = 1
+        userStreakCurrentGame.bestScore = gameObj[userId].currentScore;
+        userStreakCurrentGame.bestRank = rank;
+        userStreakCurrentGame.winCount = winCount;
+        retObj[userId] = userStreakCurrentGame;
+    });
+    return retObj;
+}
 
 
 module.exports = PreserveGameData;

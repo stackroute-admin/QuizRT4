@@ -18,7 +18,8 @@ var uuid = require('node-uuid'), // used to generate unique game ids
     LeaderBoard = require('./leaderboard.js'),
     MongoDB = require('./mongoService.js'),
     userData = require('../analytics/createMonthlyUserData'),
-    storeData = require('../analytics/storeMapReduceAnalysis');
+    storeData = require('../analytics/storeMapReduceAnalysis'),
+    updateStreakData = require('../analytics/updateStreakData');
 
 /**
 ** @param no constructor params
@@ -245,7 +246,9 @@ var GameManager = function() {
           console.log('\nSaving after 3s...');
           self.storeResult( gameData, gameBoard, game );
           var pAnalysisDataObj = gameData.preserveObj.getAnalysisData();
+          var userIdArr = [];
           game.players.forEach(function(userObj) {
+              userIdArr.push(userObj.userId);
               console.log("from game mgr  " +userObj.userId);
               var userDataObj = userData.createMonthlyUserData(userObj.userId);
               console.log("---->>" +userDataObj);
@@ -259,6 +262,8 @@ var GameManager = function() {
                   console.log("Done saving data!!");
               });
           });
+          //update streak data to db
+          updateStreakData(gameData.preserveObj.getStreakData(userIdArr));
         gameData.preserveObj.reset();
         }, 3000);
       }
@@ -267,8 +272,9 @@ var GameManager = function() {
         clearTimeout( game.timer );
         this.storeResult( gameData, gameBoard, game );
         var pAnalysisDataObj = gameData.preserveObj.getAnalysisData();
-
+        var userIdArr = [];
         game.players.forEach(function(userObj) {
+            userIdArr.push(userObj.userId);
             var userDataObj = userData.createMonthlyUserData(userObj.userId);
             storeData.getMapReduceData(userDataObj,function(data) {
                console.log(data);
@@ -280,6 +286,8 @@ var GameManager = function() {
                 console.log("Done saving data!!");
             });
         });
+        //update streak data to db
+        updateStreakData(gameData.preserveObj.getStreakData(userIdArr));
         gameData.preserveObj.reset();
       }
     } else {
@@ -314,6 +322,8 @@ var GameManager = function() {
       player.client.emit('takeResult', { error: null, gameResult: gameResultObj } );
       gameBoard.some( function( boardPlayer, index ) {
         if ( player.userId == boardPlayer.userId ) {
+         // pass rank to preserveObj
+        gameData.preserveObj.addUserRank(player.userId,index);
           var updateProfileObj = {
            score: boardPlayer.score,
            rank: index+1,

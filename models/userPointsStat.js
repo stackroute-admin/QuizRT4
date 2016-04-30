@@ -24,7 +24,15 @@ var mongoose = require('mongoose'),
             bestScore:Number,
             bestRank:Number,
             winCount:Number
+        },
+        userStreakCurrent : {
+            streakDates :Array,
+            gamePlayedCount:Number,
+            bestScore:Number,
+            bestRank:Number,
+            winCount:Number
         }
+
     });
 
  module.exports = userPointsSchema;
