@@ -122,3 +122,6 @@
 #levelnum{
   color:white;
 }
+.c3-chart-arcs-title,.c3-legend-item{
+    fill: #f5f5f5;
+}

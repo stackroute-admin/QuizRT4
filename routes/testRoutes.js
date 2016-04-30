@@ -9,6 +9,23 @@ var test = require('./getGameStat');
 //     console.log(data);
 // }
 // );
+
+test.getAnsStatForATopic(['mz','ch'], 'T1', 'correct', function(data){
+     console.log(data);
+});
+
+
+
+
+// test.getAllAnsStatForUser('mz', 'correct', function(data){
+//      console.log(data);
+// });
+
+
+    test.getWinCountForUser(['ch','mz'], function(data){
+     console.log(data);
+});
+
 //
 // // getUserStatForAllGames
 //
@@ -54,19 +71,52 @@ var test = require('./getGameStat');
 // });
 
 //
-test.getUserWinRank('ch',function(data){
-    console.log(data);
-}
-);
+// test.getUserWinRank('ch',function(data){
+//     console.log(data);
+// }
+// );
 
+var Q = require('q');
+
+// visits gamePlayed
+// test.getMonthlyGameStat('ch','2016','gamePlayed').then(function(retArr){
+//     console.log(retArr);
+//
+//
+//
+//
+// })
+// test.getUserPointsRankAndStreak('chkfff').then(function(data){
+// console.log(data);
+//
+// })
+
+// test.getUserAvgRespTimeRank('ch').then(function(data){
+// console.log(data);
+//
+// })
+// // getUserPointsRank()
+//
+// Q.all([
+//     test.getUserWinRank('ch'),
+//     test.getUserPointsRank('ch')
+//
+// ]).spread(function(res1,res2){
+//     console.log(res1 ,res2);
+// });
+
+
+//
 // test.getUserPointsRank('ch',function(data){
 //     console.log(data);
 // });
-
-
-// test.getUserAvgRespTimeRank('ch',function(data){
+//
+//
+// test.getUserPointsRankAndStreak('ch',function(data){
 //     console.log(data);
 // });
+
+
 // test.getUserCorrectPerRank('ch',function(data){
 //     console.log(data);
 // });

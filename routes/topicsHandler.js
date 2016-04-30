@@ -32,7 +32,20 @@ var express = require('express'),
         i++;
       }
       return i-1;
-    };
+   },
+   findAverageScore = function(points,totalGames)
+   {
+      return (points/totalGames);
+   },
+findAverageRank = function(ranks,totalGames)
+{
+
+    for (var i = 1; i < ranks.length; i++) {
+       ranks = ranks[0]+ranks[i];
+    }
+
+    return(ranks/totalGames);
+};
 
 router.route('/categories')
   .get( function(req, res){
@@ -82,7 +95,9 @@ router.route('/topic/:topicId')
         topicLevel: 1,
         levelPercentage: 0,
         isFollowed: false,
-        points: 0
+        points: 0,
+        ranks:[],
+        gamesLost:0
       }
     };
 
@@ -100,10 +115,29 @@ router.route('/topic/:topicId')
             if( topicsPlayed[i].topicId === req.params.topicId ) {
               topicWithUserStats.userStats.topicWins = topicsPlayed[i].gamesWon;
               topicWithUserStats.userStats.topicLosses = topicsPlayed[i].gamesPlayed - topicsPlayed[i].gamesWon;
-              topicWithUserStats.userStats.topicLevel = topicsPlayed[i].level;
-              topicWithUserStats.userStats.isFollowed = topicsPlayed[i].isFollowed;
-              topicWithUserStats.userStats.points = topicsPlayed[i].points;
-              topicWithUserStats.userStats.levelPercentage = findPercentage( topicsPlayed[i].points, topicsPlayed[i].level );
+              topicWithUserStats.userStats.topicTotalGames = topicsPlayed[i].gamesPlayed;
+             //topicWithUserStats.userStats.topicAverageRank = topicsPlayed[i].ranks;
+               topicWithUserStats.userStats.topicAverageScore = findAverageScore(   topicsPlayed[i].points,topicsPlayed[i].gamesPlayed).toFixed(2);
+               topicWithUserStats.userStats.topicAverageRank = Math.ceil(findAverageRank(   topicsPlayed[i].ranks,topicsPlayed[i].gamesPlayed));
+            //   topicWithUserStats.userStats.topicRanks = topicsPlayed[i].ranks;
+                 topicWithUserStats.userStats.topicLevel = topicsPlayed[i].level;
+                 topicWithUserStats.userStats.isFollowed = topicsPlayed[i].isFollowed;
+                 topicWithUserStats.userStats.points = topicsPlayed[i].points;
+                 topicWithUserStats.userStats.levelPercentage = findPercentage( topicsPlayed[i].points, topicsPlayed[i].level ).toFixed(2);
+                 topicWithUserStats.userStats.progressOptions = {thickness: 1, mode: "gauge", total: 100};
+                    topicWithUserStats.userStats.graphOptions = {
+                        data :{
+                            columns:
+                            [
+                              [ "WIN", topicWithUserStats.userStats.topicWins ],
+                              ["LOSE", topicWithUserStats.userStats.topicLosses ],
+                            ],
+                        type:'donut'
+                    },
+                    donut: {
+                        title: "Win Vs. Lose %"
+                    }
+                }
               break;
             }
           }

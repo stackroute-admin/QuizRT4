@@ -75,6 +75,60 @@ PreserveGameData.prototype.getRequiredGameData = function(userIdArr){
     return deferred.promise;
 }
 
+PreserveGameData.prototype.getAnalysisData = function (){
+    self = this;
+    var retObj = {};
+    self.dataArr.forEach(function(newData){
+        // initialize if object doesn't exists
+        if ( !(newData.userId in retObj)){
+            retObj[newData.userId] = {};
+            retObj[newData.userId].totalResponseTime = 0;
+            retObj[newData.userId].totalResponseCount = 0;
+            retObj[newData.userId].numOfQuesAttempted = 0;
+            retObj[newData.userId].correctResponseCount = 0;
+            retObj[newData.userId].wrongResponseCount = 0;
+            retObj[newData.userId].skipResponseCount = 0;
+
+            retObj[newData.userId].correctPercentage = 0;
+            retObj[newData.userId].wrongPercentage = 0;
+            retObj[newData.userId].skipPercentage = 0;
+            // total totalResponseTime/numOfQuesAttempted
+            retObj[newData.userId].avgResponseTime = 0;
+        }
+        if (newData.ans === 'correct'){
+            retObj[newData.userId].correctResponseCount += 1;
+            retObj[newData.userId].numOfQuesAttempted += 1;
+            retObj[newData.userId].totalResponseCount += 1;
+            retObj[newData.userId].totalResponseTime += newData.responseTime;
+        }
+        if (newData.ans === 'wrong'){
+            retObj[newData.userId].wrongResponseCount += 1;
+            retObj[newData.userId].numOfQuesAttempted += 1;
+            retObj[newData.userId].totalResponseCount += 1;
+            retObj[newData.userId].totalResponseTime += newData.responseTime;
+        }
+        if (newData.ans === 'skip'){
+            retObj[newData.userId].skipResponseCount += 1;
+            retObj[newData.userId].totalResponseCount += 1;
+        }
+    });
+
+    for (var userId in retObj){
+        if(retObj[userId].correctResponseCount!==0){
+            retObj[userId].correctPercentage = (retObj[userId].totalResponseCount/retObj[userId].correctResponseCount)*100;
+        }
+        if(retObj[userId].wrongResponseCount!==0){
+            retObj[userId].wrongPercentage = (retObj[userId].totalResponseCount/retObj[userId].wrongResponseCount)*100;
+        }
+        if (retObj[userId].skipResponseCount!==0){
+            retObj[userId].skipPercentage = (retObj[userId].totalResponseCount/retObj[userId].skipResponseCount)*100;
+        }
+        retObj[userId].avgResponseTime = (retObj[userId].totalResponseTime/retObj[userId].numOfQuesAttempted);
+        }
+        return retObj;
+}
+
+
 
 
 module.exports = PreserveGameData;

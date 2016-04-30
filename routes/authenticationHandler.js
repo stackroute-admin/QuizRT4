@@ -17,7 +17,9 @@
 
 var express = require('express'),
   router = express.Router(),
-  clickStreamStat = require('./clickStreamStatistics');
+  clickStreamStat = require('./clickStreamStatistics'),
+  userData = require('./analytics/createMonthlyUserData'),
+  storeData = require('./analytics/storeMapReduceAnalysis');
 module.exports = function(passport){
 	//sends successful login state back to angular
 	router.get('/success', function(req, res){
@@ -26,6 +28,10 @@ module.exports = function(passport){
             loginTime: new Date().toString()
         }
         clickStreamStat.userLoginStatSave(data);
+        var userDataObj = userData.createMonthlyUserData(data.userId);
+        storeData.saveMapReduceVisitCount(userDataObj,function(data) {
+            console.log(data);
+        });
 		res.send({error:null});
 	});
 

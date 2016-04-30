@@ -39,8 +39,12 @@ o.reduce = function (key, values ) {
                             };
 
         values.forEach( function(value) {
-                              reducedObject.totalResponseTime += value.responseTime;
-                              reducedObject.numOfQuesAttempted += value.count;
+                               if(value.responseTime!=undefined){
+                                   reducedObject.totalResponseTime += value.responseTime;
+                               }
+                               if(value.count!=undefined){
+                                   reducedObject.numOfQuesAttempted += value.count;
+                               }
                               if ( value.responseType == 'correct' ){
                                   reducedObject.correctResponseCount += 1;
                               }
@@ -64,7 +68,6 @@ o.finalize  = function (key, reducedValue) {
                                    reducedValue.wrongPercentage = (reducedValue.wrongResponseCount * 100)/reducedValue.numOfQuesAttempted;
                                    reducedValue.skipPercentage = (reducedValue.skipResponseCount * 100)/reducedValue.numOfQuesAttempted;
                                }
-
                                return reducedValue;
                             };
 
@@ -79,7 +82,7 @@ userAnalytics.mapReduce(o, function (err, results) {
     results.forEach(function(newRec){
         var combinedDataObj = newRec.value;
         storeData.saveMRUserRespTimeStat(combinedDataObj,function(data) {
-            console.log(data);
+            // console.log(data);
         });
     });
    // analyticsDbObj.close();

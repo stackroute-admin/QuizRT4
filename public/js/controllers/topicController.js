@@ -37,6 +37,19 @@ angular.module('quizRT')
            $scope.userTopicFollowState = successResponse.data.topicWithUserStats.userStats.isFollowed;
            // levelId is defined for Tournaments only hence resetting it
            $rootScope.levelId = null;
+           $scope.chartLevel ={
+                      data: {
+                       columns: [
+                           ['Level', $scope.topic.userStats.levelPercentage],
+                       ],
+                       type : 'gauge'
+                   },
+                   gauge:{
+                        units: "Level Completion"
+                    }
+                  };
+              $scope.chartWin = $scope.topic.userStats.graphOptions;
+            $scope.loadLevelData = true;
          }, function( errorResponse ) {
            if ( errorResponse.status === 401 ) {
             //  $rootScope.isAuthenticatedCookie = false;

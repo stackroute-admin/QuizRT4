@@ -35,10 +35,6 @@ o.map = function () {
                             emit(key, val);
                        }
                    }
-
-
-
-
 o.reduce = function (key, values ) {
         var retObj = {
             value:0,
@@ -72,12 +68,12 @@ o.reduce = function (key, values ) {
      }
 // o.sort = { points: -1 }
 
-// o.query = { 'userId' : 'qw'}
+//o.query = { 'userId' : 'ch'}
 // o.out = {replace:'testMapReduceOutput22'}
 
 userProfile.mapReduce(o, function (err, results) {
-  console.log(results)
-  console.log(results[0].value.gameInfo);
+  // console.log(results)
+  // console.log(results[0].value.gameInfo);
   var storeData = require('./storeMapReduceAnalysis');
   results.forEach(function(newRec){
     dataObj = {};

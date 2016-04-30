@@ -18,57 +18,59 @@
 -->
 <div class="container fullHeight">
   <div class="content">
-    <div class="">
-      <div class="topic-header">
-        <h1>{{topic.topicName}}<br><small>{{topic.topicDescription}}</small></h1>
-      </div><!--end topic-header-->
-
-
+      <div class="row topic-header">
+         <div class="col-xs-4 topic-icon">
+           <img ng-src="{{topic.topicIcon}}"  class="img-responsive" alt="">
+           <div class="follow">
+             <h3>
+             <span title="Unfollow this topic" class="glyphicon glyphicon-heart" ng-show="userTopicFollowState" ng-click="followUnfollow()" style="color: red;"></span>
+             <span title="Follow this topic" class="glyphicon glyphicon-heart-empty" ng-hide="userTopicFollowState" ng-click="followUnfollow()"></span>
+             <span>{{topicFollowers}}</span>
+             </h3>
+             <label class="btn btn-info" id="levelnum">Level:{{topic.userStats.topicLevel}}</label>
+            </div>
+         </div>
+            <h1>{{topic.topicName}}<br><small>{{topic.topicDescription}}</small></h1>
+            <label class="btn btn-success pull-right" id="exp">Points:{{topic.userStats.points}} </label>
+      </div><!--end topic-icon-->
       <div class="row">
-        <div class="col-xs-6 topic-icon">
-          <img ng-src="{{topic.topicIcon}}"  class="img-responsive" alt="">
-          <div class="follow">
-            <h3>
-            <span title="Unfollow this topic" class="glyphicon glyphicon-heart" ng-show="userTopicFollowState" ng-click="followUnfollow()" style="color: red;"></span>
-            <span title="Follow this topic" class="glyphicon glyphicon-heart-empty" ng-hide="userTopicFollowState" ng-click="followUnfollow()"></span>
-            <span>{{topicFollowers}}</span>
-          </h3>
-          </div>
-        </div><!--end topic-icon-->
-        <div class="col-xs-6 topic-user">
-          <div class="wins row">
-            <div class="col-xs-8">
-              <h4>#Wins</h4>
+         <div class="col-xs-4  col-md-offset-2 col-lg-offset-2">
+            <div class="pie-chart" ng-if="loadLevelData">
+               <!-- <pie-chart data="topic.userStats.progressData" options="topic.userStats.progressOptions"></pie-chart> -->
+               <c3-simple id="chart-donut-level" config="chartLevel"></c3-simple>
             </div>
-            <div class="col-xs-4" id="numwins">
-              <h4>{{topic.userStats.topicWins}}</h4>
-            </div>
-          </div> <!--end wins-->
-          <div class="losses row">
-            <div class="col-xs-8">
-              <h4>#Losses</h4>
-            </div>
-            <div class="col-xs-4" id="numloss">
-              <h4>{{topic.userStats.topicLosses}}</h4>
-            </div>
-          </div> <!--end losses-->
-          <div class=" losses row">
-            <div class="progress col-xs-10 col-sm-10 col-md-10 col-lg-10">
-              <div class="progress-bar progress-bar-striped progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" id="level-bar" style="width:{{topic.userStats.levelPercentage}}%">
-                     <span id="levelperc">{{topic.userStats.levelPercentage}}%</span>
-                </div>
-            </div>
-            <div class="col-xs-2 col-sm-2 col-lg-2">  <button class="btn btn-info">Level <span id="levelnum">{{topic.userStats.topicLevel}}</span></button><button class="btn btn-success">Points: <span id="exp">{{topic.userStats.points}}</span></button></div>
-          </div>
+         </div>
+         <div class="col-xs-4  col-md-offset-2 col-lg-offset-1">
+            <div class="pie-chart" ng-if="loadLevelData">
+               <!-- <pie-chart data="topic.userStats.graphOptions"
 
-        </div> <!--end topic-user-->
-      </div><!--end row-->
+                options="topic.userStats.dataOptions"></pie-chart> -->
+               <c3-simple id="chart-donut-win" config="chartWin"></c3-simple>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-xs-4" id="games">
+            <span class="glyphicon glyphicon-tower glyph"></span>
+            <p>Games</br>{{topic.userStats.topicTotalGames}}
+            </p>
+         </div>
+         <div class="col-xs-4" id="win">
+            <span class="glyphicon glyphicon-user glyph"></span>
+            <p>AverageRank</br>{{topic.userStats.topicAverageRank}}
+            </p>
+         </div>
+         <div class="col-xs-4" id="winpercentage">
+            <span class="glyphicon glyphicon-signal glyph"></span>
+            <p>AverageScore<br>{{topic.userStats.topicAverageScore}}
+            </p>
+         </div>
+       </div><!--end row-->
       <hr>
-    </div><!--end topic-info-->
-    <div id="foot" class="row">
+      <div id="foot" class="row">
 			<div  class="col-xs-12 play-button-bar">
 					<button id="startGameButton" class="btn btn-success" ng-click="playGame(topicId)">Play Now</button>
 			</div>
-		</div>
+		</div><!--end of foot-->
   </div><!--end content-->
 </div><!--end container-->

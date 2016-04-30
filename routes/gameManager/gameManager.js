@@ -16,7 +16,9 @@
 var uuid = require('node-uuid'), // used to generate unique game ids
     questionBank = require('./questionBank'),
     LeaderBoard = require('./leaderboard.js'),
-    MongoDB = require('./mongoService.js');
+    MongoDB = require('./mongoService.js'),
+    userData = require('../analytics/createMonthlyUserData'),
+    storeData = require('../analytics/storeMapReduceAnalysis');
 
 /**
 ** @param no constructor params
@@ -242,13 +244,42 @@ var GameManager = function() {
         game.timer = setTimeout( function() {
           console.log('\nSaving after 3s...');
           self.storeResult( gameData, gameBoard, game );
-          gameData.preserveObj.reset();
+          var pAnalysisDataObj = gameData.preserveObj.getAnalysisData();
+          game.players.forEach(function(userObj) {
+              console.log("from game mgr  " +userObj.userId);
+              var userDataObj = userData.createMonthlyUserData(userObj.userId);
+              console.log("---->>" +userDataObj);
+              storeData.getMapReduceData(userDataObj,function(data) {
+                 console.log(data);
+              });
+            //   store analytics data to db userpointstats
+              var tempData = pAnalysisDataObj[userObj.userId];
+              tempData.userId=userObj.userId;
+              storeData.saveMRUserRespTimeStat(tempData,function(data) {
+                  console.log("Done saving data!!");
+              });
+          });
+        gameData.preserveObj.reset();
         }, 3000);
       }
       if ( game.playersFinished === game.players.length ) {
         console.log('\nSaving after all players finished..');
         clearTimeout( game.timer );
         this.storeResult( gameData, gameBoard, game );
+        var pAnalysisDataObj = gameData.preserveObj.getAnalysisData();
+
+        game.players.forEach(function(userObj) {
+            var userDataObj = userData.createMonthlyUserData(userObj.userId);
+            storeData.getMapReduceData(userDataObj,function(data) {
+               console.log(data);
+            });
+            //   store analytics data to db userpointstats
+            var tempData = pAnalysisDataObj[userObj.userId];
+            tempData.userId=userObj.userId;
+            storeData.saveMRUserRespTimeStat(tempData,function(data) {
+                console.log("Done saving data!!");
+            });
+        });
         gameData.preserveObj.reset();
       }
     } else {
