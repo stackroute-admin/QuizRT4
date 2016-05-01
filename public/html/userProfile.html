@@ -64,10 +64,18 @@
 			</div>
 			<div class="row streakDetails">
 					<div class="col-xs-5 streakScore">
-						<span>Game Streak:&nbsp;&nbsp;&nbsp;<strong>{{loggedInUser.gamePlayedCount}} Games</strong></span>
+						<span>Longest Game Streak:&nbsp;&nbsp;&nbsp;<strong>{{loggedInUser.gamePlayedCount}} Games</strong></span>
 					</div>
 					<div class="col-xs-7 streakDate">
 						<span>Day Streak:&nbsp;&nbsp;&nbsp;<strong>{{loggedInUser.streakDays}} Days&nbsp;&nbsp;{{loggedInUser.streakDate}}</strong></span>
+					</div>
+			</div>
+			<div class="row streakDetails">
+					<div class="col-xs-5 streakScore">
+						<span>Current Streak:&nbsp;&nbsp;&nbsp;<strong>{{loggedInUser.gamePlayedCountCur}} Games</strong></span>
+					</div>
+					<div class="col-xs-7 streakDate">
+						<span>Day Streak:&nbsp;&nbsp;&nbsp;<strong>{{loggedInUser.streakDaysCur}} Days&nbsp;&nbsp;{{loggedInUser.streakDateCur}}</strong></span>
 					</div>
 			</div>
 		</div>

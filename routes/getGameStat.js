@@ -352,7 +352,7 @@ module.exports = {
    getUserPointsRankAndStreak: function(userId){
        var deferred = Q.defer();
        // fetch sorted userId according to totalpoints
-       mapReduceObjPoint.find({},{ _id:0,userId:1,userStreak:1},
+       mapReduceObjPoint.find({},{ _id:0,userId:1,userStreak:1,userStreakCurrent:1},
             function(err, results){
                 if (err) {
                    console.log(err);
@@ -370,7 +370,8 @@ module.exports = {
                                    {
                                        'label':'Total Points',
                                        'rank':Number(i+1),
-                                       'labelStreak':'User Streak', 'userStreak':results[i].userStreak
+                                       'labelStreak':'User Streak', 'userStreak':results[i].userStreak,
+                                       'userStreakCurrent':results[i].userStreakCurrent
                                    }
                                );
                                break;
@@ -385,6 +386,12 @@ module.exports = {
                                 'rank':"--",
                                 'labelStreak':'User Streak',
                                 'userStreak':
+                                   { streakDates: [],
+                                     winCount: "--",
+                                     bestRank:"--",
+                                     bestScore: "--",
+                                     gamePlayedCount: "--" },
+                                'userStreakCurrent':
                                    { streakDates: [],
                                      winCount: "--",
                                      bestRank:"--",

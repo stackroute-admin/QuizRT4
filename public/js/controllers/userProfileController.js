@@ -121,14 +121,16 @@ angular.module('quizRT')
                   // console.log('total Points');
                   $rootScope.loggedInUser['pointsRank']=response.data[i].rank;
                   $rootScope.loggedInUser['gamePlayedCount']=((response.data[i].userStreak.gamePlayedCount==='--')?0:response.data[i].userStreak.gamePlayedCount);
+                  $rootScope.loggedInUser['gamePlayedCountCur']=((response.data[i].userStreakCurrent.gamePlayedCount==='--')?0:response.data[i].userStreakCurrent.gamePlayedCount);
+
+                  var monthNames = [
+                        "Jan", "Feb", "Mar",
+                        "Apr", "May", "Jun", "Jul",
+                        "Aug", "Sept", "Oct",
+                        "Nov", "Dec"
+                      ];
                   var len=response.data[i].userStreak.streakDates.length;
                   if(len>=1){
-                    var monthNames = [
-                          "Jan", "Feb", "Mar",
-                          "Apr", "May", "Jun", "Jul",
-                          "Aug", "Sept", "Oct",
-                          "Nov", "Dec"
-                        ];
                     var date = new Date(response.data[i].userStreak.streakDates[0]);
                     var day = date.getDate();
                     var monthIndex = date.getMonth();
@@ -146,6 +148,26 @@ angular.module('quizRT')
                     $rootScope.loggedInUser['streakDate']='';
                     $rootScope.loggedInUser['streakDays']=0;
                   }
+                  var lenC=response.data[i].userStreakCurrent.streakDates.length;
+                  if(lenC>=1){
+                    var date = new Date(response.data[i].userStreakCurrent.streakDates[0]);
+                    var day = date.getDate();
+                    var monthIndex = date.getMonth();
+                    var year = date.getFullYear();
+                    var streakFromDate =day+" "+monthNames[monthIndex]+" "+year;
+                    date = new Date(response.data[i].userStreakCurrent.streakDates[lenC-1]);
+                    day = date.getDate();
+                    monthIndex = date.getMonth();
+                    year = date.getFullYear();
+                    var streakToDate =day+" "+monthNames[monthIndex]+" "+year;
+                    $rootScope.loggedInUser['streakDaysCur']=lenC;
+                    $rootScope.loggedInUser['streakDateCur']='('+streakFromDate+' - '+streakToDate+')';
+                  }
+                  else{
+                    $rootScope.loggedInUser['streakDateCur']='';
+                    $rootScope.loggedInUser['streakDaysCur']=0;
+                  }
+
 
                 }
                 if (response.data[i].label==='Avg Response Time'){
