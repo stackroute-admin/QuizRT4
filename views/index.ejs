@@ -63,27 +63,33 @@
       	<div class="container">
       		<div class="row">
       			<div class="col-xs-3 nav">
-      				<div ng-click="redirectTo('userProfile')">
-      					<span class="glyph glyphicon glyphicon-user"></span>
+      				<div>
+      					<span  ng-click="redirectTo('userProfile')" class="glyph glyphicon glyphicon-user"></span>
       					<p>Profile</p>
       				</div>
       			</div>
-      			<div class="col-xs-3 nav">
-      				<div ng-click="redirectTo('userTeams')">
-            		<img class="img-responsive" src='images/team_64x64.png' alt='Teams Img'>
+      			<div class="col-xs-2 nav">
+      				<div>
+            		<img  ng-click="redirectTo('userTeams')" class="img-responsive" src='images/team_64x64.png' alt='Teams Img'>
       					<p>Teams</p>
       				</div>
       			</div>
-      			<div class="col-xs-3 nav">
-      				<div ng-click="redirectTo('userTournaments')">
-      					<span class="glyph glyphicon glyphicon-globe"></span>
+      			<div class="col-xs-2 nav">
+      				<div>
+      					<span class="glyph glyphicon glyphicon-globe" ng-click="redirectTo('userTournaments')"></span>
       					<p>Tournaments</p>
       				</div>
       			</div>
-      			<div class="col-xs-3 nav">
-      				<div ng-click="redirectTo('userSettings')">
-      					<span class="glyph glyphicon glyphicon-cog"></span>
+      			<div class="col-xs-2 nav">
+      				<div>
+      					<span  ng-click="redirectTo('userSettings')" class="glyph glyphicon glyphicon-cog"></span>
       					<p>Settings</p>
+      				</div>
+      			</div>
+                <div class="col-xs-3 nav">
+      				<div>
+      					<span  ng-click="redirectTo('badges')" class="glyph glyphicon glyphicon-briefcase"></span>
+      					<p>Badges</p>
       				</div>
       			</div>
       		</div>
@@ -108,6 +114,7 @@
 <script type="text/javascript" src="js/lib/c3.js"></script>
 <script type="text/javascript" src="js/lib/angular_c3_simple.js"></script>
 <script type="text/javascript" src='js/controllers/userTournamentsController.js'></script>
+<script type="text/javascript" src='js/controllers/badgesController.js'></script>
 <script type="text/javascript" src='js/controllers/userSettingsController.js'></script>
 <script type="text/javascript" src='js/controllers/categoriesController.js'></script>
 <script type="text/javascript" src='js/controllers/categoryController.js'></script>

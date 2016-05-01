@@ -103,3 +103,36 @@ a {
 .radioBtn{
 	color: wheat;
 }
+.numberCircle {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+    background: #fff;
+    border: 2px solid black;
+    color: black;
+    text-align: center;
+    font: 16px Arial, sans-serif;
+    display: inline-block;
+}
+@media (max-width:500px){
+	.numberCircle{
+		width: 24px;
+		height: 24px;
+		font: 10px Arial, sans-serif;
+	}
+}
+
+.badgebox{
+    /*background: white;*/
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    margin-left: 15px;
+    position: relative;
+    width: 340px;
+    height: 110px;
+    opacity: .75;
+    filter: alpha(opacity=75);
+    border-radius: 5px;
+    overflow: hidden;
+}
