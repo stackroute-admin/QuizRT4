@@ -1,0 +1,10 @@
+// var currentGameCorerctAnscount;
+// var totalGameCorrectAnscount;
+// var totalWinCount;
+// var avgResponseSpeedCorrectQues;
+// var winStreak;
+// var dayStreak;
+// var currentScore;
+// var totalScore;
+// var topicId;
+// var topicName;
