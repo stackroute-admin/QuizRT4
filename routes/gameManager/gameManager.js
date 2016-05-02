@@ -17,6 +17,7 @@ var uuid = require('node-uuid'), // used to generate unique game ids
     questionBank = require('./questionBank'),
     LeaderBoard = require('./leaderboard.js'),
     prebuildQuestionBank=require('./prebuildQuestions.js'),
+    Profile = require('../../models/profile.js');
     MongoDB = require('./mongoService.js');
     questionPaper=null;
 /**
@@ -558,6 +559,29 @@ console.log("jkjkjkjkjkjkjkjkkjkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+questions);
   this.updateScore = function( gameId, userId, score) {
     LeaderBoard.updateScore( gameId, userId, score); // call the LeaderBoard to update the player score
   };
-}
 
+  // Get User Details
+  this.getUserDetails = function getUserDetails(client, userId) {
+
+    console.log("Into function");
+    var onlineFriends = [];
+    Profile.find({}).then(function(profiles) {
+
+      profiles.forEach(function(profile) { 
+        var onlineFriend = {id:profile.userId , name: profile.name, image: profile.imageLink, badge: profile.badge, wins:profile.wins};
+
+        onlineFriends.push(onlineFriend);
+        onlineFriends.sort(function(a,b) {
+            return (b.online - a.online);
+        });
+      
+      });
+       
+      client.emit('onlineFriends', onlineFriends);
+      console.log("emitted");
+    });
+     
+  };
+
+};
 module.exports = GameManager;

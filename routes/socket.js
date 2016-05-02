@@ -152,6 +152,12 @@ module.exports = function(server,sessionMiddleware) {
         client.on('leaveGame', function( gameId ){
           GameManager.leaveGame( gameId, client.request.session.user );
         });
+
+        client.on('getOnlineFriends', function(myuserId) {
+          console.log("Get Online Users");
+          GameManager.getUserDetails(client);
+        });
+     
       });// end normalGameSocket
 
 
@@ -304,3 +310,5 @@ module.exports = function(server,sessionMiddleware) {
             });
           });// end tournament socket
 }
+
+
