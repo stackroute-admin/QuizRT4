@@ -19,10 +19,11 @@
 var express = require('express'),
 router = express.Router(),
 Profile = require("../models/profile"),
-userSettingsHandler = require('./userSettingsHandler');
+userSettingsHandler = require('./userSettingsHandler'),
+FriendShip = require("../models/friendship");
 
-router.post('/profileData', function(req, res, next) {
-    if (req.body.showCurrentLoggedInUserProfile && req.session != null && req.session.user != null ) {
+router.get('/profileData', function(req, res, next) {
+  if (req.session && req.session.user ) {
     console.log('Authenticated user: ' + req.session.user);
     if( !(req.session.user == null) ){
       var user = req.session.user;
@@ -34,7 +35,7 @@ router.post('/profileData', function(req, res, next) {
           res.writeHead(500, {'Content-type': 'application/json'});
           res.end(JSON.stringify({ error:'We could not load your profile properly. Try again later.'}) );
         }else if( !profileData ){
-          console.log('User not found in database !.');
+          console.log('User not found in database.');
           res.writeHead(500, {'Content-type': 'application/json'});
           res.end(JSON.stringify({ error: 'We could not find you in our database. Try again later.'}) );
         }else {
@@ -43,31 +44,40 @@ router.post('/profileData', function(req, res, next) {
       });
     }
   }
-  else if(!req.body.showCurrentLoggedInUserProfile)
-  {
-    var user = req.body.user;
-    Profile.findOne({userId: user})
-    .populate("topicsPlayed.topicId")
-    .exec(function(err,profileData){
-      if (err) {
-        console.log('Database error. Could not load user profile.');
-        res.writeHead(500, {'Content-type': 'application/json'});
-        res.end(JSON.stringify({ error:'We could not load your profile properly. Try again later.'}) );
-      }else if( !profileData ){
-        console.log('User not found in database.');
-        res.writeHead(500, {'Content-type': 'application/json'});
-        res.end(JSON.stringify({ error: 'We could not find you in our database. Try again later.'}) );
-      }else {
-        res.json({ error: null, user:profileData });
-      }
-    });
-  }
   else {
     console.log('User not authenticated. Returning.');
     res.writeHead(401);
     res.end(JSON.stringify({ error: 'Failed to create user session. Kindly do a fresh Login.' }) );
   }
 });
+
+router.get('/profileData/:userId' ,function(req,res){
+  var user = req.params.userId;
+  Profile.findOne({userId: user})
+  .populate("topicsPlayed.topicId")
+  .exec(function(err,profileData){
+    if (err) {
+      console.log('Database error. Could not load user profile.');
+      res.writeHead(500, {'Content-type': 'application/json'});
+      res.end(JSON.stringify({ error:'We could not load the profile properly. Try again later.'}) );
+    }else if( !profileData ){
+      console.log('User not found in database.');
+      res.writeHead(500, {'Content-type': 'application/json'});
+      res.end(JSON.stringify({ error: 'We could not find the user in our database. Try again later.'}) );
+    }else {
+      Friendship.getAcceptanceState(req.session.user,user).then(function(isfriend){
+        res.json({ error: null, user:profileData , isfriend  });
+      })
+    }
+  })
+});
+
+//
+// router.post('/', function(req,res) {
+//   FriendShip.search(req.body.dasd).then(function(relation){
+//     res.send(relation.length > 0);
+//   })
+// });
 
 // add user profile sub-hadlers here
 router.use('/userSettings', userSettingsHandler );

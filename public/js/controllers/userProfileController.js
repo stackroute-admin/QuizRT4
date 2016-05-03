@@ -61,7 +61,7 @@ angular.module('quizRT')
       $location.path( '/quizResult/' + gameId );
     }
 
-    $http({method : 'POST',url:'/userProfile/profileData' , data : {showCurrentLoggedInUserProfile : true}})
+    $http({method : 'GET',url:'/userProfile/profileData'})
     .then( function( successResponse ){
       $scope.data = successResponse.data.user;
       $rootScope.loggedInUser = successResponse.data.user;
@@ -92,44 +92,62 @@ angular.module('quizRT')
     });
 
 
-    $scope.viewUserProfile = function(user){//TO DO : Send an object
-     $http({method : 'POST',url:'/userProfile/profileData' , data : {showCurrentLoggedInUserProfile : false , user : user}})
-     .then(function(successResponse){
-       $scope.data = successResponse.data.user;
-       console.log($scope.data);
-       $rootScope.friendUser = successResponse.data.user;
-       $scope.topicsFollowed = [];
-       if($rootScope.friendUser.topicsPlayed != null) {
-         for(var i = 0;i < $rootScope.friendUser.topicsPlayed.length;i++){
-           if( $rootScope.friendUser.topicsPlayed[i].isFollowed){
-             $scope.topicsFollowed.push( $rootScope.friendUser.topicsPlayed[i] );
-           }
-         }
-       }
-       $rootScope.myImage = $rootScope.friendUser.imageLink;
-       $rootScope.fakeMyName = $rootScope.friendUser.name;
-       $rootScope.topperImage = $rootScope.friendUser.imageLink;
-       $rootScope.userIdnew = $rootScope.friendUser.userId;
-       $location.path('/friendUserProfile')
-     },function(errorResponse){
-          console.log(errorResponse);
-     });
-    }
-
-    $scope.sendFriendRequest = function(currentUserProfile){//remove istrue after testing
-      $scope.viewUserProfile("anil2");
-      if(currentUserProfile){
-      var friendshipData = {userIds : [] , acceptanceState : 0 , lastUpdatedDate : new Date()};
-      friendshipData.userIds.push($rootScope.loggedInUser);
-      friendshipData.userIds.push(currentUserProfile);// to do : Should work on retrieving the Object
-      $http({method :'POST',data : friendshipData , url : 'userProfile/userSettings/sendFriendRequest'})
+    $scope.viewUserProfile = function(user){
+      $http({method : 'GET',url:'/userProfile/profileData/' + user , params : {userId : user}})
       .then(function(successResponse){
-          $rootScope.$broadcast('sent:a:frndreq',1);
-        console.log('Friend Request Sent');
+        $rootScope.friendUser = successResponse.data.user;
+        $rootScope.friendUser.acceptanceState = successResponse.data.isfriend == null ? undefined : successResponse.data.isfriend["acceptanceState"];
+        $rootScope.friendUser.buttonText = $rootScope.friendUser.acceptanceState == 0 ? 'Send Request Remainder' :  $rootScope.friendUser.acceptanceState == 1 ? 'Unfriend' :  $rootScope.friendUser.acceptanceState == 2 ? 'Cannot Send Request' : 'Send Friend Request'
+        $scope.friendUser.topicsFollowed = [];
+        if($rootScope.friendUser.topicsPlayed != null) {
+          for(var i = 0;i < $rootScope.friendUser.topicsPlayed.length;i++){
+            if( $rootScope.friendUser.topicsPlayed[i].isFollowed){
+              $scope.friendUser.topicsFollowed.push( $rootScope.friendUser.topicsPlayed[i] );
+            }
+          }
+        }
+        $location.path('/friendUserProfile/' + $rootScope.friendUser.name);
+      },function(errorResponse){
+        console.log(errorResponse);
+      });
+    };
+
+    $scope.sendFriendRequest = function(currentUserProfile){
+      $scope.viewUserProfile('sai')
+      if(currentUserProfile){
+        if($rootScope.friendUser.acceptanceState == undefined)
+        {
+          var friendshipData = {userIds : [] , acceptanceState : 0 , lastUpdatedDate : new Date()};
+          friendshipData.userIds.push($rootScope.loggedInUser);
+          friendshipData.userIds.push(currentUserProfile);// to do : Should work on retrieving the Object
+          $http({method :'POST',data : friendshipData , url : 'userProfile/userSettings/sendFriendRequest'})
+          .then(function(successResponse){
+            $rootScope.$broadcast('sent:a:frndreq',1);
+            console.log('Friend Request Sent');
+            $rootScope.friendUser.buttonText = "Request Sent"
+          } , function(failureResponse){
+            console.log(failureResponse);
+          })
+        };
+      }
+    };
+
+    $scope.acceptFriendRequest = function(user,friendUser){
+      $http({method :'POST',data : {user,friendUser} , url : 'userProfile/userSettings/acceptFriendRequest'})
+      .then(function(successResponse){
+        console.log('Friend Request Accepted');
       } , function(failureResponse){
         console.log(failureResponse);
       });
     }
+
+    $scope.rejectFriendRequest = function(user,friendUser){
+      $http({method :'POST',data : {user,friendUser} , url : 'userProfile/userSettings/rejectFriendRequest'})
+      .then(function(successResponse){
+        console.log('Friend Request Accepted');
+      } , function(failureResponse){
+        console.log(failureResponse);
+      });
     }
 
     $scope.showFollowedTopic = function(topicID){

@@ -19,8 +19,14 @@ function getUserIds(userToSearch,user){
       console.log(err);
     }
     docs.map(function(e) {doc.push(_.pluck(e["userIds"],'userId'))});
-    doc =_.without(doc.reduce(function(a, b) { return _.union(a,b)}) , user)
-    deferred.resolve(doc);
+    if(doc != 'undefined' && doc.length > 0)
+    {
+      doc =_.without(doc.reduce(function(a, b) { return _.union(a,b)}) , user)
+      deferred.resolve(doc);
+    }
+    else{
+      deferred.reject([]);
+    }
   });
   return deferred.promise;
 }
@@ -40,7 +46,29 @@ friendshipSchema.statics.search = function search(user){
   return deferred.promise;
 };
 
+friendshipSchema.statics.getAcceptanceState = function getAcceptanceState(users){
+  var deferred = Q.defer();
+  var userIds = profile.find({userId : { $in : users }})
+  .select({'_id' : 1})
+  .exec(function(err,docs){
+    if(err){
+      console.log(err)
+    }
+    var userIds = _.pluck(docs,'_id');
+    userIds.map(function(e){
+        mongoose.model('friendship')
+                .findOne({userIds : { $all : userIds}}, {'acceptanceState' : 1 , '_id' : 0 })
+                .exec(function(err,docs){
+                  if (err) {
+                    console.log(err);
+                  }
 
+                  deferred.resolve(docs);
+                });
+    })
+  });
+  return deferred.promise;
+};
 
 Friendship = mongoose.model('friendship', friendshipSchema,'friendship_Collection');
 

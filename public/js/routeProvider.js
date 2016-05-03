@@ -270,6 +270,11 @@ angular.module('quizRT', ['ngRoute', 'ngCookies'])
         'templateUrl': 'html/createConfTournament.html',
         'controller': 'tournamentCreationController'
       })
+
+      .when('/friendUserProfile/:userId', {
+        'templateUrl': 'html/friendUserProfile.html',
+        'controller': 'userProfileController'
+      })
       .otherwise({
         redirectTo: '/404'
       });

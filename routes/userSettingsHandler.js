@@ -132,10 +132,7 @@ router.post('/updateProfile', function(req,res,next) {
 });
 
 router.post('/sendFriendRequest', function(req,res,next) {
-  var friendship = new FriendShip(req.body)
-  FriendShip.search('anil2').then(function(ret){
-    console.log('Hello' + ret);
-  })
+  var friendship = new FriendShip(req.body);
   friendship.save(function(err, updatedUserProfile ) {
     if ( err ) {
       console.log('Could not Send Friend Request!');
@@ -147,6 +144,24 @@ router.post('/sendFriendRequest', function(req,res,next) {
       res.end( JSON.stringify({ error:null, updatedUserProfile: updatedUserProfile }) );
     }
   })
+});
+
+router.post('/acceptFriendRequest', function(req,res,next) {
+  var friendship = new FriendShip(req.body);
+  friendship.update({"_id" : {$all : req.body}} , { acceptanceState : 1 , lastUpdatedDate : new Date() } ,{upsert : false} , function(err, doc){
+    if (err)
+      return res.send(500, { error: 'MONGOERROR' });
+     res.end();
+  }););
+});
+
+router.post('/rejectFriendRequest', function(req,res,next) {
+  var friendship = new FriendShip(req.body);
+  friendship.update({"_id" : {$all : req.body}} , { acceptanceState : 2 , lastUpdatedDate : new Date() } ,{upsert : false} , function(err, doc){
+    if (err)
+      return res.send(500, { error: 'MONGOERROR' });
+     res.end();
+  }););
 });
 
 // persist user profile to MongoDB
