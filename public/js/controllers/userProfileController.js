@@ -124,6 +124,7 @@ angular.module('quizRT')
       console.log(friendshipData);
       $http({method :'POST',data : friendshipData , url : 'userProfile/userSettings/sendFriendRequest'})
       .then(function(successResponse){
+          $rootScope.$broadcast('sent:a:frndreq',1);
         console.log('Friend Request Sent');
       } , function(failureResponse){
         console.log(failureResponse);

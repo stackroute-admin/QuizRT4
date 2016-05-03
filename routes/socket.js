@@ -157,7 +157,7 @@ module.exports = function(server,sessionMiddleware) {
           console.log("Get Online Users");
           GameManager.getUserDetails(client);
         });
-     
+
       });// end normalGameSocket
 
 
@@ -309,6 +309,12 @@ module.exports = function(server,sessionMiddleware) {
               }
             });
           });// end tournament socket
+
+          var notificationSocket = io
+              .of('/notification')
+              .on('connection', function(client) {
+                  client.on('respond:to:frndreq',function(data){
+                      console.log('recieved a notification');
+                  });
+              });
 }
-
-
