@@ -17,6 +17,7 @@ var badgesData = [
     badgeDep:["nOfConsWin"],
     badgeFunct: function(nOfConsWin) {
         if(nOfConsWin>6) {return true}
+        else return false
       }
   },
   {
@@ -27,6 +28,7 @@ var badgesData = [
     badgeDep:["avgResTimeCrctCurrentGame"],
     badgeFunct: function(avgResTimeCrctCurrentGames) {
         if(avgResTimeCrctCurrentGame<0.5) {return true}
+        else return false
       }
   },
   {
@@ -37,6 +39,7 @@ var badgesData = [
     badgeDep:["consLogin"],
     badgeFunct:function(consLogin) {
         if(consLogin>=5) {return true}
+        else return false
       }
   },
   {
@@ -47,6 +50,7 @@ var badgesData = [
     badgeDep:["nOfUniqTopicPlayed"],
     badgeFunct: function(nOfUniqTopicPlayed) {
         if(nOfUniqTopicPlayed>=10) {return true}
+        else return false
       }
   }
 ];
