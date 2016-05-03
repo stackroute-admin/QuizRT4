@@ -21,12 +21,12 @@ router = express.Router(),
 Profile = require("../models/profile"),
 userSettingsHandler = require('./userSettingsHandler');
 
-router.get('/profileData', function(req, res, next) {
-  if ( req.session && req.session.user ) {
+router.post('/profileData', function(req, res, next) {
+    if (req.body.showCurrentLoggedInUserProfile && req.session && req.session.user ) {
     console.log('Authenticated user: ' + req.session.user);
     if( !(req.session.user == null) ){
-      var usr = req.session.user;
-      Profile.findOne({userId: usr})
+      var user = req.session.user;
+      Profile.findOne({userId: user})
       .populate("topicsPlayed.topicId")
       .exec(function(err,profileData){
         if (err) {
@@ -42,23 +42,18 @@ router.get('/profileData', function(req, res, next) {
         }
       });
     }
-  } else {
-    console.log('User not authenticated. Returning.');
-    res.writeHead(401);
-    res.end(JSON.stringify({ error: 'Failed to create user session. Kindly do a fresh Login.' }) );
   }
-});
-
-router.post('/profileData', function(req, res, next) {
-  if (req.body.user) {
-    var usr = req.body.user;
-    Profile.findOne({userId: usr})
+  else if(!req.body.showCurrentLoggedInUserProfile)
+  {
+    var user = req.body.user;
+    console.log(user);
+    Profile.findOne({userId: user})
     .populate("topicsPlayed.topicId")
     .exec(function(err,profileData){
       if (err) {
         console.log('Database error. Could not load user profile.');
         res.writeHead(500, {'Content-type': 'application/json'});
-        res.end(JSON.stringify({ error:'We could not load the User profile properly. Try again later.'}) );
+        res.end(JSON.stringify({ error:'We could not load your profile properly. Try again later.'}) );
       }else if( !profileData ){
         console.log('User not found in database.');
         res.writeHead(500, {'Content-type': 'application/json'});
@@ -68,8 +63,16 @@ router.post('/profileData', function(req, res, next) {
       }
     });
   }
+  else {
+    console.log('User not authenticated. Returning.');
+    res.writeHead(401);
+    res.end(JSON.stringify({ error: 'Failed to create user session. Kindly do a fresh Login.' }) );
+  }
 });
 
+function getProfileData(user){
+
+}
 
 // add user profile sub-hadlers here
 router.use('/userSettings', userSettingsHandler );

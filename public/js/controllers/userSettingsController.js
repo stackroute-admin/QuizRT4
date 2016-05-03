@@ -141,6 +141,5 @@ angular.module('quizRT')
         });
       });
 
-      $scope.
     }
   });

@@ -132,10 +132,19 @@ router.post('/updateProfile', function(req,res,next) {
 });
 
 router.post('/sendFriendRequest', function(req,res,next) {
-  var userToSendFriendRequest = req.body.friendUser;
-  var friendship = new FriendShip({userIds : [req.body.user , req.body.userToSendFriendRequest]},acceptanceState : 0 , lastUpdatedDate : new Date());
-  friendship.save()
-})
+  var friendship = new FriendShip(req.body);
+  friendship.save(function(err, updatedUserProfile ) {
+    if ( err ) {
+      console.log('Could not Send Friend Request!');
+      console.error(err);
+      res.writeHead(500,{'Content-Type':'application/json'});
+      res.end( JSON.stringify({ error:'Could not Send Friend Request'}) );
+    }else {
+      console.log("User profile updated sucessfully!!\n");
+      res.end( JSON.stringify({ error:null, updatedUserProfile: updatedUserProfile }) );
+    }
+  })
+});
 
 // persist user profile to MongoDB
 function validateAndSaveProfile( profileData, res ) {
