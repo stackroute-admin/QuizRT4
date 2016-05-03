@@ -24,6 +24,7 @@ angular.module('quizRT')
       $rootScope.initializeSockets(); // need to understand this requirement
     }
     $rootScope.stylesheetName="style";
+    $rootScope.notificationCount=1;
     $scope.logInErrorMsg = '';
     $scope.dismissMsg = function() {
       $rootScope.logInLogOutErrorMsg = '';

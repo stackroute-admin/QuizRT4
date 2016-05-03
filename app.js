@@ -34,6 +34,7 @@ var express = require('express'),
     tournamentHandler = require('./routes/tournamentHandler'),
     confTournamentHandler=require('./routes/confTounamentHandler'),
     questionPaperRetriever = require('./routes/questionPaperRetriever'),
+    notificationsRoute = require('./routes/notificationsRoute'),
     index = require('./routes/index'),
     authenticationHandler = require('./routes/authenticationHandler')(passport),
     // redis_store = new RedisStore({ host: '172.23.238.253', port: 6379, client: redisClient}),
@@ -89,8 +90,9 @@ app.use( function( req, res, next ) {
 app.use('/userProfile', profileHandler);
 app.use('/topicsHandler', topicsHandler);
 app.use('/tournamentHandler', tournamentHandler);
-app.use('/',confTournamentHandler);
+//app.use('/',confTournamentHandler);
 app.use('/QuestionPaperRetriever',questionPaperRetriever);
+app.use('/notifications',notificationsRoute);
 
 // server.listen(8080, function() {
 // server.listen(8080, function() {
