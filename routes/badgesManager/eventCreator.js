@@ -1,5 +1,5 @@
-var Event=function (eventType,userId) {
-  this.eventType=eventType;
+var Event=function (userId,eventType) {
   this.userId=userId;
+  this.eventType=eventType;
 }
 module.exports=Event;

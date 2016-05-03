@@ -6,6 +6,7 @@ var badgesData = [
     badgeDep:["nOfWin"],
     badgeFunct: function(nOfWin) {
         if(nOfWin==1) {return true}
+        else return false;
       }
   },
   {

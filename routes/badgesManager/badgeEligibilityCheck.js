@@ -1,14 +1,25 @@
 var Event = require('./eventCreator');
+var mongoose = require('mongoose');
 var EventExecutor = require('./eventExecutor');
-var badgeEligibilityCheck=new function(userId,EVENT_TYPE) {
+var BadgesManager = require('./badgesManager');
+mongoose.connect('mongodb://localhost/quizRT3',function () {
+  console.log('connected');
+});
+var badgeEligibilityCheck= function(userId,eventType) {
   this.userId=userId;
-  this.EVENT_TYPE=EVENT_TYPE;
+  this.eventType=eventType;
 }
 badgeEligibilityCheck.prototype.check = function () {
-  var event=new Event(this.userId,this.EVENT_TYPE);
-  var eventExecutor=new EventExecutor(event);
-  eventExecutor.execute(function (badgeId) {
-    //TODO socket stuffs
-  });
+  //var event=new Event(this.userId,this.eventType);
+  var eventExecutor=new EventExecutor(new Event(this.userId,this.eventType));
+  eventExecutor.execute((function (badgeId) {
+    new BadgesManager().addBadgesToUser(this.userId, badgeId, function(err,doc) {
+      if(err)
+          console.log(err);
+      //TODO socket stuffs
+    });
+  }).bind(this));
 };
-module.export=badgeEligibilityCheck;
+module.exports=badgeEligibilityCheck;
+
+new badgeEligibilityCheck('ie','gameFinish').check();

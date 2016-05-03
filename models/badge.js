@@ -17,7 +17,7 @@
 var mongoose = require('mongoose')
 require('mongoose-function')(mongoose),
   badgeSchema=mongoose.Schema({
-    badgeId: {Type: String, Unique: true},
+    badgeId: {type: String, unique: true},
     badgeName : String,
     badgeDesc : String,
     badgeUrl : String,

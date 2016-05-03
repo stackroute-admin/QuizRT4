@@ -1,28 +1,40 @@
 var Asynchrony = require('asynchrony-di');
+var BadgesManager = require('./badgesManager');
+var counterEvaluator = require('./counterEvaluator/counterEvaluator');
+var badgesManager = new BadgesManager();
 var EventExecutor = function (event) {
   this.event=event;
 };
 
 EventExecutor.prototype.execute = function (callback) {
-  // this.fetchData((function (err,userCountersValue) {
-  //   this.fetchBadges(function (err,badge) {
-  //     if(userCountersValue>=badge['winCount']){
-  //       callback(badge['badgeId']);
-  //     }
-  //   });
-  // }).bind(this));
-  if(this.event.EVENT_TYPE=='gameFinish'){
+  if(this.event.eventType==='gameFinish'){
     var asynchrony=new Asynchrony();
-    asynchrony.add('nOfConsWin',function(done) {
-      done(null,getNumOfConsWin(this.event.userId));
-    });
-    asynchrony.add('nOfWin',function(done) {
-      done(null,getNumOfWin(this.event.userId));
-    });
-    doc=getAllBadges();
-    var dep=doc.badgeDep;
-    dep.push(doc.badgeFunct);
-    asynchrony.invoke(dep);
+    asynchrony.add('nOfWin',[(function(done) {
+      counterEvaluator.getNumOfWin(this.event.userId,function(err,data) {
+        if(err) return done(err);
+        done(null,data[0].wins-133);
+      });
+    }).bind(this)]);
+    asynchrony.add('nOfConsWin',[(function(done) {
+      counterEvaluator.getNumOfConsWin(this.event.userId,function(err,data) {
+        if(err) return done(err);
+        console.log(data.winCount);
+        done(null,data.winCount+8);
+      });
+    }).bind(this)]);
+    badgesManager.fetchAllBadges(function(err,docs) {
+        console.log(docs);
+        if(err) return console.log(err);;
+        docs.forEach(function(doc){
+          var dep=new Array(doc.badgeDep);
+          dep.push(doc.badgeFunct);
+          asynchrony.invoke(dep).then(function(condition) {
+            if(condition){
+              callback.apply(null,[doc.badgeId]);
+            }
+          });
+        });
+      });
   }
 };
 module.exports=EventExecutor;
