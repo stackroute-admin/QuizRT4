@@ -24,7 +24,7 @@ angular.module('quizRT')
         $location.path('/login');
       } else {
         $rootScope.hideFooterNav = false;
-        $rootScope.stylesheetName="";
+        $rootScope.stylesheetName="badges";
         $scope.badgeUrl="../images/badges/handshake.png";
         $scope.badgeArr=[1,2,3,4,5,6,7];
         $scope.badgeArr1=[

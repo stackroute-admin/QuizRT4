@@ -26,8 +26,9 @@ var mongoose = require('mongoose'),
       imageLink:String,
       country:String,
       flagLink:String,
-      badge: String,
-      badges:Array,
+
+      badge:String,
+      badges: Array,
       totalGames:Number,
       wins:Number,
       topicsPlayed:[{
