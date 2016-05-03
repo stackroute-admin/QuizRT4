@@ -1,5 +1,5 @@
 var User = require('../models/user.js'),
-    Friend = require('../models/friendship_collection.js'),
+    Friend = require('../models/friendship.js'),
     Profile = require('../models/profile.js');
 
 
