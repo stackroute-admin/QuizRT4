@@ -95,6 +95,21 @@ angular.module('quizRT')
     $scope.viewUserProfile = function(user){//TO DO : Send an object
      $http({method : 'POST',url:'/userProfile/profileData' , data : {showCurrentLoggedInUserProfile : false , user : user}})
      .then(function(successResponse){
+       $scope.data = successResponse.data.user;
+       console.log($scope.data);
+       $rootScope.loggedInUser = successResponse.data.user;
+       $scope.topicsFollowed = [];
+       if($rootScope.loggedInUser.topicsPlayed != null) {
+         for(var i = 0;i < $rootScope.loggedInUser.topicsPlayed.length;i++){
+           if( $rootScope.loggedInUser.topicsPlayed[i].isFollowed){
+             $scope.topicsFollowed.push( $rootScope.loggedInUser.topicsPlayed[i] );
+           }
+         }
+       }
+       $rootScope.myImage = $rootScope.loggedInUser.imageLink;
+       $rootScope.fakeMyName = $rootScope.loggedInUser.name;
+       $rootScope.topperImage = $rootScope.loggedInUser.imageLink;
+       $rootScope.userIdnew = $rootScope.loggedInUser.userId;
      },function(errorResponse){
           console.log(errorResponse);
      });
