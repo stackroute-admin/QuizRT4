@@ -129,13 +129,11 @@ angular.module('quizRT')
             console.log('Friend Request Sent');
               //$scope.notificationCount+=1;
               console.log($scope.notificationCount);
-
-<<<<<<< .merge_file_a07104
           }, function(failureResponse) {
             console.log(failureResponse);
           });
       }
-=======
+
     $scope.viewUserProfile = function(user){//TO DO : Send an object
      $http({method : 'POST',url:'/userProfile/profileData' , data : {showCurrentLoggedInUserProfile : false , user : user}})
      .then(function(successResponse){
