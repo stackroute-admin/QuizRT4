@@ -148,10 +148,11 @@
 }
 
 .online {
-  background:  green;
   cursor: pointer;
+  background : white;
+  border: 1px solid;
 }
 
 .selected {
-  background: blue;
+  background: #5BC0DE ;
 }
