@@ -22,7 +22,7 @@ Profile = require("../models/profile"),
 userSettingsHandler = require('./userSettingsHandler');
 
 router.post('/profileData', function(req, res, next) {
-    if (req.body.showCurrentLoggedInUserProfile && req.session && req.session.user ) {
+    if (req.body.showCurrentLoggedInUserProfile && req.session != null && req.session.user != null ) {
     console.log('Authenticated user: ' + req.session.user);
     if( !(req.session.user == null) ){
       var user = req.session.user;
@@ -34,7 +34,7 @@ router.post('/profileData', function(req, res, next) {
           res.writeHead(500, {'Content-type': 'application/json'});
           res.end(JSON.stringify({ error:'We could not load your profile properly. Try again later.'}) );
         }else if( !profileData ){
-          console.log('User not found in database.');
+          console.log('User not found in database !.');
           res.writeHead(500, {'Content-type': 'application/json'});
           res.end(JSON.stringify({ error: 'We could not find you in our database. Try again later.'}) );
         }else {
@@ -46,7 +46,6 @@ router.post('/profileData', function(req, res, next) {
   else if(!req.body.showCurrentLoggedInUserProfile)
   {
     var user = req.body.user;
-    console.log(user);
     Profile.findOne({userId: user})
     .populate("topicsPlayed.topicId")
     .exec(function(err,profileData){
@@ -69,10 +68,6 @@ router.post('/profileData', function(req, res, next) {
     res.end(JSON.stringify({ error: 'Failed to create user session. Kindly do a fresh Login.' }) );
   }
 });
-
-function getProfileData(user){
-
-}
 
 // add user profile sub-hadlers here
 router.use('/userSettings', userSettingsHandler );

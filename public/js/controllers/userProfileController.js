@@ -97,31 +97,31 @@ angular.module('quizRT')
      .then(function(successResponse){
        $scope.data = successResponse.data.user;
        console.log($scope.data);
-       $rootScope.loggedInUser = successResponse.data.user;
+       $rootScope.friendUser = successResponse.data.user;
        $scope.topicsFollowed = [];
-       if($rootScope.loggedInUser.topicsPlayed != null) {
-         for(var i = 0;i < $rootScope.loggedInUser.topicsPlayed.length;i++){
-           if( $rootScope.loggedInUser.topicsPlayed[i].isFollowed){
-             $scope.topicsFollowed.push( $rootScope.loggedInUser.topicsPlayed[i] );
+       if($rootScope.friendUser.topicsPlayed != null) {
+         for(var i = 0;i < $rootScope.friendUser.topicsPlayed.length;i++){
+           if( $rootScope.friendUser.topicsPlayed[i].isFollowed){
+             $scope.topicsFollowed.push( $rootScope.friendUser.topicsPlayed[i] );
            }
          }
        }
-       $rootScope.myImage = $rootScope.loggedInUser.imageLink;
-       $rootScope.fakeMyName = $rootScope.loggedInUser.name;
-       $rootScope.topperImage = $rootScope.loggedInUser.imageLink;
-       $rootScope.userIdnew = $rootScope.loggedInUser.userId;
+       $rootScope.myImage = $rootScope.friendUser.imageLink;
+       $rootScope.fakeMyName = $rootScope.friendUser.name;
+       $rootScope.topperImage = $rootScope.friendUser.imageLink;
+       $rootScope.userIdnew = $rootScope.friendUser.userId;
+       $location.path('/friendUserProfile')
      },function(errorResponse){
           console.log(errorResponse);
      });
     }
 
-    $scope.sendFriendRequest = function(currentUserProfile){
+    $scope.sendFriendRequest = function(currentUserProfile){//remove istrue after testing
       $scope.viewUserProfile("anil2");
+      if(currentUserProfile){
       var friendshipData = {userIds : [] , acceptanceState : 0 , lastUpdatedDate : new Date()};
-      console.log(friendshipData);
       friendshipData.userIds.push($rootScope.loggedInUser);
-      //  friendshipData.userIds.push(currentUserProfile); // to do : Should work on retrieving the Object
-      console.log(friendshipData);
+      friendshipData.userIds.push(currentUserProfile);// to do : Should work on retrieving the Object
       $http({method :'POST',data : friendshipData , url : 'userProfile/userSettings/sendFriendRequest'})
       .then(function(successResponse){
           $rootScope.$broadcast('sent:a:frndreq',1);
@@ -129,6 +129,7 @@ angular.module('quizRT')
       } , function(failureResponse){
         console.log(failureResponse);
       });
+    }
     }
 
     $scope.showFollowedTopic = function(topicID){

@@ -132,7 +132,10 @@ router.post('/updateProfile', function(req,res,next) {
 });
 
 router.post('/sendFriendRequest', function(req,res,next) {
-  var friendship = new FriendShip(req.body);
+  var friendship = new FriendShip(req.body)
+  FriendShip.search('anil2').then(function(ret){
+    console.log('Hello' + ret);
+  })
   friendship.save(function(err, updatedUserProfile ) {
     if ( err ) {
       console.log('Could not Send Friend Request!');
