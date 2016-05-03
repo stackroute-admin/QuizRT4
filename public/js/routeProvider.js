@@ -101,8 +101,8 @@ angular.module('quizRT', ['ngRoute', 'ngCookies','angular-c3-simple'])
     .factory('socket', function ($rootScope) {
 
       return function($rootScope, type) {
-        // var socket = io.connect('http://192.168.0.103:7000' + type, {'forceNew':true } );
-        var socket = io.connect('http://172.23.238.184:7000' + type, {'forceNew':true } );
+        // var socket = io.connect('http://192.168.0.105:7000' + type, {'forceNew':true } );
+        var socket = io.connect('http://172.23.238.207:7000' + type, {'forceNew':true } );
         // var socket = io.connect('http://quizart.stackroute.in:2000' + type, {'forceNew':true } );
         console.log('Socket initialized for ' + type);
 
@@ -169,6 +169,10 @@ angular.module('quizRT', ['ngRoute', 'ngCookies','angular-c3-simple'])
         .when('/userTeams',{
           'templateUrl': 'html/userTeams.html',
           'controller': 'userProfileController'
+        })
+        .when('/badges',{
+          'templateUrl': 'html/badges.html',
+          'controller': 'badgesController'
         })
         .when('/userTournaments',{
           'templateUrl': 'html/userTournaments.html',
