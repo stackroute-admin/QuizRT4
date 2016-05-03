@@ -13,8 +13,8 @@ var userAnalyticsSchema = require('../models/userAnalytics'),
     Profile = require("../models/profile"),
     Q = require('q');
 
-   // var mongoose = require('mongoose');
-   // mongoose.connect('mongodb://localhost/quizRT3');
+   var mongoose = require('mongoose');
+   mongoose.connect('mongodb://localhost/quizRT3');
 
 module.exports = {
     // function to return game stat for a given game and a user
@@ -306,15 +306,14 @@ module.exports = {
                         function (err, result) {
                             if (err) {
                                console.log(err);
-                               deferred.resolve( { 'error': 'dbErr'} );
+                               deferred.resolve( null );
                            } else {
                                if(result){
-                                   console.log("Fetched results !!");
                                    var tCount = result.topicsPlayed.length;
-                                   deferred.resolve({distinctTopicsPlayedCount:tCount});
+                                   deferred.resolve(tCount);
                                }
                                else {
-                                   deferred.resolve({distinctTopicsPlayedCount:0})
+                                   deferred.resolve(0)
                                }
                            }
                        }
@@ -510,10 +509,10 @@ module.exports = {
                 }
                 else {
                     if ( results ){
-                        deferred.resolve( {avgResponseTime:results.avgResponseTime} );
+                        deferred.resolve(results.avgResponseTime);
                     }
                     else {
-                        deferred.resolve( { 'error': 'dbErr'} );
+                        deferred.resolve( null );
                     }
                 }
               }
@@ -526,14 +525,14 @@ module.exports = {
           Profile.findOne({userId:userId},{'totalGames':1},
                function(err, results){
                  if (err) {
-                      deferred.resolve( { 'error': 'dbErr'} );
+                      deferred.resolve( null );
                  }
                  else {
                      if ( results ){
-                         deferred.resolve( {totalGames:results.totalGames} );
+                         deferred.resolve( results.totalGames );
                      }
                      else {
-                         deferred.resolve( { totalGames:0} );
+                         deferred.resolve( 0 );
                      }
                  }
                }
@@ -645,7 +644,7 @@ module.exports = {
              function(err, results){
                  if (err) {
                     console.log(err);
-                    deferred.resolve([ { 'error': 'dbErr'}] );
+                    deferred.resolve( null );
                 } else {
                  //    console.log("Fetched results !!");
                     if ( results.length >= 1 ){
@@ -654,11 +653,7 @@ module.exports = {
                             doc.years.forEach(function(mObj){
                                 mObj.monthObj.forEach(function(mVal){
                                     if(mVal.month===month){
-                                        retArr.push(
-                                            {
-                                                'Visit Count' : mVal.count
-                                            }
-                                        );
+                                        retArr.push(mVal.count);
                                     }
                                 });
                             });
@@ -666,7 +661,7 @@ module.exports = {
                         deferred.resolve( retArr[0] );
                      }
                      else {
-                         deferred.resolve({ 'Visit Count': 0} );
+                         deferred.resolve( 0 );
                      }
                  //    done(results );
                  }
