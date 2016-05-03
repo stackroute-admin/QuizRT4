@@ -23,7 +23,9 @@ angular.module('quizRT')
         $rootScope.logInLogOutErrorMsg = 'You are logged out. Kindly Login...';
         $rootScope.logInLogOutSuccessMsg = '';
         $location.path('/login');
-      } else {
+      }
+      else
+      {
         $rootScope.hideFooterNav = false;
         $rootScope.stylesheetName="userProfile";
         $scope.a=7;
@@ -88,6 +90,10 @@ angular.module('quizRT')
           $location.path('/error');
           console.log('User profile could not be loaded!');
         });
+
+        $scope.sendFriendRequest = function(){
+
+        };
 
         $scope.showFollowedTopic = function(topicID){
           var path = '/topic/'+topicID;

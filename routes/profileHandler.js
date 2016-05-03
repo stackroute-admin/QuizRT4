@@ -17,9 +17,9 @@
 //                       + Anil Sawant
 
 var express = require('express'),
-    router = express.Router(),
-    Profile = require("../models/profile"),
-    userSettingsHandler = require('./userSettingsHandler');
+router = express.Router(),
+Profile = require("../models/profile"),
+userSettingsHandler = require('./userSettingsHandler');
 
 router.get('/profileData', function(req, res, next) {
   if ( req.session && req.session.user ) {
@@ -27,27 +27,49 @@ router.get('/profileData', function(req, res, next) {
     if( !(req.session.user == null) ){
       var usr = req.session.user;
       Profile.findOne({userId: usr})
-        .populate("topicsPlayed.topicId")
-            .exec(function(err,profileData){
-              if (err) {
-                console.log('Database error. Could not load user profile.');
-                res.writeHead(500, {'Content-type': 'application/json'});
-                res.end(JSON.stringify({ error:'We could not load your profile properly. Try again later.'}) );
-              }else if( !profileData ){
-                console.log('User not found in database.');
-                res.writeHead(500, {'Content-type': 'application/json'});
-                res.end(JSON.stringify({ error: 'We could not find you in our database. Try again later.'}) );
-              }else {
-                res.json({ error: null, user:profileData });
-              }
-            });
+      .populate("topicsPlayed.topicId")
+      .exec(function(err,profileData){
+        if (err) {
+          console.log('Database error. Could not load user profile.');
+          res.writeHead(500, {'Content-type': 'application/json'});
+          res.end(JSON.stringify({ error:'We could not load your profile properly. Try again later.'}) );
+        }else if( !profileData ){
+          console.log('User not found in database.');
+          res.writeHead(500, {'Content-type': 'application/json'});
+          res.end(JSON.stringify({ error: 'We could not find you in our database. Try again later.'}) );
+        }else {
+          res.json({ error: null, user:profileData });
+        }
+      });
     }
   } else {
     console.log('User not authenticated. Returning.');
     res.writeHead(401);
     res.end(JSON.stringify({ error: 'Failed to create user session. Kindly do a fresh Login.' }) );
   }
- });
+});
+
+router.post('/profileData', function(req, res, next) {
+  if (req.body.user) {
+    var usr = req.body.user;
+    Profile.findOne({userId: usr})
+    .populate("topicsPlayed.topicId")
+    .exec(function(err,profileData){
+      if (err) {
+        console.log('Database error. Could not load user profile.');
+        res.writeHead(500, {'Content-type': 'application/json'});
+        res.end(JSON.stringify({ error:'We could not load the User profile properly. Try again later.'}) );
+      }else if( !profileData ){
+        console.log('User not found in database.');
+        res.writeHead(500, {'Content-type': 'application/json'});
+        res.end(JSON.stringify({ error: 'We could not find you in our database. Try again later.'}) );
+      }else {
+        res.json({ error: null, user:profileData });
+      }
+    });
+  }
+});
+
 
 // add user profile sub-hadlers here
 router.use('/userSettings', userSettingsHandler );
