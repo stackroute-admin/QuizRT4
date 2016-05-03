@@ -7,3 +7,4 @@ var mongoose = require('mongoose'),
 
   Friendship = mongoose.model('friendship', friendshipSchema,'friendship_Collection');
   module.exports = Friendship;
+  
