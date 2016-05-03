@@ -1,22 +1,27 @@
 'use strict';
-
+//  scope:{notificationCount:"="},
 angular.module('quizRT')
-  .directive('notificationData', ['$http',function($http) {
+  .directive('notificationData', ['$http', function($http) {
     return {
       restrict: 'E',
-      template: '<a>{{notificationCount}}</a>',
+      template: '<a ng-click="showModal()">{{notificationCount}}</a>',
+
       link: function postLink(scope, element, attrs) {
         $http.get('/notifications')
-         .success(function(data, status, headers, config) {
-              scope.notificationCount = data.length;
-              scope.notificationData = data;
-              console.log(data);
+          .success(function(data, status, headers, config) {
+            scope.notificationCount = data.length;
+            scope.$root.notificationCount = data.length;
+            scope.notificationData = data;
+            console.log(data);
 
           })
-        element.bind('click', function() {
-        
-          console.log(scope.notificationData);
-        });
+          scope.showModal = function(){
+            //show the modal
+          }
+        // element.bind('click', function() {
+  //
+  //   console.log(scope.notificationData);
+  // });
         // attrs.$observe('notificationData',function(newVal){
         //   var newSign = parseFloat(newVal);
         //   if(newSign>0){
