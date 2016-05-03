@@ -58,7 +58,7 @@ mongoose.connection.on('error', console.error.bind(console, 'Failed to establish
 mongoose.connection.on('open', function() {
   console.log('Connected to MongoDB@StackRouteHost:PORT/quizRT3');
 });
-require('./routes/socket.js')(server,sessionMiddleware);
+require('./routes/socket.js')(server,sessionMiddleware,redisClient);
 app.use(logger('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json());

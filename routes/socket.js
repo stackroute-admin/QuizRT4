@@ -18,9 +18,10 @@
 // var GameManager = require('./gameManager/GameManager.js'),
 var GameManagerClass = require('./gameManager/gameManager.js'),
     GameManager = new GameManagerClass(),
-    TournamentManager = require('./tournamentManager/tournamentManager.js');
+    TournamentManager = require('./tournamentManager/tournamentManager.js'),
+    FriendsManager = require('./friendsManager.js');
 
-module.exports = function(server,sessionMiddleware) {
+module.exports = function(server,sessionMiddleware,redisClient) {
   var io = require('socket.io')(server);
   io.use(function(socket,next){
     sessionMiddleware(socket.request, socket.request.res, next);
@@ -35,6 +36,7 @@ module.exports = function(server,sessionMiddleware) {
         if ( client.request.session && client.request.session.user ) {
           console.log( client.request.session.user + ' connected to QuizRT server. Socket Id: ' + client.id);
         }
+         console.log(client.request.session);
 
         client.on('disconnect', function() {
           if ( client.request.session && client.request.session.user ) {
@@ -154,8 +156,8 @@ module.exports = function(server,sessionMiddleware) {
         });
 
         client.on('getOnlineFriends', function(myuserId) {
-          console.log("Get Online Users");
-          GameManager.getUserDetails(client);
+          console.log("Get Online Users", myuserId.userId);
+          FriendsManager.getOnlineFriends(client, redisClient, myuserId.userId);
         });
 
       });// end normalGameSocket
