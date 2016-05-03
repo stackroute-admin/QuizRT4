@@ -1,0 +1,7 @@
+db.createCollection('QuestionPapers')
+
+
+db.QuestionPapers.insert({_id :'Qpaper1' , Name : 'Question Paper 3',patternId : 'P106Q33999P19',topics : ['Harry Potter Movies'],Question:['84e4fbdfb2be045cfdc9bc7eac27b1ee','"84e4fbdfb2be045cfdc9bc7eac273123'],Tournaments : ['Lord-Of-Series'],difficultyLevel : 'Easy'})
+
+
+db.QuestionPapers.insert({_id :'Qpaper2' , Name : 'Question Paper 3',patternId : 'P106Q33999P19',topics : ['Harry Potter Movies'],Question:['84e4fbdfb2be045cfdc9bc7eac27b1ee','"84e4fbdfb2be045cfdc9bc7eac273123'],Tournaments : ['Lord-Of-Series'],difficultyLevel : 'Easy'})
