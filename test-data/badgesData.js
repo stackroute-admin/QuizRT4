@@ -1,5 +1,5 @@
 var badgesData = [
-  { _id: "thumbsUp",
+  { badgeId: "thumbsUp",
     badgeName:"Thumbs Up",
     badgeDesc:"You have got your first win. Way to go!!",
     badgeUrl:"placeholder",
@@ -9,7 +9,7 @@ var badgesData = [
       }
   },
   {
-    _id:"onARoll",
+    badgeId:"onARoll",
     badgeName:"On a Roll",
     badgeDesc:"You are on a roll!! Keep it up!!",
     badgeUrl:"placeholder",
@@ -19,7 +19,7 @@ var badgesData = [
       }
   },
   {
-    _id:"responseNinja",
+    badgeId:"responseNinja",
     badgeName:"Response Ninja",
     badgeDesc:"Fast and Accurate. Master of discipline. Enough said!",
     badgeUrl:"placeholder",
@@ -29,7 +29,7 @@ var badgesData = [
       }
   },
   {
-    _id:"goodHabit",
+    badgeId:"goodHabit",
     badgeName:"Good Habit",
     badgeDesc:"You come here everyday, committed to your goal. Keep going and victory will be yours.",
     badgeUrl:"placeholder",
@@ -39,7 +39,7 @@ var badgesData = [
       }
   },
   {
-    _id:"jackOfAll",
+    badgeId:"jackOfAll",
     badgeName:"Jack Of All",
     badgeDesc:"You have played games in more than 10 topics. You are knowledgable and versatile. Keep pushing your limits!!",
     badgeUrl:"placeholder",
