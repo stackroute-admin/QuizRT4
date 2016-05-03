@@ -15,20 +15,13 @@
 //      Ghulam Rabbani, Abhishek Kumar
 
 var mongoose = require('mongoose'),
-    badgeSchema = mongoose.Schema({
-        badgeName: {type:String, unique:true},
-        levels:{
-          levelName: String,
-          subLevels:[
-              {
-                  subLevelName:String,
-                  badges:Array
-              }
-          ]
-        },
-        badgeRule:{}
-
-    {strict:false}),
-    Badge = mongoose.model('Badge', badgeSchema, "badge_collection");
-
-module.exports = Profile;
+  badgeSchema=mongoose.Schema({
+    badgeId: String,
+    badgeName : String,
+    badgeDesc : String,
+    badgeUrl : String,
+    //it will store "counterName" as key and "expression" as value
+    badgeRule : Object
+});
+var Badge = mongoose.model('badge',badgeSchema,'badges')
+module.exports = Badge;

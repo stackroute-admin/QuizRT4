@@ -1,7 +1,46 @@
 [
-  {
-    "badgeId":"thumbsUp",
+  { "badgeId": "thumbsUp",
     "badgeName":"Thumbs Up",
-    "winCount":1
+    "badgeDesc":"You have got your first win. Way to go!!",
+    "badgeUrl":"placeholder",
+    "badgeFunct": ["noOfWins", function(noOfWins) {
+        if(noOfWins>10) {return true}
+      }]
+  },
+  {
+    "badgeId":"onARoll",
+    "badgeName":"On a Roll",
+    "badgeDesc":"You are on a roll!! Keep it up!!",
+    "badgeUrl":"placeholder",
+    "badgeRule":{
+      "nOfConsWin":">=7"
+    }
+  },
+  {
+    "badgeId":"responseNinja",
+    "badgeName":"Response Ninja",
+    "badgeDesc":"Fast and Accurate. Master of discipline. Enough said!",
+    "badgeUrl":"placeholder",
+    "badgeRule":{
+      "avgResTimeCrctCurrentGame":"<0.5"
+    }
+  },
+  {
+    "badgeId":"goodHabit",
+    "badgeName":"Good Habit",
+    "badgeDesc":"You come here everyday, committed to your goal. Keep going and victory will be yours.",
+    "badgeUrl":"placeholder",
+    "badgeRule":{
+      "consLogin":"<=10"
+    }
+  },
+  {
+    "badgeId":"jackOfAll",
+    "badgeName":"Jack Of All",
+    "badgeDesc":"You have played games in more than 10 topics. You are knowledgable and versatile. Keep pushing your limits!!",
+    "badgeUrl":"placeholder",
+    "badgeRule":{
+      "nOfUniqTopicPlayed":"<=10"
+    }
   }
 ]
