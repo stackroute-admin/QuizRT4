@@ -28,8 +28,7 @@ var mongoose = require('mongoose'),
       flagLink:String,
 
       badge:String,
-      currentLevelName:String,
-      currentSubLevelName:String,
+      badges: Array,
       totalGames:Number,
       wins:Number,
       topicsPlayed:[{

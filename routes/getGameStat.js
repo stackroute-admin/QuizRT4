@@ -13,8 +13,8 @@ var userAnalyticsSchema = require('../models/userAnalytics'),
     Profile = require("../models/profile"),
     Q = require('q');
 
-    // var mongoose = require('mongoose');
-    // mongoose.connect('mongodb://localhost/quizRT3');
+   // var mongoose = require('mongoose');
+   // mongoose.connect('mongodb://localhost/quizRT3');
 
 module.exports = {
     // function to return game stat for a given game and a user
@@ -294,6 +294,33 @@ module.exports = {
         return deferred.promise;
     },
 
+    // get distinct topic played count
+    getTopicPlayedForUser: function(userId) {
+        var deferred = Q.defer();
+        Profile.findOne(
+                        {userId: userId } ,
+                        {
+                            _id : 0,
+                            topicsPlayed:1
+                        },
+                        function (err, result) {
+                            if (err) {
+                               console.log(err);
+                               deferred.resolve( { 'error': 'dbErr'} );
+                           } else {
+                               if(result){
+                                   console.log("Fetched results !!");
+                                   var tCount = result.topicsPlayed.length;
+                                   deferred.resolve({distinctTopicsPlayedCount:tCount});
+                               }
+                               else {
+                                   deferred.resolve({distinctTopicsPlayedCount:0})
+                               }
+                           }
+                       }
+                   )
+        return deferred.promise;
+    },
 
 
     getUserWinRank: function(userId) {
@@ -410,6 +437,39 @@ module.exports = {
         return deferred.promise;
     },
 
+    getUserNOfConsWin: function(userId){
+        var deferred = Q.defer();
+        // fetch sorted userId according to totalpoints
+        mapReduceObjPoint.find({'userId':userId},{'userStreakCurrent.winCount':1},
+             function(err, results){
+                 if (err) {
+                    console.log(err);
+                    deferred.resolve( { 'error': 'dbErr'} );
+                }
+                else {
+                    console.log("Fetched results !!");
+                    // console.log("oo"+results);
+                    if ( results.length >= 1 ){
+                        if(results[0].userStreakCurrent){
+                            var retVal = results[0].userStreakCurrent.winCount;
+                            if( retVal === undefined ){
+                                retVal=0;
+                            }
+                            deferred.resolve( {winCount:retVal} );
+                        }
+                        else {
+                            deferred.resolve( {winCount:0} );
+                        }
+                    }
+                    else {
+                        deferred.resolve( {winCount:0} );
+                    }
+                }
+            });
+         return deferred.promise;
+     },
+
+
     getUserAvgRespTimeRank: function(userId){
         var deferred = Q.defer();
         // fetch sorted userId according to totalpoints
@@ -440,6 +500,46 @@ module.exports = {
          ).sort({'avgResponseTime': 1}); //sort ascending
          return deferred.promise;
      },
+
+     getUserAvgRespTime: function(userId){
+         var deferred = Q.defer();
+         mapReduceObjPoint.findOne({userId:userId},{'avgResponseTime':1},
+              function(err, results){
+                if (err) {
+                     deferred.resolve( { 'error': 'dbErr'} );
+                }
+                else {
+                    if ( results ){
+                        deferred.resolve( {avgResponseTime:results.avgResponseTime} );
+                    }
+                    else {
+                        deferred.resolve( { 'error': 'dbErr'} );
+                    }
+                }
+              }
+          )
+          return deferred.promise;
+      },
+    //   get game played count for user
+      getUserGamePlayedCount: function(userId){
+          var deferred = Q.defer();
+          Profile.findOne({userId:userId},{'totalGames':1},
+               function(err, results){
+                 if (err) {
+                      deferred.resolve( { 'error': 'dbErr'} );
+                 }
+                 else {
+                     if ( results ){
+                         deferred.resolve( {totalGames:results.totalGames} );
+                     }
+                     else {
+                         deferred.resolve( { totalGames:0} );
+                     }
+                 }
+               }
+           )
+           return deferred.promise;
+       },
 
      getUserCorrectPerRank: function(userId){
          var deferred = Q.defer();
@@ -523,6 +623,50 @@ module.exports = {
                      }
                      else {
                          deferred.resolve([ { 'error': 'dbErrNoData'} ]);
+                     }
+                 //    done(results );
+                 }
+             }
+         );
+         return deferred.promise;
+    },
+
+    getMonthlyVisitCount: function(userId){
+        var deferred = Q.defer();
+        var year = new Date().getFullYear();
+        var monthIndex = new Date().getMonth();
+        var monthNames = ["January", "February", "March", "April", "May", "June",
+              "July", "August", "September", "October", "November", "December"
+            ];
+        var month = monthNames[monthIndex];
+        userMonthlyVisitStat.find(
+            { 'userId' : userId, 'years.yearVal' : year },
+            { 'years.monthObj' : 1, _id : 0 },
+             function(err, results){
+                 if (err) {
+                    console.log(err);
+                    deferred.resolve([ { 'error': 'dbErr'}] );
+                } else {
+                 //    console.log("Fetched results !!");
+                    if ( results.length >= 1 ){
+                        var retArr = [];
+                        results.forEach(function(doc){
+                            doc.years.forEach(function(mObj){
+                                mObj.monthObj.forEach(function(mVal){
+                                    if(mVal.month===month){
+                                        retArr.push(
+                                            {
+                                                'Visit Count' : mVal.count
+                                            }
+                                        );
+                                    }
+                                });
+                            });
+                        });
+                        deferred.resolve( retArr[0] );
+                     }
+                     else {
+                         deferred.resolve({ 'Visit Count': 0} );
                      }
                  //    done(results );
                  }

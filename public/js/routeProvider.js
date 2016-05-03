@@ -170,6 +170,10 @@ angular.module('quizRT', ['ngRoute', 'ngCookies','angular-c3-simple'])
           'templateUrl': 'html/userTeams.html',
           'controller': 'userProfileController'
         })
+        .when('/badges',{
+          'templateUrl': 'html/badges.html',
+          'controller': 'badgesController'
+        })
         .when('/userTournaments',{
           'templateUrl': 'html/userTournaments.html',
           'controller': 'userProfileController'

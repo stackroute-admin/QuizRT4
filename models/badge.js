@@ -12,23 +12,18 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 //
-//      Ghulam Rabbani, Abhishek Kumar
+//      Ghulam Rabbani, Abhishek Kumar, Kirushna
 
-var mongoose = require('mongoose'),
-    badgeSchema = mongoose.Schema({
-        badgeName: {type:String, unique:true},
-        levels:{
-          levelName: String,
-          subLevels:[
-              {
-                  subLevelName:String,
-                  badges:Array
-              }
-          ]
-        },
-        badgeRule:{}
-
-    {strict:false}),
-    Badge = mongoose.model('Badge', badgeSchema, "badge_collection");
-
-module.exports = Profile;
+var mongoose = require('mongoose')
+require('mongoose-function')(mongoose),
+  badgeSchema=mongoose.Schema({
+    _id: String,
+    badgeName : String,
+    badgeDesc : String,
+    badgeUrl : String,
+    badgeDep : Array,
+    //it will store "counterName" as key and "expression" as value
+    badgeFunct : Function
+});
+var Badge = mongoose.model('badge',badgeSchema,'badges')
+module.exports = Badge;

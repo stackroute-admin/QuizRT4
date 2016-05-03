@@ -52,6 +52,7 @@
     "kerberos": "^0.0.17",
     "moment": "^2.12.0",
     "mongoose": "^4.3.4",
+    "mongoose-function": "^0.1.0",
     "morgan": "^1.6.1",
     "n3-charts": "^2.0.24",
     "node-uuid": "^1.4.7",
