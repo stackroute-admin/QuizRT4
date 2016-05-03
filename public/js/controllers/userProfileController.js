@@ -92,7 +92,7 @@ angular.module('quizRT')
         });
 
         $scope.sendFriendRequest = function(){
-
+            $http.
         };
 
         $scope.showFollowedTopic = function(topicID){

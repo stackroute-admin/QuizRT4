@@ -2,7 +2,8 @@ var router = require('express').Router(),
     fs = require('fs'),
     path = require('path'),
     formidable = require('formidable'),
-    Profile = require("../models/profile");
+    Profile = require("../models/profile"),
+    FriendShip = require("../models/friendship");
 
 // to handle profile pic upload
 router.post('/profilePic', function(req,res,next) {
@@ -129,6 +130,12 @@ router.post('/updateProfile', function(req,res,next) {
     }
   });
 });
+
+router.post('/sendFriendRequest', function(req,res,next) {
+  var userToSendFriendRequest = req.body.friendUser;
+  var friendship = new FriendShip({userIds : [req.body.user , req.body.userToSendFriendRequest]},acceptanceState : 0 , lastUpdatedDate : new Date());
+  friendship.save()
+})
 
 // persist user profile to MongoDB
 function validateAndSaveProfile( profileData, res ) {
