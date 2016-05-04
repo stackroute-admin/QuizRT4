@@ -2,13 +2,18 @@ var Badge = require('../../models/badge');
 var Profile = require('../../models/profile');
 var badgesData = require('../../test-data/badgesData.js');
 
+/*var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/quizRT3',function () {
+  console.log('connected');
+});*/
+
 var badgesManager = function(){
   this.badges = badgesData;
 
   //Load badge data from a js file (badgesData.js)
   this.loadBadgesToDB = function(){
     this.badges.forEach(function(badgeData){
-      var badge = new Badge();
+      var badge = {};
       badge.badgeId = badgeData.badgeId;
       badge.badgeName = badgeData.badgeName;
       badge.badgeDesc = badgeData.badgeDesc;
@@ -43,3 +48,5 @@ var badgesManager = function(){
   }
 }
 module.exports=badgesManager;
+
+//new badgesManager().loadBadgesToDB();

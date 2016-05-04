@@ -25,44 +25,10 @@ angular.module('quizRT')
       } else {
         $rootScope.hideFooterNav = false;
         $rootScope.stylesheetName="badges";
-        $scope.badgeUrl="../images/badges/handshake.png";
-        $scope.badgeArr=[1,2,3,4,5,6,7];
-        $scope.badgeArr1=[
-            {
-                badgeHeader : "Badge Header 1",
-                badgeDesc : "Badge Description 1",
-                badgeUrl: $scope.badgeUrl
-            },
-            {
-                badgeHeader : "Badge Header 2",
-                badgeDesc : "Badge Description 2",
-                badgeUrl: $scope.badgeUrl
-            },
-            {
-                badgeHeader : "Badge Header 3",
-                badgeDesc : "Badge Description 3",
-                badgeUrl: $scope.badgeUrl
-            },
-            {
-                badgeHeader : "Badge Header 4",
-                badgeDesc : "Badge Description 4",
-                badgeUrl: $scope.badgeUrl
-            },
-            {
-                badgeHeader : "Badge Header 5",
-                badgeDesc : "Badge Description 5",
-                badgeUrl: $scope.badgeUrl
-            },
-            {
-                badgeHeader : "Badge Header 6",
-                badgeDesc : "Badge Description 6",
-                badgeUrl: $scope.badgeUrl
-            },
-            {
-                badgeHeader : "Badge Header 7",
-                badgeDesc : "Badge Description 7",
-                badgeUrl: $scope.badgeUrl
-            }
-        ];
+
+        //$scope.badgeUrl="../images/badges/handshake.png";
+        $http.get('badgesHandler/getAllBadges').then(function(response){
+          $scope.badgeArr = response.data;
+        });
       }
   });

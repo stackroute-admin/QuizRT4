@@ -32,6 +32,7 @@ var express = require('express'),
     topicsHandler = require('./routes/topicsHandler'),
     profileHandler = require('./routes/profileHandler'),
     analyticsDataHandler = require('./routes/getAnalyticsDataRoute'),
+    badgesHandler = require('./routes/badgesHandler'),
     tournamentHandler = require('./routes/tournamentHandler'),
     confTournamentHandler=require('./routes/confTounamentHandler'),
     index = require('./routes/index'),
@@ -90,6 +91,7 @@ app.use('/topicsHandler', topicsHandler);
 app.use('/tournamentHandler', tournamentHandler);
 app.use('/',confTournamentHandler);
 app.use('/analyticsDataHandler',analyticsDataHandler);
+app.use('/badgesHandler', badgesHandler);
 // server.listen(8080, function() {
 // server.listen(8080, function() {
 server.listen(7000, function() {

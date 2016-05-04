@@ -13,8 +13,8 @@ var userAnalyticsSchema = require('../models/userAnalytics'),
     Profile = require("../models/profile"),
     Q = require('q');
 
-   var mongoose = require('mongoose');
-   mongoose.connect('mongodb://localhost/quizRT3');
+   /*var mongoose = require('mongoose');
+   mongoose.connect('mongodb://localhost/quizRT3');*/
 
 module.exports = {
     // function to return game stat for a given game and a user

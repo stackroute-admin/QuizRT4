@@ -30,13 +30,6 @@ EventExecutor.prototype.execute = function (callback) {
         done(null,data);
       });
     }).bind(this)]);
-    //Adding average response time in current game
-    asynchrony.add('avgResTimeCrctCurrentGame',[(function(done) {
-      counterEvaluator.avgResTimeCrct(this.event.userId,function(err,data) {
-        if(err) return done(err);
-        done(null,data);
-      });
-    }).bind(this)]);
 
     badgesManager.fetchAllBadges(function(err,docs) {
         if(err) return console.log(err);;
