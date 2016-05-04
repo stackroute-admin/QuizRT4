@@ -21,6 +21,7 @@ require('mongoose-function')(mongoose),
     badgeName : String,
     badgeDesc : String,
     badgeUrl : String,
+    badgeRule : String,
     badgeDep : Array,
     //it will store "counterName" as key and "expression" as value
     badgeFunct : Function

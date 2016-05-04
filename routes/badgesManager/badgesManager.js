@@ -18,6 +18,7 @@ var badgesManager = function(){
       badge.badgeName = badgeData.badgeName;
       badge.badgeDesc = badgeData.badgeDesc;
       badge.badgeUrl = badgeData.badgeUrl;
+      badge.badgeRule = badgeData.badgeRule;
       badge.badgeDep = badgeData.badgeDep;
       badge.badgeFunct = badgeData.badgeFunct;
       Badge.findOneAndUpdate({badgeId:badge.badgeId},badge,{upsert:true, new:true},function(err, doc) {

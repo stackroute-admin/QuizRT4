@@ -28,6 +28,8 @@
 <link href='https://fonts.googleapis.com/css?family=Bitter' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
   <link rel="stylesheet" href="css/lib/bootstrap.min.css">
+  <link rel="stylesheet" href="css/lib/ngToast.min.css">
+  <link rel="stylesheet" href="css/lib/ngToast-animations.min.css">
   <link rel="stylesheet" href="css/lib/c3.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/userProfile.css">
@@ -55,9 +57,8 @@
     </header>
 
     <div class="view-container" ng-view>
-
     </div>
-
+    <toast></toast>
     <footer ng-if="loggedInUser" id="footer-nav">
       <nav>
       	<div class="container">
@@ -86,11 +87,12 @@
       					<p>Settings</p>
       				</div>
       			</div>
-                <div class="col-xs-3 nav">
+            <div class="col-xs-3 nav">
       				<div>
       					<span  ng-click="redirectTo('badges')" class="glyph glyphicon glyphicon-briefcase"></span>
       					<p>Badges</p>
       				</div>
+
       			</div>
       		</div>
       	</div>
@@ -104,6 +106,9 @@
 <script type="text/javascript" src='js/lib/angular.min.js'></script>
 <script type="text/javascript" src='js/lib/angular-route.min.js'></script>
 <script type="text/javascript" src="js/lib/angular-cookies.min.js"></script>
+<script type="text/javascript" src="js/lib/angular-animate.min.js"></script>
+<script type="text/javascript" src="js/lib/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="js/lib/ngToast.min.js"></script>
 <script type="text/javascript" src="js/lib/d3.min.js"></script>
 <script type="text/javascript" src="js/lib/d3.tip.v0.6.3.js"></script>
 <script type="text/javascript" src='js/routeProvider.js'></script>

@@ -15,7 +15,15 @@
 //   Name of Developers  Raghav Goel, Kshitij Jain, Lakshay Bansal, Ayush Jain, Saurabh Gupta, Akshay Meher
 //                        + Anil Sawant
 
-angular.module('quizRT', ['ngRoute', 'ngCookies','angular-c3-simple'])
+angular.module('quizRT', ['ngRoute','ngAnimate', 'ngCookies','angular-c3-simple','ngToast'])
+    .config(['ngToastProvider', function(ngToast) {
+        ngToast.configure({
+          verticalPosition: 'bottom',
+          horizontalPosition: 'right',
+          maxNumber: 3,
+          animation:'slide'
+        });
+    }])
     .run(function($cookies,$rootScope,$http,$location,socket) {
 
       $rootScope.initializeSockets = function() {

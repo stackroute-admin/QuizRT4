@@ -16,7 +16,7 @@
 //                        + Anil Sawant
 
 angular.module('quizRT')
-    .controller('userProfileController',function($http,$scope,$rootScope,$location){
+    .controller('userProfileController',function($http,$scope,$rootScope,$location,ngToast){
       // redirect to login page if the user's isAuthenticated cookie doesn't exist
       if( !$rootScope.isAuthenticatedCookie ){
         $rootScope.logInLogOutErrorMsg = 'You are logged out. Kindly Login...';
@@ -61,6 +61,10 @@ angular.module('quizRT')
             if($rootScope.loggedInUser.userId===data.userId){
                 console.log("user is " + data.userId);
                 console.log("badge is "+data.badgeId);
+                ngToast.create({
+                  className :"warning",
+                  content : "You have won the "+data.badgeId+" badge!!!"
+                });
                 $rootScope.loggedInUser.badgeCount = 12;
                 console.log($rootScope.loggedInUser.badgeCount);
             }
