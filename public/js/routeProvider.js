@@ -275,6 +275,10 @@ angular.module('quizRT', ['ngRoute', 'ngCookies'])
         'templateUrl': 'html/friendUserProfile.html',
         'controller': 'userProfileController'
       })
+      .when('/notifications', {
+        'templateUrl': 'html/notifications.html',
+        'controller': 'notificationController'
+      })
       .otherwise({
         redirectTo: '/404'
       });
