@@ -52,6 +52,61 @@ var badgesData = [
         if(nOfUniqTopicPlayed>=10) {return true}
         else return false
       }
-  }
+  },
+  {
+    badgeId:"inspiration",
+    badgeName:"Inspiration",
+    badgeDesc:"You have played more than 25 games. You are an inspiration to all!!",
+    badgeUrl:"placeholder",
+    badgeDep:["nOfGamePlayed"],
+    badgeFunct: function(nOfGamePlayed) {
+        if(nOfGamePlayed>=25) {return true}
+        else return false
+      }
+  },
+  {
+    badgeId:"highFive",
+    badgeName:"High Five",
+    badgeDesc:"You have won 5 games!! Give me a five!! Yeah!",
+    badgeUrl:"placeholder",
+    badgeDep:["nOfWin"],
+    badgeFunct: function(nOfWin) {
+        if(nOfWin>=5) {return true}
+        else return false
+      }
+  },
+  {
+    badgeId:"wiseOne",
+    badgeName:"Wise One",
+    badgeDesc:"You got it all right, O wise one!! I bow to thy wisdom. Keep going!!",
+    badgeUrl:"placeholder",
+    badgeDep:["nOfCrctResCurGame"],
+    badgeFunct: function(nOfCrctResCurGame) {
+        if(nOfCrctResCurGame==100) {return true}
+        else return false
+      }
+  },
+  {
+    badgeId:"magister",
+    badgeName:"Magister",
+    badgeDesc:"You have won 20 games in the same topic. We acknowledge your mastery and award you this. Keep winning!!",
+    badgeUrl:"placeholder",
+    badgeDep:["nOfWinForATopic"],
+    badgeFunct: function(nOfWinForATopic) {
+        if(nOfWinForATopic>=20) {return true}
+        else return false
+      }
+  },
+  {
+    badgeId:"hatTrick",
+    badgeName:"Hat Trick",
+    badgeDesc:"That's a hat trick win!! Don't stop here, there is more to achieve!!",
+    badgeUrl:"placeholder",
+    badgeDep:["nOfConsWin"],
+    badgeFunct: function(nOfWinForATopic) {
+        if(nOfConsWin==3) {return true}
+        else return false
+      }
+  },
 ];
 module.exports = badgesData;
