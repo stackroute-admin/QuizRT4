@@ -19,7 +19,8 @@ var uuid = require('node-uuid'), // used to generate unique game ids
     MongoDB = require('./mongoService.js'),
     userData = require('../analytics/createMonthlyUserData'),
     storeData = require('../analytics/storeMapReduceAnalysis'),
-    updateStreakData = require('../analytics/updateStreakData');
+    updateStreakData = require('../analytics/updateStreakData'),
+    badgeEligibilityCheck = require('../badgesManager/badgeEligibilityCheck')
 
 /**
 ** @param no constructor params
@@ -261,6 +262,8 @@ var GameManager = function() {
               storeData.saveMRUserRespTimeStat(tempData,function(data) {
                   console.log("Done saving data!!");
               });
+            //   check badge eligibility for user
+              new badgeEligibilityCheck(userObj.userId,'gameFinish').check();
           });
           //update streak data to db
           updateStreakData(gameData.preserveObj.getStreakData(userIdArr));
@@ -285,6 +288,8 @@ var GameManager = function() {
             storeData.saveMRUserRespTimeStat(tempData,function(data) {
                 console.log("Done saving data!!");
             });
+            // check badge eligibility for user
+            new badgeEligibilityCheck(userObj.userId,'gameFinish').check(gameData.gameClient);
         });
         //update streak data to db
         updateStreakData(gameData.preserveObj.getStreakData(userIdArr));

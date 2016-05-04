@@ -17,7 +17,6 @@
 
 angular.module('quizRT')
     .controller('userProfileController',function($http,$scope,$rootScope,$location){
-
       // redirect to login page if the user's isAuthenticated cookie doesn't exist
       if( !$rootScope.isAuthenticatedCookie ){
         $rootScope.logInLogOutErrorMsg = 'You are logged out. Kindly Login...';
@@ -58,7 +57,17 @@ angular.module('quizRT')
           $rootScope.showRecentResult = true;
           $location.path( '/quizResult/' + gameId );
         }
-
+        $rootScope.socket.on('gameBadge',function(data) {
+            if($rootScope.loggedInUser.userId===data.userId){
+                console.log("user is " + data.userId);
+                console.log("badge is "+data.badgeId);
+                $rootScope.loggedInUser.badgeCount = 12;
+                console.log($rootScope.loggedInUser.badgeCount);
+            }
+            else {
+                console.log("I am not the user for this badge");
+            }
+        })
       $http({method : 'GET',url:'/userProfile/profileData'})
         .then( function( successResponse ){
           $scope.data = successResponse.data.user;

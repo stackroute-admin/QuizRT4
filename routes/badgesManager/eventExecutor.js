@@ -12,18 +12,16 @@ EventExecutor.prototype.execute = function (callback) {
     asynchrony.add('nOfWin',[(function(done) {
       counterEvaluator.getNumOfWin(this.event.userId,function(err,data) {
         if(err) return done(err);
-        done(null,data[0].wins-133);
+        done(null,data);
       });
     }).bind(this)]);
     asynchrony.add('nOfConsWin',[(function(done) {
       counterEvaluator.getNumOfConsWin(this.event.userId,function(err,data) {
         if(err) return done(err);
-        console.log(data.winCount);
-        done(null,data.winCount+8);
+        done(null,data);
       });
     }).bind(this)]);
     badgesManager.fetchAllBadges(function(err,docs) {
-        console.log(docs);
         if(err) return console.log(err);;
         docs.forEach(function(doc){
           var dep=new Array(doc.badgeDep);

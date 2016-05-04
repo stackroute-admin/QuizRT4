@@ -38,11 +38,10 @@ var badgesManager = function(){
   }
 
   this.getUserBadges = function(userId){
-    Profile.findOne({userId:userId}, function(err, doc) {
+    Profile.findOne({userId:userId},{badges:1,_id:0}, function(err, doc) {
         if(err)
           console.log(err);
-        //console.log(doc);
-        return docs;
+        return doc;
     });
   }
 }

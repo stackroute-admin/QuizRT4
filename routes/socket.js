@@ -120,6 +120,7 @@ module.exports = function(server,sessionMiddleware) {
         });
         client.on( 'gameFinished', function( game ) {
             game.preserveObj=preserveData;
+            game.gameClient = client;
           GameManager.finishGame( game );
           preserveData.show();
         //   initialize the obj again
