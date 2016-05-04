@@ -31,7 +31,8 @@ var mongoose = require('mongoose'),
             bestScore:Number,
             bestRank:Number,
             winCount:Number
-        }
+        },
+        consWinCount:Number
 
     });
 

@@ -109,8 +109,8 @@ angular.module('quizRT', ['ngRoute','ngAnimate', 'ngCookies','angular-c3-simple'
     .factory('socket', function ($rootScope) {
 
       return function($rootScope, type) {
-        // var socket = io.connect('http://192.168.0.103:7000' + type, {'forceNew':true } );
-        var socket = io.connect('http://172.23.238.195:7000' + type, {'forceNew':true } );
+        // var socket = io.connect('http://192.168.0.104:7000' + type, {'forceNew':true } );
+        var socket = io.connect('http://172.23.238.207:7000' + type, {'forceNew':true } );
         // var socket = io.connect('http://quizart.stackroute.in:2000' + type, {'forceNew':true } );
         console.log('Socket initialized for ' + type);
 

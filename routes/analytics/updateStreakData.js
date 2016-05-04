@@ -8,13 +8,20 @@ var updateStreakData = function(gameData){
     var userIdArr = Object.keys(gameData);
     pointAndStreakObj.find(
         {'userId':{ $in: userIdArr } },
-        {userStreak:1,userStreakCurrent:1,userId:1},
+        {userStreak:1,userStreakCurrent:1,userId:1,consWinCount:1},
         function(err,record) {
             if(err) console.log(err);
             var count = 0;
             record.forEach(function(rec) {
                 var userStreakCurrent;
                 var newData = gameData[rec.userId];
+                var oldConsWinCount = rec.consWinCount;
+                rec.consWinCount = 0;
+                // when user wins increment the consWinCount
+                if(newData.bestRank===1){
+                    rec.consWinCount = oldConsWinCount + 1;
+                }
+
                 if(rec.userStreakCurrent.streakDates.length!==0){
                     userStreakCurrent = createCurrentStreak(rec.userStreakCurrent,newData);
                     console.log(userStreakCurrent);
@@ -54,12 +61,14 @@ var createCurrentStreak = function(oldData, newData){
     var oldStreakDates = oldData.streakDates,
         //it will always have only one elememnt
         newStreakDate = newData.streakDates[0],
+        newStreakDate = moment(newStreakDate,"YYYY-MM-DD").format('YYYY-MM-DD'),
         dateVal = moment(oldStreakDates,"YYYY-MM-DD"),
         oldNextDate = dateVal.add(1, 'days');
         oldNextDate = oldNextDate.format('YYYY-MM-DD');
     // check if old streakDates array has some data
     if(oldStreakDates.length !== 0){
         var latestDate = oldStreakDates[oldStreakDates.length-1]; //last element is the latest date
+        latestDate = moment(latestDate,"YYYY-MM-DD").format('YYYY-MM-DD');
         // check if the lastest date is same as newStreakDate
         if( latestDate === newStreakDate ){
             // add up all the values
