@@ -45,7 +45,7 @@ angular.module('quizRT')
         var playersPerMatch = $rootScope.playersPerMatch;
         $scope.pendingUsersCount = playersPerMatch;
         $scope.question = "Setting up your game...";
-        console.log("WAITING FOR " + playersPerMatch +" OTHER PLAYERS");
+        // console.log("WAITING FOR " + playersPerMatch +" OTHER PLAYERS");
 
         // levelId is defined for Tournaments only
         if($scope.levelId){
@@ -77,11 +77,11 @@ angular.module('quizRT')
             $rootScope.serverErrorStatus = 401;
             $rootScope.serverErrorStatusText = 'User session could not be found. kindly do a fresh login.';
             $location.path('/error');
-            console.log('Problem maintaining the user session!');
+            // console.log('Problem maintaining the user session!');
         });
 
         $rootScope.tournamentSocket.once('startGame', function( startGameData ) {
-          console.log(startGameData);
+          // console.log(startGameData);
           if ( startGameData.questions && startGameData.questions.length && startGameData.questions[0]) {
             $rootScope.freakgid = startGameData.gameId;
             $scope.playersCount = startGameData.playersNeeded;
@@ -89,62 +89,85 @@ angular.module('quizRT')
             $scope.question = "Starting Game in...";
             $scope.time = 3;
             $scope.timerSpan = $('#timer');
+            $scope.shouldContinue=true;
             $scope.timeInterval = $interval( function() {
-                $scope.time--;
-                //waiting for counter to end to start the Quiz
-                if ($scope.time === 0) {
-                    $scope.isDisabled = false;
-                    $scope.wrongAnswerers = 0;
-                    $scope.correctAnswerers = 0;
-                    $scope.unattempted = $scope.playersCount;
-                    if ( $scope.questionCounter == startGameData.questions.length ) {
-                        $interval.cancel($scope.timeInterval);
-                        $scope.options = null;
-                        $scope.question = 'Game finished. Compiling the result...';
-                        $scope.questionImage = null;
-                        $scope.unattempted = 0;
-                        $scope.finishGameData = {
-                          gameId: startGameData.gameId,
-                          tournamentId: $scope.tournamentId,
-                          levelId: $scope.levelId,
-                          topicId: startGameData.topicId
-                        };
-                        $rootScope.tournamentSocket.emit( 'gameFinished', $scope.finishGameData );
-                    } else {
-                        $scope.currentQuestion = startGameData.questions[$scope.questionCounter];
-                        $scope.options = $scope.currentQuestion.options;
-                        console.log($scope.options);
-                        $scope.questionCounter++;
-                        $scope.question = $scope.questionCounter + ". " +$scope.currentQuestion.question;
-                        if ($scope.currentQuestion.image != "null")
-                            $scope.questionImage = $scope.currentQuestion.image;
-                        else {
-                            $scope.questionImage = null;
-                        }
-                        $scope.time = 5;
-                        $scope.changeColor = function(id, clickEvent) {
-
-                          console.log("Inside Change Color -  ClickEventTarget",clickEvent.target);
-                          $(clickEvent.target).addClass('selectedOptionTournament');
-                          $('#'+$scope.currentQuestion.correctIndex).addClass('btn-success');
-                          $scope.isDisabled = true;
-
-                          var obj = {
+                if($scope.shouldContinue){
+                  $scope.time--;
+                  //waiting for counter to end to start the Quiz
+                  if ($scope.time === 0) {
+                      $scope.isDisabled = false;
+                      $scope.wrongAnswerers = 0;
+                      $scope.correctAnswerers = 0;
+                      $scope.unattempted = $scope.playersCount;
+                      if ( $scope.questionCounter == startGameData.questions.length ) {
+                          $interval.cancel($scope.timeInterval);
+                          $scope.options = null;
+                          $scope.question = 'Game finished. Compiling the result...';
+                          $scope.questionImage = null;
+                          $scope.unattempted = 0;
+                          $scope.finishGameData = {
                             gameId: startGameData.gameId,
-                            topicId: startGameData.topicId,
-                            selectedId:id,
                             tournamentId: $scope.tournamentId,
-                            questionId : $scope.currentQuestion.questionId,
-                            // selectedElm:element,
-                            correctIndex:$scope.currentQuestion.correctIndex,
-                            // myScore:$scope.myscore,
-                            responseTime:$scope.time,
-                            userId:$rootScope.loggedInUser.userId,
-                            gameTime:new Date().toString()
+                            levelId: $scope.levelId,
+                            topicId: startGameData.topicId
                           };
-                          console.log(obj);
-                          $rootScope.tournamentSocket.emit('confirmAnswer', {
+                          $rootScope.tournamentSocket.emit( 'gameFinished', $scope.finishGameData );
+                      } else {
+                        if(!$scope.currentQuestion) {
+                          $scope.currentQuestion = startGameData.questions[$scope.questionCounter];
+                          $scope.options = $scope.currentQuestion.options;
+                          // console.log($scope.options);
+                          $scope.questionCounter++;
+                          $scope.question = $scope.questionCounter + ". " +$scope.currentQuestion.question;
+                          if ($scope.currentQuestion.image != "null")
+                              $scope.questionImage = $scope.currentQuestion.image;
+                          else {
+                              $scope.questionImage = null;
+                          }
+                          $scope.time = 5;
+                        } else {
 
+                          $scope.shouldContinue = false;
+                          $timeout(function(correctIndex) {
+                            $('.selectedOptionTournament').removeClass('selectedOptionTournament btn-danger');
+                            $('#'+correctIndex).removeClass('btn-success');
+                            $scope.currentQuestion = startGameData.questions[$scope.questionCounter];
+                            $scope.options = $scope.currentQuestion.options;
+                            // console.log($scope.options);
+                            $scope.questionCounter++;
+                            $scope.question = $scope.questionCounter + ". " +$scope.currentQuestion.question;
+                            if ($scope.currentQuestion.image != "null")
+                            $scope.questionImage = $scope.currentQuestion.image;
+                            else {
+                              $scope.questionImage = null;
+                            }
+                            $scope.time = 5;
+                            $scope.shouldContinue = true;
+                          },20,true,$scope.currentQuestion.correctIndex);
+                        }
+
+
+
+                          $scope.changeColor = function(id, clickEvent) {
+                            $scope.isDisabled = true;
+                            // console.log("Question Counter",$scope.questionCounter);
+                            // console.log("Debugging Change Color",id);
+                            // console.log("Debugging Change Color",clickEvent);
+                            // // console.log("Inside Change Color -  ClickEventTarget",clickEvent.target);
+                            // // console.log(angular.element(clickEvent.target).attributes);
+                            angular.element(clickEvent.target).addClass('selectedOptionTournament');
+                            var correctIndexId = $scope.currentQuestion.correctIndex;
+                            if($('.selectedOptionTournament').attr('id') == correctIndexId){
+                              $('#'+$scope.currentQuestion.correctIndex).addClass('btn-success');
+                            }
+                            else{
+                            $('.selectedOptionTournament').addClass('btn-danger');
+                            $('#'+$scope.currentQuestion.correctIndex).addClass('btn-success');
+
+                          }
+
+
+                            var obj = {
                               gameId: startGameData.gameId,
                               topicId: startGameData.topicId,
                               selectedId:id,
@@ -156,20 +179,40 @@ angular.module('quizRT')
                               responseTime:$scope.time,
                               userId:$rootScope.loggedInUser.userId,
                               gameTime:new Date().toString()
-                          });
+                            };
+                            // console.log(obj);
+                            $rootScope.tournamentSocket.emit('confirmAnswer', {
+
+                                gameId: startGameData.gameId,
+                                topicId: startGameData.topicId,
+                                selectedId:id,
+                                tournamentId: $scope.tournamentId,
+                                questionId : $scope.currentQuestion.questionId,
+                                // selectedElm:element,
+                                correctIndex:$scope.currentQuestion.correctIndex,
+                                // myScore:$scope.myscore,
+                                responseTime:$scope.time,
+                                userId:$rootScope.loggedInUser.userId,
+                                gameTime:new Date().toString()
+                            });
 
 
-                      $rootScope.tournamentSocket.emit('updateStatus', {
+                        $rootScope.tournamentSocket.emit('updateStatus', {
 
-                          gameId: startGameData.gameId,
-                          topicId: startGameData.topicId,
-                          userId: $rootScope.loggedInUser.userId,
-                          tournamentId: $scope.tournamentId,
-                          playerName: $rootScope.loggedInUser.name,
-                          playerPic: $rootScope.loggedInUser.imageLink
-                      });
-                        };
-                    }
+                            gameId: startGameData.gameId,
+                            topicId: startGameData.topicId,
+                            userId: $rootScope.loggedInUser.userId,
+                            tournamentId: $scope.tournamentId,
+                            playerName: $rootScope.loggedInUser.name,
+                            playerPic: $rootScope.loggedInUser.imageLink
+                        });
+
+
+
+                          };
+                      }
+                  }
+
                 }
 
             }, 1000);// to create 1s timer
@@ -180,19 +223,24 @@ angular.module('quizRT')
         });
 
         $rootScope.tournamentSocket.on('highLightOption', function(data) {
+          // console.log("Debugging highLightOption",data);
+          console.log("In Callback");
           $scope.myscore=data.myScore;
-          console.log('hello my score is......'+$scope.myscore);
+          // console.log('hello my score is......'+$scope.myscore);
           if(data.correct){
-            console.log('hello');
+            // console.log('hello');
             // $(data.elem.target).addClass('btn-success');
-            $('.selectedOptionTournament').addClass('btn-success');
+            console.log("Data correct");
+            // $('.selectedOptionTournament').addClass('btn-success');
           }
           else{
-              console.log('hello');
+              // console.log('hello');
             // $(data.elem.target).addClass('btn-danger');
-
-            $('.selectedOptionTournament').addClass('btn-danger');
+            console.log("Data false");
+            // $('.selectedOptionTournament').addClass('btn-danger');
+            // $('#option'+ data.correctInd).addClass('btn-success');
           }
+
         });
 
         $scope.leaveGame = function() {

@@ -118,8 +118,9 @@ router.route('/createTournament')
 
       var oldPath = file.path,
         newFileName = slug(tournament.title) + '_' + file.name,
-        imageUrl = 'images/tournamentIcons/' + newFileName;
 
+        imageUrl = 'images/tournamentIcons/' + newFileName;
+    
       fs.rename(file.path, 'public/' + imageUrl, function(err) {
         if (err) throw err;
         console.log('Tournament Icon saved successfully');

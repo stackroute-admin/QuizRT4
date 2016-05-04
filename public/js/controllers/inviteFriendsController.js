@@ -32,13 +32,22 @@ angular.module('quizRT')
        $rootScope.playGame = {};
        $rootScope.playGame.topicId = topicId;
        $rootScope.isPlayingAGame = true; // to hide the footer-nav while playing a game
+       $rootScope.firstUser=true;
+       $scope.socket.emit('getUrl',$rootScope.loggedInUser);
+     $scope.socket.on('catchUrl',function(data){
+       if(data){
+       $rootScope.playGame.url=data;
+       console.log($rootScope.playGame.url);
+     }
+     });
        $http.post( '/topicsHandler/topic/'+ topicId )
          .then( function( successResponse ) {
-           $location.path( '/quizPlayer' );
+           $location.path( '/quizPlayer/'+$rootScope.playGame.topicId+'/'+$rootScope.playGame.url );
          }, function( errorResponse ) {
            console.log(errorResponse.data.error);
          });
 
+        $rootScope.socket.emit("sendInvitedFriends",{'invitedFriendsList':$scope.selectedFriends,'url':$rootScope.playGame.url});
     };
 
     $scope.toggleSelectFriend = function(index) {
@@ -58,3 +67,4 @@ angular.module('quizRT')
     };
 
 });
+

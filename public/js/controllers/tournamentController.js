@@ -65,7 +65,7 @@
           }
           $scope.refreshTournament( $scope.tournamentId );// call for the first time
 
-          $scope.playTournament = function(levelId, topicId, title, topic_name,difficultyLevel,levelMultiplier) {
+          $scope.playTournament = function(levelId, topicId, title, topic_name,difficultyLevel,levelMultiplier,questionPaper) {
 
             var tournamentId = levelId ? levelId.substring(0, levelId.indexOf('_')) : null;
             $rootScope.playGame = {};
@@ -77,6 +77,7 @@
             $rootScope.playGame.levelMultiplier = levelMultiplier;
             $rootScope.playGame.tournamentTitle = title;
             $rootScope.playGame.difficultyLevel = difficultyLevel;
+            $rootScope.playGame.questionPaper = questionPaper;
             if ( $rootScope.playGame.topicId && $rootScope.playGame.tournamentId ) {
               $location.path( '/tournamentArena' );
               $rootScope.hideFooterNav = true;

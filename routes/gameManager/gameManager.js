@@ -39,7 +39,7 @@ var GameManager = function() {
       topicId: topicId,
       levelId: levelId,
       state: 'WAITING', // can be 'WAITING', 'LIVE', "FINISHED"
-      playersNeeded: playersNeeded ? playersNeeded : 1,
+      playersNeeded: playersNeeded ? playersNeeded : 2,
       leaderBoard: [],
       players: [],
       playersFinished: 0
@@ -50,14 +50,40 @@ var GameManager = function() {
     return gameId; // return gameId so that it can be used later
   };
 
+  this.createNewGameOnDemand = function( url,topicId, levelId, playersNeeded ) {
+    var newGame = { // create a newGame, generate a new gameId using uuid and set the game into this.games
+      url:  url,
+      topicId: topicId,
+      levelId: levelId,
+      state: 'WAITING', // can be 'WAITING', 'LIVE', "FINISHED"
+      playersNeeded: playersNeeded ? playersNeeded : 2,
+      leaderBoard: [],
+      timer:15,
+      players: [],
+      playersFinished: 0
+    }
+    var gameId = uuid.v1(); // generate a unique gameId
+    this.games.set( gameId, newGame );// set the game into this.games against the new gameId
+    this.topicsWaiting[url] = gameId; // save topicId as key and gameId as value to track which topics are waiting for more players to join
+    return gameId; // return gameId so that it can be used later
+  };
   /**
   ** @param topicId as String, playersNeeded as Number, incomingPlayer as Object
   ** @return true if player was added to a game, otherwise false
   */
-  this.managePlayer = function( topicId, levelId, playersNeeded, incomingPlayer,difficultyLevel,questionPaper) {
-    console.log("inside----------managePlayer---------"+difficultyLevel);
-    var gameId4TopicInWaitStack = this.topicsWaiting[topicId];
+  this.managePlayer = function( topicId, levelId, playersNeeded, url,incomingPlayer,difficultyLevel,questionPaper) {
+    console.log("inside----------managePlayer---------"+topicId);
+    console.log("inside----------managePlayer---------"+url);
+    var gameId4TopicInWaitStack,gameId4TopicUrlInWaitStack;
+    if(url===undefined){
+     gameId4TopicInWaitStack = this.topicsWaiting[topicId];
+  }
+  else{
+    gameId4TopicUrlInWaitStack=this.topicsWaiting[url];
+  }
+  if(url===undefined){
     if ( gameId4TopicInWaitStack ) { // if the game is waiting in the wait stack
+      console.log("#################################Adding player to the game if part..........................");
       var isPlayerAdded = this.addPlayerToGame( gameId4TopicInWaitStack, topicId, incomingPlayer );
       if ( isPlayerAdded ) {
         if ( this.isGameReady( gameId4TopicInWaitStack ) ) {
@@ -70,6 +96,8 @@ var GameManager = function() {
       }
       return false;
     } else {
+      console.log("#################################Adding player to the game else part..........................");
+
       var gameId = this.createNewGame( topicId, levelId, playersNeeded ); // create a new game
       if ( gameId ) { // if the game was created successfully
         var isPlayerAdded = this.addPlayerToGame( gameId, topicId, incomingPlayer );
@@ -86,6 +114,41 @@ var GameManager = function() {
       }
       return false;
     }
+  }
+  else{
+    if ( gameId4TopicUrlInWaitStack ) { // if the game is waiting in the wait stack
+      console.log("#################################Adding player to the game if part GOD..........................");
+      var isPlayerAdded = this.addPlayerToGame( gameId4TopicUrlInWaitStack, topicId, incomingPlayer );
+      if ( isPlayerAdded ) {
+        if ( this.isGameReady( gameId4TopicUrlInWaitStack ) ) {
+          this.startGame( gameId4TopicUrlInWaitStack,difficultyLevel,questionPaper); //start the game
+          delete this.topicsWaiting[url]; //remove the url from wait stack
+          return true;
+        }
+        this.emitPendingPlayers( gameId4TopicUrlInWaitStack );
+        return true; // GameManager started managing the player
+      }
+      return false;
+    } else {
+      console.log("#################################Adding player to the game else part god..........................");
+
+      var gameId = this.createNewGameOnDemand(url, topicId, levelId, playersNeeded ); // create a new game
+      if ( gameId ) { // if the game was created successfully
+        var isPlayerAdded = this.addPlayerToGame( gameId, topicId, incomingPlayer );
+        if ( isPlayerAdded ) {
+          if ( this.isGameReady( gameId ) ) {
+            this.startGame( gameId,difficultyLevel,questionPaper); //start the game
+            delete this.topicsWaiting[topicId]; //remove the topic from wait stack
+            return true;
+          }
+          this.emitPendingPlayers( gameId );
+          return true; // GameManager started managing the player
+        }
+        return false;
+      }
+      return false;
+    }
+  }
   };
 
   /**
@@ -188,7 +251,13 @@ var GameManager = function() {
     var game = this.games.get( gameId ),
         self = this;
         console.log("inside start game........................................"+game);
-        if(difficultyLevel!==null){
+        console.log("difficultyLevel issssssssssss arry"+difficultyLevel.length);
+        console.log("Questrion paperrrrrrrrrrrrr--------------"+questionPaper);
+        if (difficultyLevel.length === 0) {
+          difficultyLevel = [1,2,3,4,5];
+
+        }
+        if(difficultyLevel!==null  && questionPaper !== undefined){
     questionBank.getQuizQuestions( game.topicId, difficultyLevel, 5 , function( err, questions ) { // get questions from the questionBank
       console.log("popppppppppopokkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkoooooooooooo"+questions);
       if ( err ) {
