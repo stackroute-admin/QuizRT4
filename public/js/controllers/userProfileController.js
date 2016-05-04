@@ -58,6 +58,87 @@ angular.module('quizRT')
         $location.path('/quizResult/' + gameId);
       }
 
+
+      //test
+        $scope.topicsList = function(data){
+        $http({
+           method : 'GET',
+           url : '/userProfile/topicsList',
+           params : {topic:data}
+         }) .then(
+           function(successResponse) {
+             $scope.topics = successResponse.data;
+           },
+           function(errorResponse) {
+             console.log('Error in fetching data.');
+             console.log(errorResponse.status);
+             console.log(errorResponse.statusText);
+           }
+         )
+       }
+
+
+
+          $scope.searchPeople1 = function(){
+            var inputData;
+
+        //     $scope.topicHide = {
+        //     show: true,
+        //     hide: false
+        // };
+        $scope.hideTopic=function(changedTopicVal){
+        $scope.changedTopicVal = null;
+        }
+            $scope.getVal=function(changedVal){
+              radioVal=changedVal;
+              console.log(radioVal);
+            }
+
+            $scope.clearSearch = function(){
+              // $scope.changedVal = null;
+              // $scope.changedTopicVal = null;
+              $scope.user = null;
+              $scope.topicData = null;
+               $scope.searchPeople = null;
+            }
+            // var  topicVal = "";
+            $scope.selectedTopic=function(value){
+                  $scope.topicVal = value;
+                  console.log("inside function:"+  $scope.topicVal);
+                }
+            // console.log("outside function:"+ $scope.topicVal);
+            // topicVal =  $scope.topicVal
+            // console.log(topicVal+"............................");
+            $scope.userData = function (user) {
+                inputData = {name:user,radio:radioVal,selectTopic:$scope.topicVal};
+                console.log("user......."+user);
+
+       $http({
+          method : 'GET',
+          url : '/userProfile/searchPeople',
+          params : inputData
+        }) .then(
+          function(successResponse) {
+            $scope.searchPeople = successResponse.data;
+            $scope.topicData = false;
+            console.log(  $scope.searchPeople);
+          },
+          function(errorResponse) {
+            console.log('Error in fetching data.');
+            console.log(errorResponse.status);
+            console.log(errorResponse.statusText);
+          }
+        )
+      }
+
+    }
+    $scope.selectedUser=function(selectedLocal) {
+      console.log('user obj'+selectedLocal);
+    }
+        //end test
+
+
+
       $http({
           method: 'GET',
           url: '/userProfile/profileData'

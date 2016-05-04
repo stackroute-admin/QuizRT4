@@ -51,6 +51,58 @@ router.get('/profileData', function(req, res, next) {
   }
 });
 
+
+//test
+router.get('/topicsList',function(req,res,next){
+
+  var regExp = new RegExp("^"+req.query.topic, 'i');
+  Topic.find({'_id': regExp} ,function(err,data){
+      res.send(data);
+})
+})
+
+router.get('/searchPeople',function(req,res,next){
+    var search  =req.query.name;
+    var topicVal = req.query.selectTopic;
+    console.log(req.query.selectTopic);
+    switch (req.query.radio) {
+      case 'name':
+                      console.log(search+"////////////////////");
+                        Profile.find( {'name' : new RegExp(search, 'i')},function(err,data){
+                          if (data==null) {
+                            console.log('no results');
+                          }
+                          res.send(data);
+                          console.log(data);
+                        })
+                          break;
+      case 'topic':
+      console.log(topicVal+"..................................."+search);
+
+                          console.log("inside topics played"+topicVal);
+                          Profile.find({'topicsPlayed.topicId':topicVal} ,function(err,data){
+                            console.log(data);
+                            res.send(data);
+                        })
+
+
+                        break;
+      case 'country':
+                        Profile.find({'country': new RegExp(search, 'i')},function(err,data){
+                        res.send(data);
+                      })
+
+                        break;
+  }
+  console.log(req.query.name+"......q.....name");
+
+})
+
+
+
+//end
+
+
 router.get('/profileData/:userId' ,function(req,res){
   var user = req.params.userId;
   Profile.findOne({userId: user})
