@@ -1,8 +1,13 @@
 var mongoose = require('mongoose'),
+  metaDataSchema = new mongoose.Schema({
+    from: String,
+    to: [String],
+    type: String
+  }),
   notificationSchema = new mongoose.Schema({
     dateAdded: 'Date',
-    to: 'String',
-    metaData: {},
+
+    metaData: metaDataSchema,
     seen: 'Boolean'
   }),
   Notification = mongoose.model('Notification', notificationSchema, "notification_collection");

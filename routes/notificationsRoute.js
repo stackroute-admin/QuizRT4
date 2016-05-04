@@ -5,25 +5,33 @@ var Notification = require('../models/notifications');
 
 router.route('/')
   .get(function(req, res) {
-  //  console.log(req.session.user);
-    Notification.find({ to: req.session.user }).select('-_id metaData').sort('-dateAdded').exec(function(err,data){
+    //  console.log(req.session.user);
+    Notification.find({
+      'metaData.to': req.session.user
+    }).select('-_id metaData').sort('-dateAdded').exec(function(err, data) {
       res.send(data);
     });
-
-    // var notification = new Notification({
-    //   dateAdded: new Date(),
-    //   to:'abcdefk',
-    //   metaData: {from:'abcdefh',type:"FRND"},
-    //   seen: false
-    // });
-    // notification.save(function(reply){
-    //   res.send(reply);
-    // })
 
 
   })
   .post(function(req, res) {
-
+    var metaData = {
+      from: req.body.from,
+      to: req.body.to,
+      type: req.body.type
+    }
+    var notification = new Notification({
+      dateAdded: new Date(),
+      metaData: metaData,
+      seen: false
+    });
+    notification.save(function(reply) {
+      res.send(reply);
+    });
+    // {
+    //   from: 'abcdefh',
+    //   type: "FRND"
+    // },
   })
 
 
