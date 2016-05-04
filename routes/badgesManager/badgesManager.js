@@ -1,15 +1,11 @@
 var Badge = require('../../models/badge');
 var Profile = require('../../models/profile');
 var badgesData = require('../../test-data/badgesData.js');
-var Q = require('q');
 
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/quizRT3',function () {
-  console.log('connected');
-});
 var badgesManager = function(){
   this.badges = badgesData;
 
+  //Load badge data from a js file (badgesData.js)
   this.loadBadgesToDB = function(){
     this.badges.forEach(function(badgeData){
       var badge = new Badge();
@@ -27,16 +23,17 @@ var badgesManager = function(){
     });
   };
 
-
+  //Get all the badges from DB
   this.fetchAllBadges = function(callback){
     Badge.find({},callback);
   };
 
+  //Add badges to user profile
   this.addBadgesToUser = function(userId, badgeId, callback){
-    console.log('hi user'+userId);
     Profile.findOneAndUpdate({userId:userId}, {$push:{badges:badgeId}}, {upsert:false, new:true}, callback);
   }
 
+  //Get all badges won by a particular user
   this.getUserBadges = function(userId){
     Profile.findOne({userId:userId},{badges:1,_id:0}, function(err, doc) {
         if(err)
