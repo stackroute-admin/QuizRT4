@@ -36,7 +36,6 @@ module.exports = function(server,sessionMiddleware,redisClient) {
         if ( client.request.session && client.request.session.user ) {
           console.log( client.request.session.user + ' connected to QuizRT server. Socket Id: ' + client.id);
         }
-         console.log(client.request.session);
 
         client.on('disconnect', function() {
           if ( client.request.session && client.request.session.user ) {
@@ -156,7 +155,7 @@ module.exports = function(server,sessionMiddleware,redisClient) {
         });
 
         client.on('getOnlineFriends', function(myuserId) {
-          console.log("Get Online Users", myuserId.userId);
+          console.log("Get Online Friends for ", myuserId.userId);
           FriendsManager.getOnlineFriends(client, redisClient, myuserId.userId);
         });
 
