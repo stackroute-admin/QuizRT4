@@ -12,7 +12,7 @@ function getUserIds(userToSearch,user){
    var deferred = Q.defer();
    var doc = [];
    mongoose.model('friendship')
-  .find({userIds : userToSearch})
+  .find({userIds : userToSearch , acceptanceState : 1})
   .populate('userIds')
   .exec(function(err,docs){
     if (err) {
@@ -31,7 +31,7 @@ function getUserIds(userToSearch,user){
   return deferred.promise;
 }
 
-friendshipSchema.statics.search = function search(user){
+friendshipSchema.statics.getFriends = function search(user){
   var deferred = Q.defer();
   var userToSearch = profile.findOne({userId : user})
   .select({'_id' : 1})
@@ -48,7 +48,7 @@ friendshipSchema.statics.search = function search(user){
 
 friendshipSchema.statics.getAcceptanceState = function getAcceptanceState(users){
   var deferred = Q.defer();
-  var userIds = profile.find({userId : { $in : users }})
+  var userIds = profile.find({userId : { $in : _.values(users) }})
   .select({'_id' : 1})
   .exec(function(err,docs){
     if(err){
