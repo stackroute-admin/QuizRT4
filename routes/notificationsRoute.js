@@ -8,7 +8,7 @@ router.route('/')
     //  console.log(req.session.user);
     Notification.find({
       'metaData.to': req.session.user
-    }).where('seen').equals(false).select('-_id metaData').sort('-dateAdded').exec(function(err, data) {
+    }).where('seen').equals(false).select('_id metaData').sort('-dateAdded').exec(function(err, data) {
       res.send(data);
     });
 
@@ -32,7 +32,22 @@ router.route('/')
     //   from: 'abcdefh',
     //   type: "FRND"
     // },
+  });
+router.route('/updateStatus/:notification')
+  .get(function(req, res) {
+    //
+        Notification.update({
+      'metaData.from': req.params.notification
+    }, {
+      $set: {
+        seen: true
+      }
+    }, function(data) {
+      console.log('status updated');
+    });
+
   })
+
 
 
 //}

@@ -5,21 +5,16 @@ angular.module('quizRT')
         $scope.notificationData = data;
       });
 
-      $scope.sendNotification = function(userChoice){
-        if (userChoice==='accept'){
-            //call updater to mark seen false
-            //pass the meta object to the calling guy .
-            //depends on req type
+    $scope.sendNotification = function(userEvent, notification) {
+      //trigger event that is subscribed by the clients.
+      //submit user actions
+      console.log(notification);
+      $http.get('/notifications/updateStatus/'+notification).success(function(response) {
+          console.log(response);
+        })
+        // $http.post("/notifications/updateStatus", "abcdefk").success(function(response) {
+        //   console.log(response);
+        // });
+    }
 
-
-        }
-        else if (userChoice==='reject') {
-          //call updater to mark seen false
-          //pass the meta object to the calling guy .
-          //depends on req type
-        }
-        else{
-          //keep quiet
-        }
-      }
   });
