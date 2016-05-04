@@ -321,6 +321,33 @@ module.exports = {
         return deferred.promise;
     },
 
+    // get topic played count for a user
+    getTopicPlayedCountForUser: function(userId,topicId) {
+        var deferred = Q.defer();
+        Profile.findOne(
+                         { userId: userId },
+                         {
+                             topicsPlayed:
+                                { $elemMatch: { topicId: topicId } }
+                         },
+                        function (err, result) {
+                            if (err) {
+                               console.log(err);
+                               deferred.resolve( null );
+                           } else {
+                               if(result){
+                                   var tCount = result.topicsPlayed[0].gamesPlayed;
+                                   deferred.resolve(tCount);
+                               }
+                               else {
+                                   deferred.resolve(0)
+                               }
+                           }
+                       }
+                   )
+        return deferred.promise;
+    },
+
 
     getUserWinRank: function(userId) {
         var deferred = Q.defer();

@@ -263,7 +263,7 @@ var GameManager = function() {
                   console.log("Done saving data!!");
               });
             //   check badge eligibility for user
-              new badgeEligibilityCheck(userObj.userId,'gameFinish').check();
+              new badgeEligibilityCheck(userObj.userId,'gameFinish',gameData).check(gameData.gameClient);
           });
           //update streak data to db
           updateStreakData(gameData.preserveObj.getStreakData(userIdArr));
@@ -276,6 +276,8 @@ var GameManager = function() {
         this.storeResult( gameData, gameBoard, game );
         var pAnalysisDataObj = gameData.preserveObj.getAnalysisData();
         var userIdArr = [];
+        console.log("GAme object  is ------------->>>>>>"+gameData.gameId);
+        console.log(game);
         game.players.forEach(function(userObj) {
             userIdArr.push(userObj.userId);
             var userDataObj = userData.createMonthlyUserData(userObj.userId);
@@ -289,7 +291,7 @@ var GameManager = function() {
                 console.log("Done saving data!!");
             });
             // check badge eligibility for user
-            new badgeEligibilityCheck(userObj.userId,'gameFinish').check(gameData.gameClient);
+            new badgeEligibilityCheck(userObj.userId,'gameFinish',gameData).check(gameData.gameClient);
         });
         //update streak data to db
         updateStreakData(gameData.preserveObj.getStreakData(userIdArr));
