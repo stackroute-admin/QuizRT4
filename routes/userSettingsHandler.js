@@ -152,7 +152,7 @@ router.post('/acceptFriendRequest', function(req,res,next) {
     if (err)
       return res.send(500, { error: 'MONGOERROR' });
      res.end();
-  }););
+  });
 });
 
 router.post('/rejectFriendRequest', function(req,res,next) {
@@ -161,7 +161,7 @@ router.post('/rejectFriendRequest', function(req,res,next) {
     if (err)
       return res.send(500, { error: 'MONGOERROR' });
      res.end();
-  }););
+  });
 });
 
 // persist user profile to MongoDB
