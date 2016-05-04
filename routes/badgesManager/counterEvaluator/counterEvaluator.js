@@ -63,5 +63,35 @@ module.exports = {
         .fail(function(err) {
             done(err,null);
         });
+    },
+    // get count of correct answer in a given gameId for user
+    getNumOfCrctResCount: function(userId,gameId,done) {
+        getGameStat.getCurrentGameStat(userId,gameId,function(data) {
+            if(data.length>0){
+                done(data[0].correctCount);
+            }
+            else {
+                done(0);
+            }
+        });
+    },
+    // mber of win in a topic by user
+    getNumOfWinForTopic: function(userId,topicId,done){
+        getGameStat.getTopicPlayedCountForUser(userId,topicId)
+        .then(function(data) {
+            done(null,data);
+        })
+        .fail(function(err) {
+            done(err,null);
+        });
     }
 }
+
+
+// getGameStat.getCurrentGameStat('mz','b39e1380-ffab-11e5-9529-53801e3bf90e',function (data) {
+//     console.log(data);
+// })
+
+getGameStat.getTopicPlayedCountForUser('mddz','T2').then(function(data) {
+    console.log(data);
+})
