@@ -170,7 +170,7 @@ angular.module('quizRT')
                     var streakFromDate =day+" "+monthNames[monthIndex]+" "+year;
                     date = new Date(response.data[i].userStreakCurrent.streakDates[lenC-1]);
                     day = date.getDate();
-                    monthIndex = date.getMonth();
+                    var monthIndex = date.getMonth();
                     year = date.getFullYear();
                     var streakToDate =day+" "+monthNames[monthIndex]+" "+year;
                     $rootScope.loggedInUser['streakDaysCur']=lenC;
