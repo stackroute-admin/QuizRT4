@@ -8,7 +8,7 @@ router.route('/')
     //  console.log(req.session.user);
     Notification.find({
       'metaData.to': req.session.user
-    }).where('seen').equals(false).select('_id metaData').sort('-dateAdded').exec(function(err, data) {
+    }).where('seen').equals(false).select('_id metaData').where('seen').equals(false).sort('-dateAdded').exec(function(err, data) {
       res.send(data);
     });
 
@@ -43,7 +43,7 @@ router.route('/updateStatus/:notification')
         seen: true
       }
     }, function(data) {
-      console.log('status updated');
+      res.send(data);
     });
 
   })
