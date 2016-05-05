@@ -3,8 +3,8 @@ var Q = require('q');
 
 module.exports = {
     // get total win count for a user
-    getNumOfWin :function(userId,done){
-        getGameStat.getWinCountForUser([userId])
+    getNumOfWin :function(data,flag,done){
+        getGameStat.getWinCountForUser([data.userId])
         .then(function(data) {
             done(null,data);
         })
@@ -13,8 +13,8 @@ module.exports = {
         });
     },
     // get number of consecutive win for a user
-    getNumOfConsWin :function(userId,done){
-        getGameStat.getUserNOfConsWin(userId)
+    getNumOfConsWin :function(data,flag,done){
+        getGameStat.getUserNOfConsWin(data.userId)
         .then(function(data) {
             done(null,data);
         })
@@ -24,8 +24,9 @@ module.exports = {
     },
 
     // get average response time for correct answer
-    avgResTimeCrct :function(userId,done){
-        getGameStat.getUserAvgRespTime(userId)
+    avgResTimeCrct :function(data, flag,done){
+        console.log(flag);
+        getGameStat.getUserAvgRespTime(data.userId)
         .then(function(data) {
             done(null,data);
         })
@@ -35,8 +36,9 @@ module.exports = {
     },
 
     // get distinct topic played count
-    getNumOfUniqueTopicPlayed: function(userId, done) {
-        getGameStat.getTopicPlayedForUser(userId)
+    getNumOfUniqueTopicPlayed: function(data, flag, done) {
+        console.log(flag);
+        getGameStat.getTopicPlayedForUser(data.userId)
         .then(function(data) {
             done(null,data);
         })
@@ -45,8 +47,8 @@ module.exports = {
         });
     },
     // get number of games played by a user
-    getNumOfGamePlayed:function(userId,done) {
-        getGameStat.getUserGamePlayedCount(userId)
+    getNumOfGamePlayed:function(data,flag,done) {
+        getGameStat.getUserGamePlayedCount(data.userId)
         .then(function(data) {
             done(null,data);
         })
@@ -55,8 +57,8 @@ module.exports = {
         });
     },
     // get monthly visit count for current month
-    getUserLoginCount: function(userId,done) {
-        getGameStat.getMonthlyVisitCount(userId)
+    getUserLoginCount: function(data,flag,done) {
+        getGameStat.getMonthlyVisitCount(data.userId)
         .then(function(data) {
             done(null,data);
         })
@@ -65,8 +67,8 @@ module.exports = {
         });
     },
     // get count of correct answer in a given gameId for user
-    getNumOfCrctResCount: function(userId,gameId,done) {
-        getGameStat.getCurrentGameStat(userId,gameId,function(data) {
+    getNumOfCrctResCount: function(data,flag,done) {
+        getGameStat.getCurrentGameStat(data.userId,data.gameId,function(data) {
             if(data.length>0){
                 done(data[0].correctCount);
             }
@@ -76,8 +78,8 @@ module.exports = {
         });
     },
     // number of win in a topic by user
-    getNumOfWinForTopic: function(userId,topicId,done){
-        getGameStat.getTopicPlayedCountForUser(userId,topicId)
+    getNumOfWinForTopic: function(data,flag,done){
+        getGameStat.getTopicPlayedCountForUser(data.userId,data.topicId)
         .then(function(data) {
             done(null,data);
         })
@@ -86,8 +88,8 @@ module.exports = {
         });
     },
     // get consecutive win count
-    getConsWinCount : function(userId , done){
-        getGameStat.getConsWinCount(userId)
+    getConsWinCount : function(data,flag, done){
+        getGameStat.getConsWinCount(data.userId)
         .then(function(data) {
             done(null,data);
         })
@@ -96,8 +98,9 @@ module.exports = {
         });
     },
     // get consecutive login
-    getNOfConsLogin:function(userId,done){
-        getGameStat.getNOfConsLogin(userId)
+    getNOfConsLogin:function(data,flag,done){
+        //console.log(flag);
+        getGameStat.getNOfConsLogin(data.userId)
         .then(function(data) {
             done(null,data);
         })

@@ -1,11 +1,12 @@
 var Asynchrony = require('asynchrony-di');
 var BadgesManager = require('./badgesManager');
 var EventsManager = require('./eventsManager');
-var counterEval = require('./counterEvaluator/counterEvalFunction');
+var CounterEval = require('./counterEvaluator/counterEvalFunction');
 var _ = require('underscore');
 
 var badgesManager = new BadgesManager();
 var eventsManager = new EventsManager();
+var counterEval = new CounterEval();
 
 var EventExecutor = function (event) {
   this.event=event;
@@ -23,7 +24,7 @@ EventExecutor.prototype.execute = function (callback) {
     counters: ['nOfWin','nOfConsWin']
   }*/
   eventsManager.fetchEvent(eventType, function(err, eventData){
-    var badges = eventData.badges;
+    var badges = eventData.badges,
         counters = eventData.counters;
     //filter out badges user already has won
     badgesManager.getUserBadges(userId, function(err, doc) {
@@ -44,6 +45,7 @@ EventExecutor.prototype.execute = function (callback) {
         params.userId = userId;
         params.gameData = gameData;
 
+        //console.log(counterEval.getFunction(counters[0], params, true));
         counters.forEach(function(counter){
           asynchrony.add(counter,[counterEval.getFunction(counter, params, true)]);
         });
@@ -55,6 +57,7 @@ EventExecutor.prototype.execute = function (callback) {
         badgeData.forEach(function(badge){
           var dep=new Array(badge.badgeDep);
           dep.push(badge.badgeFunct);
+          console.log(dep);
           asynchrony.invoke(dep).then(function(condition) {
             if(condition){
               callback.apply(null,[badge.badgeId]);

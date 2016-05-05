@@ -4,15 +4,16 @@ Counters.prototype.getFunction = function (counter,data,flag) {
   switch (counter) {
       case 'nOfWin':
         return function (done) {
-          counterEvaluator.getNumOfWin(data,flag,             function(err,value) {
+          counterEvaluator.getNumOfWin(data,flag, function(err,value) {
               if(err)
                 console.error(err);
-              done(null,value);
+              console.log("type "+ (typeof value));
+              done(null,value[0].wins+1);
           });
         };
       case 'nOfConsWin':
         return function(done) {
-          counterEvaluator.getNumOfConsWin(data,flag,         function(err,value) {
+          counterEvaluator.getNumOfConsWin(data,flag, function(err,value) {
             if(err)
               console.error(err);
             done(null,value);
@@ -28,7 +29,7 @@ Counters.prototype.getFunction = function (counter,data,flag) {
         };
       case 'consLogin':
         return function(done) {
-          counterEvaluator.getUserLoginCount(data,flag,       function(err,value) {
+          counterEvaluator.getUserLoginCount(data,flag, function(err,value) {
             if(err)
               console.error(err);
             done(null,value);
@@ -36,7 +37,7 @@ Counters.prototype.getFunction = function (counter,data,flag) {
         };
       case 'nOfUniqTopicPlayed':
         return function(done) {
-          counterEvaluator.getNumOfUniqueTopicPlayed(data,flag,       function(err,value) {
+          counterEvaluator.getNumOfUniqueTopicPlayed(data,flag, function(err,value) {
             if(err)
               console.error(err);
             done(null,value);
@@ -44,7 +45,7 @@ Counters.prototype.getFunction = function (counter,data,flag) {
         };
       case 'nOfGamePlayed':
         return function(done) {
-          counterEvaluator.getNumOfGamePlayed(data,flag,       function(err,value) {
+          counterEvaluator.getNumOfGamePlayed(data,flag, function(err,value) {
             if(err)
               console.error(err);
             done(null,value);
@@ -52,7 +53,7 @@ Counters.prototype.getFunction = function (counter,data,flag) {
         };
       case 'nOfCrctResCurGame':
         return function(done) {
-          counterEvaluator.getNumOfCrctResCount(data,flag,       function(err,value) {
+          counterEvaluator.getNumOfCrctResCount(data,flag, function(err,value) {
             if(err)
               console.error(err);
             done(null,value);
@@ -60,7 +61,7 @@ Counters.prototype.getFunction = function (counter,data,flag) {
         };
       case 'nOfWinForATopic':
         return function(done) {
-          counterEvaluator.getNumOfWinForTopic(data,flag,       function(err,value) {
+          counterEvaluator.getNumOfWinForTopic(data,flag, function(err,value) {
             if(err)
               console.error(err);
             done(null,value);
