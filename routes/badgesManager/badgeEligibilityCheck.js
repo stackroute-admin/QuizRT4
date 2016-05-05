@@ -2,9 +2,9 @@ var Event = require('./eventCreator');
 var mongoose = require('mongoose');
 var EventExecutor = require('./eventExecutor');
 var BadgesManager = require('./badgesManager');
-/*mongoose.connect('mongodb://localhost/quizRT3',function () {
+mongoose.connect('mongodb://localhost/quizRT3',function () {
   console.log('connected');
-});*/
+});
 var badgeEligibilityCheck= function(userId,eventType) {
   this.userId=userId;
   this.eventType=eventType;
@@ -20,10 +20,10 @@ badgeEligibilityCheck.prototype.check = function (gameClient) {
       //TODO socket stuffs
     //   gameData.emit()
     console.log("emitingg...");
-      gameClient.emit('gameBadge',{userId:'ch',badgeId:badgeId});
+      gameClient.emit('gameBadge',{userId:this.userId,badgeId:badgeId});
     });
   }).bind(this));
 };
 module.exports=badgeEligibilityCheck;
 
-// new badgeEligibilityCheck('ch','gameFinish').check();
+new badgeEligibilityCheck('kk','gameFinish').check();

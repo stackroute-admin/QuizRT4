@@ -34,18 +34,19 @@ var badgesManager = function(){
     Badge.find({},callback);
   };
 
+  //Get all the badges by ID from DB
+  this.getBadgesById = function(badgeIds,callback){
+    Badge.find({badgeId:{$in:badgeIds}},callback);
+  };
+
   //Add badges to user profile
   this.addBadgesToUser = function(userId, badgeId, callback){
     Profile.findOneAndUpdate({userId:userId}, {$push:{badges:badgeId}}, {upsert:false, new:true}, callback);
   }
 
   //Get all badges won by a particular user
-  this.getUserBadges = function(userId){
-    Profile.findOne({userId:userId},{badges:1,_id:0}, function(err, doc) {
-        if(err)
-          console.log(err);
-        return doc;
-    });
+  this.getUserBadges = function(userId, callback){
+    Profile.findOne({userId:userId},{badges:1,_id:0}, callback);
   }
 }
 module.exports=badgesManager;
