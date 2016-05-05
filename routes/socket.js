@@ -22,11 +22,10 @@ var GameManagerClass = require('./gameManager/gameManager.js'),
     uuid= require('node-uuid');
 
 module.exports = function(server,sessionMiddleware,redisClient) {
-  
-  FriendsManager = require('./friendsManager.js')(redisClient);
+
+FriendsManager = require('./friendsManager.js')(redisClient);
 
   var io = require('socket.io')(server);
-
   io.use(function(socket,next){
     sessionMiddleware(socket.request, socket.request.res, next);
   });
@@ -71,20 +70,27 @@ module.exports = function(server,sessionMiddleware,redisClient) {
         gamesOnDemand.prototype.showFriends = function () {
           return this.gamesOnDemandAttr;
         };
+        //var allFriends=[];
 
+        gamesOnDemandObj=new gamesOnDemand();
         //gamesOnDemandObj = null;
         client.on('sendInvitedFriends',function(data) {
-          console.log(data);
-          gamesOnDemandObj=new gamesOnDemand();
+          console.log(data, data.url);
+          //gamesOnDemandObj=new gamesOnDemand();
+
           if(data){
             gamesOnDemandObj.addFriends(data);
             console.log("inside socket-----------------friendzzzzzz"+data.invitedFriendsList.length);
+            console.log(gamesOnDemandObj.gamesOnDemandAttr[0].invitedFriendsList, "Obj");
+            console.log(Object.keys(gamesOnDemandObj), "Obj");
+            console.log(data.url);
           }
           var temp=gamesOnDemandObj.showFriends();
           console.log("temp  inner"+temp.length);
          // end client-on-join
         });
 
+        //on clicking on play with friends
         client.on('joinGamesOnDemand',function( playerData ) {
            console.log( playerData.userId + ' joined. Wants to play ' + playerData.topicId );
 
@@ -110,8 +116,7 @@ module.exports = function(server,sessionMiddleware,redisClient) {
          }
            //addPlayersToGame(playerData);
          });
-        //var temp=gamesOnDemandObj.showFriends();
-        //console.log("temp  outer"+temp.length);
+
 
         client.on('join',function( playerData ) {
           console.log( playerData.userId + ' joined. Wants to play ' + playerData.topicId );
@@ -279,7 +284,9 @@ module.exports = function(server,sessionMiddleware,redisClient) {
 
 
             client.on('confirmAnswer',function( data ){
-              console.log("Printingg Data Blahhhhh",data);
+              //console.log("Printingg Data Blahhhhh",data);
+              console.log("Invoking Confirm Answer",data.selectedId);
+              console.log(data.correctIndex, typeof(data.selectedId), typeof(data.correctIndex));
               if(data.selectedId == data.correctIndex) {
                 var gameManager = TournamentManager.getGameManager( data.tournamentId ),
                     gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
@@ -388,5 +395,3 @@ module.exports = function(server,sessionMiddleware,redisClient) {
                   });
               });
 }
-
-
