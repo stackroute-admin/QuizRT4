@@ -65,19 +65,19 @@ angular.module('quizRT')
           });
         }
         $rootScope.socket.on('gameBadge',function(data) {
-            if($rootScope.loggedInUser.userId===data.userId){
-                console.log("user is " + data.userId);
-                console.log("badge is "+ data.badgeId);
-                ngToast.create({
-                  className :"warning",
-                  content : "You have won the "+data.badgeId+" badge!!!"
-                });
-                $rootScope.loggedInUser.badgeCount = 12;
-                console.log($rootScope.loggedInUser.badgeCount);
-            }
-            else {
-                console.log("I am not the user for this badge");
-            }
+          if($rootScope.loggedInUser.userId===data.userId){
+              console.log("user is " + data.userId);
+              console.log("badge is "+ data.badgeId);
+              ngToast.create({
+                className :"warning",
+                content : "You have won the "+data.badgeId+" badge!!!"
+              });
+              $rootScope.loggedInUser.badgeCount = 12;
+              console.log($rootScope.loggedInUser.badgeCount);
+          }
+          else {
+              console.log("I am not the user for this badge");
+          }
         })
       $http({method : 'GET',url:'/userProfile/profileData'})
         .then( function( successResponse ){
