@@ -67,10 +67,10 @@
     </div><!--end topic-info-->
     <div id="foot" class="row">
      <div  class="col-xs-12 play-button-bar">
-      <button id="startGameButton" role="button" class="btn btn-success" ng-click="playGame(topicId)">Play Now</button>
+      <button id="startGameButton" role="button" class="btn btn-success" ng-click="playGame(topicId)">Play Now</button> 
 
        <div class="InviteFriends" ng-controller="inviteFriendsController">
-         <button href="#inviteFriends" role="button" class="btn btn-info" ng-click="getOnlineFriends()" data-toggle="modal"><span class="glyphicon glyphicon-thumbs-up"></span> Play With Friends</button>
+         <button href="#inviteFriends" role="button" class="btn btn-info play-button" ng-click="getOnlineFriends()" data-toggle="modal"><span class="glyphicon glyphicon-thumbs-up"></span> Play With Friends</button>
           <div class="modal fade" id="inviteFriends" tabindex="-1" role="dialog">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -101,14 +101,14 @@
                       </div>
                     </div><!-- end tbody -->
 
-                    <div class="alert alert-warning" ng-show ="selectedFriends.length >= maxFriends">
-                      <strong>Warning!</strong> Can Invite maximum of {{selectedFriends.length}} Friends.
+                    <div class="alert alert-warning" ng-show ="showWarning">
+                      <strong>Alert!</strong> Should Invite minimum of {{minFriends}} Friends, selected {{selectedFriends.length}} Friends !!.
                     </div>
                   </div><!-- end Table -->
                 </div><!-- end modal-body -->
                 <div class="modal-footer">
                   <button type="button" class="btn btn-info pull-left" ng-click="Refresh()"><span class="glyphicon glyphicon-refresh"></span></button>
-                  <button type="button" class="btn btn-info" ng-click="inviteFriends(topicId)">Send Invite</button>
+                  <button type="button" class="btn btn-info" ng-click="inviteFriends(topicId)" nf-if="showWarning: data-dismiss='modal'">Send Invite</button>
                   <button type="button" class="btn btn-default" ng-click="reset()" data-dismiss="modal">Close</button>
                 </div>
               </div><!-- /.modal-content -->

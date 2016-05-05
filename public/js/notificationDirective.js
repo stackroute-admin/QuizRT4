@@ -4,7 +4,7 @@ angular.module('quizRT')
   .directive('notificationData', ['$rootScope', '$http', '$location', function($rootScope, $http, $location) {
     return {
       restrict: 'E',
-      template: '<a ng-click="showModal()">{{notificationCount}}</a>',
+      template: '<a ng-click="showNotifications()">{{notificationCount}}</a>',
       link: function postLink(scope, element, attrs) {
 
         $rootScope.$on('sent:a:frndreq', function(event, data) {
@@ -16,14 +16,17 @@ angular.module('quizRT')
             scope.$root.notificationCount = data.length;
             scope.notificationData = data;
           });
-        scope.showModal = function() {
-          //show the modal
-          $rootScope.notificationSocket.emit('respond:to:frndreq', scope.notificationData);
-        }
 
+
+        var showNotifications = function() {
+          $location.path('/notifications');
+        }
         element.bind('click', function() {
           $location.path('/notifications');
         });
+        // element.bind('click', function() {
+        //
+        // });
         // element.bind('click', function() {
         //
         //   console.log(scope.notificationData);

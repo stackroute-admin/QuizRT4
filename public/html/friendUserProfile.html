@@ -29,7 +29,7 @@
 				<h6 id="country">{{friendUser.country}}</h6>
 
 				<div >
-					<button class="play-now-button btn btn-success" ng-click="sendFriendRequest(friendUser)">{{friendUser.buttonText}}</button>
+					<button class="play-now-button btn btn-success" ng-disabled="friendUser.disableButton" ng-click="sendFriendRequest(friendUser)">{{friendUser.buttonText}}</button>
 				</div>
 			</div>
 

@@ -17,7 +17,7 @@
 //                      + Anil Sawant
 
 angular.module('quizRT')
-    .controller('quizPlayerController', function($route, $scope, $timeout,$location, $interval, $http, $rootScope, $window, $cookies) {
+    .controller('quizPlayerController', function($route, $scope, $timeout,$location, $interval, $http, $rootScope, $window, $cookies,$routeParams) {
       if ( !$rootScope.loggedInUser ) {
         $rootScope.isAuthenticatedCookie = false;
         $rootScope.serverErrorMsg = 'User not authenticated.';
@@ -48,6 +48,10 @@ angular.module('quizRT')
         }else{
             $scope.levelDetails = "";
         }
+        $scope.urlForGame=$rootScope.playGame.url;
+        // if($scope.urlForGame!==undefined){
+        // $location.path('/quizPlayer/'+$scope.urlForGame);
+        // }
         // watch when the user leaves the quiz-play page to show/hide footer nav
         $scope.$on( '$routeChangeStart', function(args) {
           $rootScope.hideFooterNav = false;
@@ -62,8 +66,47 @@ angular.module('quizRT')
             playerPic: $rootScope.loggedInUser.imageLink,
             playersNeeded: playersPerMatch
         };
-        $rootScope.socket.emit('join', playerData); // enter the game and wait for other players to join
 
+        console.log($location.path());
+        console.log('/quizPlayer/'+$routeParams.topicId+'/'+$routeParams.urlId);
+
+        console.log($location.path()==='/quizPlayer/'+$routeParams.topicId+'/'+$routeParams.urlId);
+        if($rootScope.firstUser==true){
+          playerData.url=$rootScope.playGame.url;
+          playerData.firstUser=true;
+          console.log("hi");
+          $rootScope.socket.emit('joinGamesOnDemand', playerData);
+          $rootScope.firstUser=false;
+          $scope.time = 30;
+          $scope.waitInterval = $interval(function () {
+            $scope.time--;
+            if($scope.time==0){
+              $interval.cancel($scope.waitInterval);
+
+            $location.path('/topic/'+$routeParams.topicId);
+            }
+          }, 1000);
+        }
+        else if($location.path()==='/quizPlayer/'+$routeParams.topicName+'/'+$routeParams.topicId+'/'+$routeParams.urlId){
+          console.log("second");
+          $http.post( '/topicsHandler/topic/'+ $routeParams.topicId )
+          .then( function( successResponse ) {
+            console.log("post",successResponse);
+            //$rootScope.playGame = {};
+            playerData.topicId=$routeParams.topicId;
+            playerData.url=$routeParams.urlId;
+            playerData.firstUser=false;
+            $rootScope.isPlayingAGame = true;
+            $scope.quizTitle = $routeParams.topicName;
+            console.log(playerData);
+            $rootScope.socket.emit('joinGamesOnDemand', playerData);
+          }, function( errorResponse ) {
+            console.log(errorResponse.data.error);
+          });
+        }
+        else{
+        $rootScope.socket.emit('join', playerData); // enter the game and wait for other players to join
+      }
         $rootScope.socket.on( 'userNotAuthenticated', function() {
             $rootScope.isAuthenticatedCookie = false;
             $rootScope.serverErrorMsg = 'User not authenticated.';
@@ -74,17 +117,21 @@ angular.module('quizRT')
             console.log('Problem maintaining the user session!');
         });
 
+
         $rootScope.socket.once('startGame', function( startGameData ) {
+          $interval.cancel($scope.waitInterval);
           if ( startGameData.questions && startGameData.questions.length && startGameData.questions[0]) {
             $rootScope.freakgid = startGameData.gameId;
             $scope.playersCount = startGameData.playersNeeded;
             $scope.questionCounter = 0; // reset the questionCounter for each game
             $scope.question = "Starting Game ...";
             $scope.time = 3;
+            $scope.timerSpan = $('#timer');
+            $scope.shouldContinue=true;
 
             $scope.timeInterval = $interval( function() {
                 $scope.time--;
-
+                  if($scope.shouldContinue){
                 //waiting for counter to end to start the Quiz
                 if ($scope.time === 0) {
                     $scope.isDisabled = false;
@@ -106,6 +153,7 @@ angular.module('quizRT')
                         };
                         $rootScope.socket.emit( 'gameFinished', $scope.finishGameData );
                     } else {
+                      if(!$scope.currentQuestion) {
                         $scope.currentQuestion = startGameData.questions[$scope.questionCounter];
                         $scope.options = $scope.currentQuestion.options;
                         $scope.questionCounter++;
@@ -116,12 +164,40 @@ angular.module('quizRT')
                             $scope.questionImage = null;
                         }
                         $scope.time = 5;
-                        $scope.changeColor = function(id, element) {
-                          alert('hello i am c.licked');
-                          $(element.target).attr('id','selectedOption');
-                          $('#'+$scope.currentQuestion.correctIndex).addClass('btn-success');
-                          $scope.isDisabled = true;
+                      }
+                        else {
 
+                          $scope.shouldContinue = false;
+                          $timeout(function(correctIndex) {
+                            $('.selectedOptionTournament').removeClass('selectedOptionTournament btn-danger');
+                            $('#'+correctIndex).removeClass('btn-success');
+                            $scope.currentQuestion = startGameData.questions[$scope.questionCounter];
+                            $scope.options = $scope.currentQuestion.options;
+                            // console.log($scope.options);
+                            $scope.questionCounter++;
+                            $scope.question = $scope.questionCounter + ". " +$scope.currentQuestion.question;
+                            if ($scope.currentQuestion.image != "null")
+                            $scope.questionImage = $scope.currentQuestion.image;
+                            else {
+                              $scope.questionImage = null;
+                            }
+                            $scope.time = 5;
+                            $scope.shouldContinue = true;
+                          },20,true,$scope.currentQuestion.correctIndex);
+                        }
+
+                        $scope.changeColor = function(id, element) {
+                          angular.element(element.target).addClass('selectedOptionTournament');
+                          var correctIndexId = $scope.currentQuestion.correctIndex;
+                          if($('.selectedOptionTournament').attr('id') == correctIndexId){
+                            $('#'+$scope.currentQuestion.correctIndex).addClass('btn-success');
+                          }
+                          else{
+                          $('.selectedOptionTournament').addClass('btn-danger');
+                          $('#'+$scope.currentQuestion.correctIndex).addClass('btn-success');
+
+                        }
+                          $scope.isDisabled = true;
                           var obj = {
                             gameId: startGameData.gameId,
                             topicId: startGameData.topicId,
@@ -157,6 +233,7 @@ angular.module('quizRT')
                     }
                 }
 
+              }
             }, 1000);// to create 1s timer
           } else {
             $rootScope.hideFooterNav = false;
@@ -165,17 +242,17 @@ angular.module('quizRT')
 
         });
         $rootScope.socket.on('highLightOption', function(data) {
-        //  $scope.myscore=data.myScore;
-        //  console.log('hello my score is......'+$scope.myscore);
+          $scope.myscore=data.myScore;
+          console.log('hello my score is......'+$scope.myscore);
           if(data.correct){
             console.log('hello');
             // $(data.elem.target).addClass('btn-success');
-            $('#selectedOption').addClass('btn-success');
+            // $('#selectedOption').addClass('btn-success');
           }
           else{
               console.log('hello  selected wrong option');
             // $(data.elem.target).addClass('btn-danger');
-            $('#selectedOption').addClass('btn-danger');
+            // $('#selectedOption').addClass('btn-danger');
           }
         });
         $rootScope.socket.on('takeScore', function(data) {

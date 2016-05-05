@@ -19,6 +19,7 @@
 var mongoose = require('mongoose'),
   Topic = require('./topic'),
   Profile = require('./profile'),
+  QuestionPapers=require('./questionPaper'),
   tournamentSchema = mongoose.Schema({
     _id: String,
     title: String,
@@ -61,8 +62,9 @@ var mongoose = require('mongoose'),
         ref: 'Game'
       }],
       isRandom: Boolean,
-      difficultyLevel: Number,
-      levelMultiplier: Number
+      difficultyLevel: [Number],
+      levelMultiplier: Number,
+      questionPaper:String
     }],
     registration: {
       startDate: {

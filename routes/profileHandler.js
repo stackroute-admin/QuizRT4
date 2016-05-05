@@ -40,7 +40,9 @@ router.get('/profileData', function(req, res, next) {
           res.writeHead(500, {'Content-type': 'application/json'});
           res.end(JSON.stringify({ error: 'We could not find you in our database. Try again later.'}) );
         }else {
-          res.json({ error: null, user:profileData });
+          Friendship.getFriends(user).then(function(friends){
+            res.json({ error: null, user:profileData , friends : friends })
+          })
         }
       });
     }
@@ -66,10 +68,8 @@ console.log("inside route topic"+req.query.topic);
 router.get('/searchPeople',function(req,res,next){
     var search  =req.query.name;
     var topicVal = req.query.selectTopic;
-    console.log(req.query.selectTopic);
     switch (req.query.radio) {
       case 'name':
-                      console.log(search+"////////////////////");
                         Profile.find( {'name' : new RegExp(search, 'i')},function(err,data){
                           if (data==null) {
                             console.log('no results');
@@ -79,14 +79,10 @@ router.get('/searchPeople',function(req,res,next){
                         })
                           break;
       case 'topic':
-      console.log(topicVal+"..................................."+search);
-
-                          console.log("inside topics played"+topicVal);
                           Profile.find({'topicsPlayed.topicId':topicVal} ,function(err,data){
                             console.log(data);
                             res.send(data);
                         })
-
 
                         break;
       case 'country':
@@ -96,8 +92,6 @@ router.get('/searchPeople',function(req,res,next){
 
                         break;
   }
-  console.log(req.query.name+"......q.....name");
-
 })
 
 
@@ -119,7 +113,7 @@ router.get('/profileData/:userId' ,function(req,res){
       res.writeHead(500, {'Content-type': 'application/json'});
       res.end(JSON.stringify({ error: 'We could not find the user in our database. Try again later.'}) );
     }else {
-      Friendship.getAcceptanceState(req.session.user,user).then(function(isfriend){
+      Friendship.getAcceptanceState({user : req.session.user,frienduser :user}).then(function(isfriend){
         res.json({ error: null, user:profileData , isfriend  });
       })
     }
