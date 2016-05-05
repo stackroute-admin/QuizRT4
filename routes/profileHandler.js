@@ -19,6 +19,7 @@
 var express = require('express'),
 router = express.Router(),
 Profile = require("../models/profile"),
+Topic = require("../models/topic")
 userSettingsHandler = require('./userSettingsHandler'),
 FriendShip = require("../models/friendship");
 
@@ -56,10 +57,11 @@ router.get('/profileData', function(req, res, next) {
 
 //test
 router.get('/topicsList',function(req,res,next){
-
+console.log("inside route topic"+req.query.topic);
   var regExp = new RegExp("^"+req.query.topic, 'i');
   Topic.find({'_id': regExp} ,function(err,data){
       res.send(data);
+      console.log('topic route res data'+data);
 })
 })
 

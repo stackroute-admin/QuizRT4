@@ -86,7 +86,7 @@ footer .nav img {
   white-space: nowrap;
   width: 102%;
   display: inline-block;
-  overflow-x: auto;
+  overflow-x: hidden;;
   overflow-y: hidden;
   margin-top: 20px;
 }
