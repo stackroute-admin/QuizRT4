@@ -20,14 +20,10 @@ var GameManagerClass = require('./gameManager/gameManager.js'),
     GameManager = new GameManagerClass(),
     TournamentManager = require('./tournamentManager/tournamentManager.js'),
     FriendsManager = require('./friendsManager.js');
-  uuid= require('node-uuid'),
+    uuid= require('node-uuid');
 
 module.exports = function(server,sessionMiddleware,redisClient) {
-  
-  FriendsManager = require('./friendsManager.js')(redisClient);
-
   var io = require('socket.io')(server);
-
   io.use(function(socket,next){
     sessionMiddleware(socket.request, socket.request.res, next);
   });
@@ -72,20 +68,27 @@ module.exports = function(server,sessionMiddleware,redisClient) {
         gamesOnDemand.prototype.showFriends = function () {
           return this.gamesOnDemandAttr;
         };
+        //var allFriends=[];
 
+        gamesOnDemandObj=new gamesOnDemand();
         //gamesOnDemandObj = null;
         client.on('sendInvitedFriends',function(data) {
-          console.log(data);
-          gamesOnDemandObj=new gamesOnDemand();
+          console.log(data, data.url);
+          //gamesOnDemandObj=new gamesOnDemand();
+
           if(data){
             gamesOnDemandObj.addFriends(data);
             console.log("inside socket-----------------friendzzzzzz"+data.invitedFriendsList.length);
+            console.log(gamesOnDemandObj.gamesOnDemandAttr[0].invitedFriendsList, "Obj");
+            console.log(Object.keys(gamesOnDemandObj), "Obj");
+            console.log(data.url);
           }
           var temp=gamesOnDemandObj.showFriends();
           console.log("temp  inner"+temp.length);
          // end client-on-join
         });
 
+        //on clicking on play with friends
         client.on('joinGamesOnDemand',function( playerData ) {
            console.log( playerData.userId + ' joined. Wants to play ' + playerData.topicId );
 
@@ -111,11 +114,9 @@ module.exports = function(server,sessionMiddleware,redisClient) {
          }
            //addPlayersToGame(playerData);
          });
-        //var temp=gamesOnDemandObj.showFriends();
-        //console.log("temp  outer"+temp.length);
+
 
         client.on('join',function( playerData ) {
-          levelMultiplier =playerData.levelMultiplier;
           console.log( playerData.userId + ' joined. Wants to play ' + playerData.topicId );
           // check if the user is authenticated and his session exists, if so add him to the game
 
@@ -131,13 +132,11 @@ module.exports = function(server,sessionMiddleware,redisClient) {
               userId: playerData.userId,
               playerName: playerData.playerName,
               playerPic: playerData.playerPic,
-              client: client,
-              score: 0,
-              timer: 10
-
+              score:0,
+              client: client
             };
             var difficultyLevelTopic=[1,2,3,4,5];//for topics game fetch questions from all difficulty levels
-            var addedSuccessfully = GameManager.managePlayer( playerData.topicId, playerData.levelId, playerData.playersPerMatch, gamePlayer,difficultyLevelTopic); // add the player against the topicId.
+            var addedSuccessfully = GameManager.managePlayer( playerData.topicId, playerData.levelId, playerData.playersPerMatch,playerData.url,gamePlayer,difficultyLevelTopic);
             if ( addedSuccessfully === false ) {
               console.log('User is already playing the game ' + playerData.topicId + '. Cannot add him again.');
               client.emit('alreadyPlayingTheGame', { topicId: playerData.topicId });
@@ -146,8 +145,7 @@ module.exports = function(server,sessionMiddleware,redisClient) {
             console.log('User session does not exist for: ' + playerData.userId + '. Or the user client was knocked out.');
             client.emit( 'userNotAuthenticated' ); //this may not be of much use
           }
-        }); // end client-on-join
-
+        };
 
         client.on('confirmAnswer',function(data){
           console.log("Dataaaa####!!!!!@@@@",data);
@@ -162,7 +160,7 @@ module.exports = function(server,sessionMiddleware,redisClient) {
             GameManager.getGamePlayers(data.gameId).forEach( function( player, index) {
 
               if(player.userId==data.userId){
-                console.log("insude if getGame...................................");
+                console.log("insude if getGame..................................."+data.userId);
                 player.score+=data.scopeTime+10;
                 console.log("score is..................."+player.score);
                 player.client.emit('highLightOption',{correct:true,myScore:player.score,correctInd:data.correctIndex});
@@ -284,13 +282,15 @@ module.exports = function(server,sessionMiddleware,redisClient) {
 
 
             client.on('confirmAnswer',function( data ){
-              console.log("Printingg Data Blahhhhh",data);
+              //console.log("Printingg Data Blahhhhh",data);
+              console.log("Invoking Confirm Answer",data.selectedId);
+              console.log(data.correctIndex, typeof(data.selectedId), typeof(data.correctIndex));
               if(data.selectedId == data.correctIndex) {
                 var gameManager = TournamentManager.getGameManager( data.tournamentId ),
                     gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
                   gamePlayers.forEach( function( player, index) {
                     console.log("------------------------   ------------------------------------   ------------------------------------"+player.userId+" "+player.score);
-                      if(player.userId==data.userId){
+                      if(player.userId===data.userId){
                         console.log("inside if getGameTournament...................................");
                         player.score+=data.responseTime+10;
                         console.log("tournament score is..................."+player.score);
@@ -310,10 +310,10 @@ module.exports = function(server,sessionMiddleware,redisClient) {
                      gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
                     console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"+gamePlayers);
                     gamePlayers.forEach(function( player, index) {
-                      if(player.userId==data.userId){
+                      console.log('player info'+player.userId);
                       if(player.userId===data.userId){
                         player.score-=5;
-                        player.client.emit('highLightOption',{correct:false,myScore:player.score});
+                        player.client.emit('highLightOption',{correct:false,myScore:player.score,correctInd:data.correctIndex});
                       }
 
                     });
@@ -393,5 +393,3 @@ module.exports = function(server,sessionMiddleware,redisClient) {
                   });
               });
 }
-
-
