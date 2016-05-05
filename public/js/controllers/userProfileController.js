@@ -57,10 +57,17 @@ angular.module('quizRT')
           $rootScope.showRecentResult = true;
           $location.path( '/quizResult/' + gameId );
         }
+        $scope.callToast = function(){
+          ngToast.create({
+            className :"warning",
+            content : "You have won the badge!!!",
+            dismissButton: true
+          });
+        }
         $rootScope.socket.on('gameBadge',function(data) {
             if($rootScope.loggedInUser.userId===data.userId){
                 console.log("user is " + data.userId);
-                console.log("badge is "+data.badgeId);
+                console.log("badge is "+ data.badgeId);
                 ngToast.create({
                   className :"warning",
                   content : "You have won the "+data.badgeId+" badge!!!"
@@ -170,7 +177,7 @@ angular.module('quizRT')
                     var streakFromDate =day+" "+monthNames[monthIndex]+" "+year;
                     date = new Date(response.data[i].userStreakCurrent.streakDates[lenC-1]);
                     day = date.getDate();
-                    monthIndex = date.getMonth();
+                    var monthIndex = date.getMonth();
                     year = date.getFullYear();
                     var streakToDate =day+" "+monthNames[monthIndex]+" "+year;
                     $rootScope.loggedInUser['streakDaysCur']=lenC;

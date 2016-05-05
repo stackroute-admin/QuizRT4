@@ -147,8 +147,7 @@ PreserveGameData.prototype.getStreakData = function (userIdArr){
             winCount:0
         }
         var date = new Date();
-        var dateVal = date.getFullYear() + '-' + ("0" +     Number(date.getMonth()+1)).slice(-2) + '-'
-            + date.getDate();
+        var dateVal = date.getFullYear() + '-' + ("0" + Number(date.getMonth()+1)).slice(-2) + '-' + ( "0" + Number(date.getDate())).slice(-2);
         var rank = self.userRankObj[userId];
         var winCount = 0;
         if(rank===1){
