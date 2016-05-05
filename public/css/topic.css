@@ -109,12 +109,11 @@
   width:100%;
 }
 
-.play-button{
+.play-button-bar{
 }
 
-.play-button button{
-  width: 100%;
-  font-size: 22px;
+.play-button {
+  margin: 5px;
 }
 #levelperc{
   color: white;
@@ -134,7 +133,7 @@
   border-radius: 10px;
   margin-bottom: 4px;
   text-transform: capitalize;
-  background: grey;
+  background: #DAD6D6;
 }
 
 .data{

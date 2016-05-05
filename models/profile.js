@@ -46,7 +46,8 @@ var mongoose = require('mongoose'),
         finalLevel:Number,
         levelPoints:Array,
         isFollowed:Boolean
-      }]
+      }],
+      clientIds: []
     },
     {strict:false});
 

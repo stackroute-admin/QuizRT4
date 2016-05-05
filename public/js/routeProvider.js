@@ -16,7 +16,7 @@
 //                        + Anil Sawant
 
 angular.module('quizRT', ['ngRoute', 'ngCookies'])
-  .run(function($cookies, $rootScope, $http, $location, socket) {
+    .run(function($cookies,$rootScope,$http,$location,socket) {
 
     $rootScope.initializeSockets = function() {
       console.log('Initializing sockets...');
@@ -104,21 +104,19 @@ angular.module('quizRT', ['ngRoute', 'ngCookies'])
   })
   .factory('socket', function($rootScope) {
     return function($rootScope, type) {
-      // var socket = io.connect('http://192.168.0.103:8082' + type, {'forceNew':true } );
-      // var socket = io.connect('http://172.23.238.216:7071' + type, {'forceNew':true } );
-
-      var socket = io.connect('http://127.0.0.1:8080'  + type, {
+       var socket = io.connect('http://192.168.0.101:8081' + type, {'forceNew':true } );
+      /*var socket = io.connect('http://127.0.0.1:8080' + type, {
         'forceNew': true
-      });
+      });*/
       // var socket = io.connect('http://quizart.stackroute.in:2000' + type, {'forceNew':true } );
       console.log('Socket initialized for ' + type);
 
-      return {
-        on: function(eventName, callback) {
-          socket.on(eventName, function() {
-            var args = arguments;
-            $rootScope.$apply(function() {
-              callback.apply(socket, args);
+        return {
+          on: function (eventName, callback) {
+           socket.on(eventName, function () {
+           var args = arguments;
+           $rootScope.$apply(function () {
+             callback.apply(socket, args);
             });
           });
         },
@@ -138,151 +136,158 @@ angular.module('quizRT', ['ngRoute', 'ngCookies'])
                 callback.apply(socket, args);
               }
             });
-          })
-        },
-        disconnect: function() {
-          socket.disconnect();
-        }
-      };
-    }
-  })
-  .config(function($routeProvider) {
-    $routeProvider
-      .when('/404', {
-        'templateUrl': 'html/404.html'
-      })
-      .when('/error', {
-        'templateUrl': 'html/error.html'
-      })
-      .when('/', {
-        'templateUrl': 'html/login.html',
-        'controller': 'authController'
-      })
-      .when('/login', {
-        'templateUrl': 'html/login.html',
-        'controller': 'authController'
-      })
-      .when('/locallogin', {
-        'templateUrl': 'html/locallogin.html',
-        'controller': 'authController'
-      })
-      .when('/register', {
-        'templateUrl': 'html/register.html',
-        'controller': 'authController'
-      })
-      .when('/userProfile', {
-        'templateUrl': 'html/userProfile.html',
-        'controller': 'userProfileController'
-      })
-      .when('/userTeams', {
-        'templateUrl': 'html/userTeams.html',
-        'controller': 'userProfileController'
-      })
-      .when('/userTournaments', {
-        'templateUrl': 'html/userTournaments.html',
-        'controller': 'userProfileController'
-      })
-      .when('/userSettings', {
-        'templateUrl': 'html/userSettings.html',
-        'controller': 'userSettingsController'
-      })
-      .when('/categories', {
-        'templateUrl': 'html/categories.html',
-        'controller': 'categoriesController'
-      })
-      .when('/category/:categoryID', {
-        'templateUrl': 'html/category.html',
-        'controller': 'categoryController'
-      })
-      .when('/topic/:topicId', {
-        'templateUrl': 'html/topic.html',
-        'controller': 'topicController'
-      })
-      .when('/quizPlayer', {
-        'templateUrl': 'html/quizPlayer.html',
-        'controller': 'quizPlayerController',
-        'reload': true
-      })
-      .when('/tournamentArena', {
-        'templateUrl': 'html/tournamentArena.html',
-        'controller': 'tournamentPlayController',
-        'reload': true
-      })
-      .when('/quizResult/:gameId', {
-        'templateUrl': 'html/result.html',
-        'controller': 'resultController'
-      })
-      .when('/tournament', {
-        'templateUrl': 'html/tournamentLists.html',
-        'controller': 'tournamentController'
-      })
-      .when('/tournament/:tournamentId', {
-        'templateUrl': 'html/tournament.html',
-        'controller': 'tournamentController'
-      })
-      .when('/tournament/tournamentPlayer', {
-        'templateUrl': 'html/tournamentPlayer.html',
-        'controller': 'tournamentPlayerController'
-      })
-      .when('/userProfile', {
-        'templateUrl': 'html/userProfile.html',
-        'controller': 'userProfileController'
-      })
-      .when('/userTeams', {
-        'templateUrl': 'html/userTeams.html',
-        'controller': 'userProfileController'
-      })
-      .when('/userTournaments', {
-        'templateUrl': 'html/userTournaments.html',
-        'controller': 'userTournamentsController'
-      })
-      .when('/userSettings', {
-        'templateUrl': 'html/userSettings.html',
-        'controller': 'userSettingsController'
-      })
-      .when('/categories', {
-        'templateUrl': 'html/categories.html',
-        'controller': 'categoriesController'
-      })
-      .when('/category/:categoryID', {
-        'templateUrl': 'html/category.html',
-        'controller': 'categoryController'
-      })
-      .when('/topic/:topicID', {
-        'templateUrl': 'html/topic.html',
-        'controller': 'topicController'
-      })
-      .when('/quizPlayer', {
-        'templateUrl': 'html/quizPlayer.html',
-        'controller': 'quizPlayerController',
-        'reload': true
-      })
-      .when('/tournament/tournamentPlayer', {
-        'templateUrl': 'html/tournamentPlayer.html',
-        'controller': 'tournamentPlayerController'
-      })
-      .when('/leaderBoard/hallOfFame/:tournamentId', {
-        'templateUrl': 'html/hallOfFame.html',
-        'controller': 'halloffameController'
-      })
-      .when('/createTournament', {
-        'templateUrl': 'html/tournamentCreation.html',
-        'controller': 'tournamentCreationController'
-      })
-      .when('/createConfTournament', {
-        'templateUrl': 'html/createConfTournament.html',
-        'controller': 'tournamentCreationController'
-      })
-
-      .when('/friendUserProfile/:userId', {
-        'templateUrl': 'html/friendUserProfile.html',
-        'controller': 'userProfileController'
-      })
-      .when('/notifications', {
-        'templateUrl': 'html/notifications.html',
-        'controller': 'notificationController'
-      })
-      .otherwise({
-        redirectTo: '/404'
-      });
-  });
+            })
+          },
+          disconnect: function() {
+            socket.disconnect();
+          }
+         };
+      }})
+     .config(function($routeProvider){
+       $routeProvider
+        .when('/404',{
+          'templateUrl' : 'html/404.html'
+        })
+        .when('/error',{
+          'templateUrl' : 'html/error.html'
+        })
+        .when('/',{
+          'templateUrl' : 'html/login.html',
+          'controller':'authController'
+        })
+        .when('/login', {
+          'templateUrl': 'html/login.html',
+          'controller':'authController'
+        })
+        .when('/locallogin', {
+          'templateUrl': 'html/locallogin.html',
+          'controller': 'authController'
+        })
+        .when('/register', {
+          'templateUrl': 'html/register.html',
+          'controller': 'authController'
+        })
+        .when('/userProfile',{
+          'templateUrl': 'html/userProfile.html',
+          'controller': 'userProfileController'
+        })
+        .when('/userTeams',{
+          'templateUrl': 'html/userTeams.html',
+          'controller': 'userProfileController'
+        })
+        .when('/userTournaments',{
+          'templateUrl': 'html/userTournaments.html',
+          'controller': 'userProfileController'
+        })
+        .when('/userSettings',{
+          'templateUrl': 'html/userSettings.html',
+          'controller': 'userSettingsController'
+        })
+        .when('/categories',{
+          'templateUrl': 'html/categories.html',
+          'controller': 'categoriesController'
+        })
+        .when('/category/:categoryID',{
+          'templateUrl': 'html/category.html',
+          'controller': 'categoryController'
+        })
+        .when('/topic/:topicId',{
+          'templateUrl': 'html/topic.html',
+          'controller': 'topicController'
+        })
+        .when('/quizPlayer',{
+          'templateUrl': 'html/quizPlayer.html',
+          'controller': 'quizPlayerController',
+          'reload':true
+        })
+        .when('/quizPlayer/:topicName/:topicId/:urlId',{
+          'templateUrl': 'html/quizPlayer.html',
+          'controller': 'quizPlayerController',
+          'reload':true
+        })
+        .when('/tournamentArena',{
+          'templateUrl': 'html/tournamentArena.html',
+          'controller': 'tournamentPlayController',
+          'reload':true
+        })
+        .when('/quizResult/:gameId',{
+          'templateUrl': 'html/result.html',
+          'controller': 'resultController'
+        })
+        .when('/tournament',{
+          'templateUrl': 'html/tournamentLists.html',
+          'controller': 'tournamentController'
+        })
+        .when('/tournament/:tournamentId' , {
+          'templateUrl': 'html/tournament.html',
+          'controller': 'tournamentController'
+        })
+        .when('/tournament/tournamentPlayer' , {
+          'templateUrl': 'html/tournamentPlayer.html',
+          'controller': 'tournamentPlayerController'
+        })
+        .when('/userProfile',{
+          'templateUrl': 'html/userProfile.html',
+          'controller': 'userProfileController'
+        })
+        .when('/userTeams',{
+          'templateUrl': 'html/userTeams.html',
+          'controller': 'userProfileController'
+        })
+        .when('/userTournaments',{
+          'templateUrl': 'html/userTournaments.html',
+          'controller': 'userTournamentsController'
+        })
+        .when('/userSettings',{
+          'templateUrl': 'html/userSettings.html',
+          'controller': 'userSettingsController'
+        })
+        .when('/categories',{
+          'templateUrl': 'html/categories.html',
+          'controller': 'categoriesController'
+        })
+        .when('/category/:categoryID',{
+          'templateUrl': 'html/category.html',
+          'controller': 'categoryController'
+        })
+        .when('/topic/:topicID',{
+          'templateUrl': 'html/topic.html',
+          'controller': 'topicController'
+        })
+        .when('/quizPlayer',{
+          'templateUrl': 'html/quizPlayer.html',
+          'controller': 'quizPlayerController',
+          'reload':true
+        })
+        .when('/tournament/tournamentPlayer' , {
+          'templateUrl': 'html/tournamentPlayer.html',
+          'controller': 'tournamentPlayerController'
+        })
+        .when('/leaderBoard/hallOfFame/:tournamentId' , {
+          'templateUrl': 'html/hallOfFame.html',
+          'controller': 'halloffameController'
+        })
+        .when('/createTournament' , {
+          'templateUrl': 'html/tournamentCreation.html',
+          'controller': 'tournamentCreationController'
+        })
+        .when('/createConfTournament' , {
+          'templateUrl': 'html/createConfTournament.html',
+          'controller': 'tournamentCreationController'
+        })
+        .when('/inviteFriends', {
+          'templateUrl': 'html/inviteFriends.html',
+          'controller': 'inviteFriendsController'
+        })
+        .when('/friendUserProfile/:userId', {
+          'templateUrl': 'html/friendUserProfile.html',
+          'controller': 'userProfileController'
+        })
+        .when('/notifications', {
+          'templateUrl': 'html/notifications.html',
+          'controller': 'notificationController'
+        })
+        .otherwise({
+          redirectTo : '/'
+        });
+    });

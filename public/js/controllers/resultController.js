@@ -17,7 +17,9 @@
 
 angular.module('quizRT')
 	.controller('resultController', function( $scope, $rootScope, $route, $location, $timeout) {
+		console.log($location.path());
 		$scope.gameId = $route.current.params.gameId;
+		console.log("game id is----------"+$scope.gameId);
 		if ( !$rootScope.recentGames || !$rootScope.recentGames[$scope.gameId] ) {
 			$location.path( '/404');
 		} else {

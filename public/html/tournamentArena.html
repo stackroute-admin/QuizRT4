@@ -1,5 +1,4 @@
   <link rel="stylesheet" href="css/tournamentArena.css">
-
     <div class="container" id="tournamentArena">
       <section>
         <div class="row" id="quizTitle">
@@ -64,9 +63,10 @@
           </div>
         </div><!-- end question info -->
         <div  class="row options">
-          <div class="col-xs-12">
+
+          <div class="col-xs-12 mutator">
             <div ng-repeat="option in options" class="option">
-              <button ng-disabled="isDisabled" ng-click = "changeColor($index,$event)" id="{{$index}}" class="btn btn-large btn-default btn-block btn-option">{{option}}</button>
+              <button ng-disabled="isDisabled" id="{{ $index }}" ng-click = "changeColor('option'+$index,$event)" class="btn btn-large btn-default btn-block btn-option">{{option}}</button>
             </div>
           </div>
         </div>
@@ -91,3 +91,20 @@
         </div>
       </section>
     </div><!-- end container -->
+<!-- <script>
+var target = document.querySelector('.mutator');
+console.log("target recieved",target);
+var observer = new MutationObserver(function(mutations) {
+   mutations.forEach(function(mutation) {
+      console.log("Inside Mutations");
+      console.log(mutation.type);
+      console.log(mutation);
+   });
+});
+
+
+var config = {attributes: true, childList: true, subtree: true, attributeFilter: ['class']};
+
+observer.observe(target,config);
+
+</script> -->
