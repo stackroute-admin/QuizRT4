@@ -1,29 +1,30 @@
 var Asynchrony = require('asynchrony-di');
 var BadgesManager = require('./badgesManager');
-//var EventManager = require('./eventManager');
-var counterEvaluator = require('./counterEvaluator/counterEvaluator');
+var EventsManager = require('./eventsManager');
+var counterEval = require('./counterEvaluator/counterEvalFunction');
 var _ = require('underscore');
 
 var badgesManager = new BadgesManager();
-//var eventManager = new EventManager();
+var eventsManager = new EventsManager();
 
 var EventExecutor = function (event) {
   this.event=event;
 };
 
 EventExecutor.prototype.execute = function (callback) {
-  var userId = this.event.userId;
-  var eventType = this.event.eventType;
-  var asynchrony = new Asynchrony();
+  var userId = this.event.userId,
+      eventType = this.event.eventType,
+      gameData = this.event.gameData,
+      asynchrony = new Asynchrony();
 
   //get event related badges and counters
   /*var eventData = {
     badges: ['thumbsUp','goodHabit','highFive'], //has nOfWin, consLogin, nOfWin
     counters: ['nOfWin','nOfConsWin']
   }*/
-  eventManager.getEvent(eventType, function(err, eventData){
+  eventsManager.fetchEvent(eventType, function(err, eventData){
     var badges = eventData.badges;
-    var counters = eventData.counters;
+        counters = eventData.counters;
     //filter out badges user already has won
     badgesManager.getUserBadges(userId, function(err, doc) {
       if(err)
@@ -33,20 +34,22 @@ EventExecutor.prototype.execute = function (callback) {
       badgesManager.getBadgesById(badges, function(err, badgeData){ //get data for probable badges
         if(err)
           console.log(err);
-        var badgeCounters = _.uniq(_.flatten(_.pluck(badgeData,'badgeDep')));
-        var readOnlyCounters = _.difference(badgeCounters,counters);
-        //console.log('Execute counters : '+ counters);
-        //console.log('Read-only counters : '+ readOnlyCounters);
+        var badgeCounters = _.uniq(_.flatten(_.pluck(badgeData,'badgeDep'))),
+            readOnlyCounters = _.difference(badgeCounters,counters);
 
-        var params = [];
-        params.push(userId);
+        console.log('Execute counters : '+ counters);
+        console.log('Read-only counters : '+ readOnlyCounters);
+
+        var params = {};
+        params.userId = userId;
+        params.gameData = gameData;
 
         counters.forEach(function(counter){
-          asynchrony.add(counter,[getFunction(counter, params, true)]);
+          asynchrony.add(counter,[counterEval.getFunction(counter, params, true)]);
         });
 
         readOnlyCounters.forEach(function(counter){
-          asynchrony.add(counter,[getFunction(counter, params, false)]);
+          asynchrony.add(counter,[counterEval.getFunction(counter, params, false)]);
         });
 
         badgeData.forEach(function(badge){

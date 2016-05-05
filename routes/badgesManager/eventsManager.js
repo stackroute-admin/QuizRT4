@@ -1,10 +1,10 @@
 var Event = require('../../models/event');
 var eventsData = require('../../test-data/eventsData.js');
 
-// var mongoose = require('mongoose');
-// mongoose.connect('mongodb://localhost/quizRT3',function () {
-//   console.log('connected');
-// });
+/*var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/quizRT3',function () {
+  console.log('connected');
+});*/
 
 var eventsManager = function(){
   this.events = eventsData;
@@ -32,6 +32,6 @@ var eventsManager = function(){
 module.exports=eventsManager;
 
 //new eventsManager().loadEventsToDB();
-// new eventsManager().fetchEvent('gameFinish',function (err,data) {
-//   console.log(data);
-// });
+/*new eventsManager().fetchEvent('gameFinish',function (err,data) {
+  console.log(data);
+});*/
