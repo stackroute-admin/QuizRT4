@@ -19,6 +19,7 @@
 var express = require('express'),
 router = express.Router(),
 Profile = require("../models/profile"),
+Topic = require("../models/topic"),
 userSettingsHandler = require('./userSettingsHandler'),
 FriendShip = require("../models/friendship");
 
@@ -54,7 +55,6 @@ router.get('/profileData', function(req, res, next) {
 
 //test
 router.get('/topicsList',function(req,res,next){
-
   var regExp = new RegExp("^"+req.query.topic, 'i');
   Topic.find({'_id': regExp} ,function(err,data){
       res.send(data);
@@ -97,6 +97,7 @@ router.get('/searchPeople',function(req,res,next){
 
 router.get('/profileData/:userId' ,function(req,res){
   var user = req.params.userId;
+  console.log(user);
   Profile.findOne({userId: user})
   .populate("topicsPlayed.topicId")
   .exec(function(err,profileData){
