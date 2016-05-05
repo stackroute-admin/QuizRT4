@@ -6,9 +6,9 @@ angular.module('quizRT')
       });
 
     $scope.sendNotification = function(userEvent, notification) {
+      notification.userAcceptance = userEvent;
       //trigger event that is subscribed by the clients.
       $rootScope.notificationSocket.emit('respond:to:frndreq', notification);
-
       //submit user actions
 
       $http.get('/notifications/updateStatus/' + notification).success(function(response) {

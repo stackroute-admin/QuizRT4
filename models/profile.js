@@ -18,6 +18,8 @@
 var mongoose = require('mongoose'),
     Topic=require('./topic'),
     Tournament = require('./tournament'),
+    Q = require('q'),
+    _ = require('underscore'),
     profileSchema = mongoose.Schema({
       userId: {type:String, unique:true},
       name:String,
@@ -46,7 +48,31 @@ var mongoose = require('mongoose'),
         isFollowed:Boolean
       }]
     },
-    {strict:false}),
-    Profile = mongoose.model('Profile', profileSchema, "profile_collection");
+    {strict:false});
+
+
+    profileSchema.statics.getUserIdFromId = function getUserIdFromId(from,to){
+      var deferred = Q.defer();
+      var doc = [];
+      mongoose.model('Profile')
+     .find({userId : {$in : [from ,to]}},{'_id' : 1})
+     .exec(function(err,docs){
+       if (err) {
+         console.log(err);
+         deferred.reject("Cannot Find Id")
+       }
+       if(docs != 'undefined' && docs.length > 0)
+       {
+         deferred.resolve(docs);
+       }
+       else{
+         deferred.reject([]);
+       }
+     });
+     return deferred.promise;
+    }
+    var Profile = mongoose.model('Profile', profileSchema, "profile_collection");
+
+
 
 module.exports = Profile;
