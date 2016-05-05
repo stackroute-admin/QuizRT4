@@ -32,7 +32,7 @@
 			<h6 id="country">{{loggedInUser.country}}</h6>
 
 		</div>
-		
+
 		<div class="col-xs-12 col-sm-6" id="GamesInfo">
 			<div class="row info">
 				<div class=" col-xs-4" id="games">
@@ -236,6 +236,24 @@
 								</div>
 							</div>
 						</section><!--  End invitations Section -->
+
+
+						<!--  Invitations Section -->
+						<section>
+							<div class="row sectionHeader">Friends</div>
+							<div class="row topic-info" ng-hide="friends.length > 0">
+								Inbox is empty.
+							</div>
+							<div class="row topic-info" ng-show="friends.length > 0">
+								{{friends}}
+					</div> <!-- end topicinfo row -->
+
+					<div id="foot" class="row">
+						<div col-xs-12 class="play-button-bar">
+							<button class="play-now-button btn btn-success" ng-click="redirectTo('userTeams')">Show All</button>
+						</div>
+					</div>
+				</section><!--  End invitations Section -->
 
 
 						<!--  Tournament Section -->

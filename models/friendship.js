@@ -9,18 +9,18 @@ friendshipSchema = new mongoose.Schema({
 });
 
 function getUserIds(userToSearch,user){
-   var deferred = Q.defer();
-   var doc = [];
-   mongoose.model('friendship')
+  var deferred = Q.defer();
+  var doc = [];
+  mongoose.model('friendship')
   .find({userIds : userToSearch , acceptanceState : 1})
   .populate('userIds')
   .exec(function(err,docs){
     if (err) {
       console.log(err);
     }
-    docs.map(function(e) {doc.push(_.pluck(e["userIds"],'userId'))});
-    if(doc != 'undefined' && doc.length > 0)
+    if(docs != null && docs != 'undefined' && docs.length > 0)
     {
+      docs.map(function(e) {doc.push(_.pluck(e["userIds"],'userId'))});
       doc =_.without(doc.reduce(function(a, b) { return _.union(a,b)}) , user)
       deferred.resolve(doc);
     }
@@ -41,12 +41,15 @@ friendshipSchema.statics.getFriends = function search(user){
     }
     getUserIds(docs._id,user).then(function(ret){
       deferred.resolve(ret);
+    },function(errorResponse){
+      deferred.resolve(errorResponse)
     });
   });
   return deferred.promise;
 };
 
-friendshipSchema.statics.getAcceptanceState = function getAcceptanceState(users){
+friendshipSchema.statics.getAcceptanceStat
+e = function getAcceptanceState(users){
   var deferred = Q.defer();
   var userIds = profile.find({userId : { $in : _.values(users) }})
   .select({'_id' : 1})
@@ -56,15 +59,14 @@ friendshipSchema.statics.getAcceptanceState = function getAcceptanceState(users)
     }
     var userIds = _.pluck(docs,'_id');
     userIds.map(function(e){
-        mongoose.model('friendship')
-                .findOne({userIds : { $all : userIds}}, {'acceptanceState' : 1 , '_id' : 0 })
-                .exec(function(err,docs){
-                  if (err) {
-                    console.log(err);
-                  }
-
-                  deferred.resolve(docs);
-                });
+      mongoose.model('friendship')
+      .findOne({userIds : { $all : userIds}}, {'acceptanceState' : 1 , '_id' : 0 })
+      .exec(function(err,docs){
+        if (err) {
+          console.log(err);
+        }
+        deferred.resolve(docs);
+      });
     })
   });
   return deferred.promise;

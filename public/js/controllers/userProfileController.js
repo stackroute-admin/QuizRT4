@@ -130,8 +130,10 @@ angular.module('quizRT')
       url: '/userProfile/profileData'
     })
     .then(function(successResponse) {
+      console.log(successResponse.data);
       $scope.data = successResponse.data.user;
       $rootScope.loggedInUser = successResponse.data.user;
+      $rootScope.friends = successResponse.data.friends;
       $scope.topicsFollowed = [];
       if ($rootScope.loggedInUser.topicsPlayed != null) {
         for (var i = 0; i < $rootScope.loggedInUser.topicsPlayed.length; i++) {
@@ -195,7 +197,6 @@ angular.module('quizRT')
           };
           friendshipData.userIds.push($rootScope.loggedInUser);
           friendshipData.userIds.push(currentUserProfile); // to do : Should work on retrieving the Object
-          debugger;
           $http({
             method: 'POST',
             data: friendshipData,
@@ -214,6 +215,7 @@ angular.module('quizRT')
               data: notificationsMeta,
               url: '/notifications'
             }).then(function(notificationRes) {
+              console.log(notificationRes);
               $rootScope.$broadcast('sent:a:frndreq', 1);
             })
           }, function(failureResponse) {

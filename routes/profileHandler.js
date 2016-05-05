@@ -39,7 +39,9 @@ router.get('/profileData', function(req, res, next) {
           res.writeHead(500, {'Content-type': 'application/json'});
           res.end(JSON.stringify({ error: 'We could not find you in our database. Try again later.'}) );
         }else {
-          res.json({ error: null, user:profileData });
+          Friendship.getFriends(user).then(function(friends){
+            res.json({ error: null, user:profileData , friends : friends })
+          })
         }
       });
     }
