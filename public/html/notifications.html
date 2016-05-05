@@ -3,6 +3,6 @@
   <h2>Your notifications</h2>
   <div class="" ng-repeat="notification in notificationData">
     Notification from {{notification.metaData.from}} {{notification.metaData.type}}
-    <a ng-click="sendNotification('accept',notification.metaData.from)">Accept</a>
-    <a ng-click="sendNotification('reject',notification.metaData.from)">Reject</a>
+    <a ng-click="sendNotification(notification.metaData)">Accept</a>
+    <a ng-click="sendNotification(notification.metaData)">Reject</a>
   </div>

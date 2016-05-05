@@ -69,6 +69,7 @@ angular.module('quizRT', ['ngRoute', 'ngCookies'])
     // Add app level events here
     $rootScope.$on('login', function(event) {
       $location.path('/login');
+
     });
 
     $rootScope.$on('logout', function(event, user) {
