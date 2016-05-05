@@ -106,7 +106,7 @@ module.exports = {
         });
     },
     // get count of correct answer in a given gameId for user
-    getAvgCrctResTime: function(currentGameData, flag, done) {
+    getAvgResTimeCrctCurrentGame: function(currentGameData, flag, done) {
         getGameStat.getCurrentGameStatTime(currentGameData.userId,currentGameData.gameId,function(data) {
             done(null,data);
         });
