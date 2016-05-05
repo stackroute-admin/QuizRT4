@@ -60,6 +60,51 @@ module.exports = {
             })
   }, // end of function getCurrentGameStat
 
+
+
+  getCurrentGameStatTime: function(userId, gameId, done) {
+      userAnalytics.aggregate(
+          [
+               { $match:
+                  {
+                      userId: userId,
+                      gameId: gameId
+                  }
+               },
+               { $group:
+                   {
+                       _id:  { topicId : "$topicId" ,userId : "$userId"},
+                        correctCount: {$sum: { "$cond": [{ "$eq": [ "$responseType", 'correct' ] }, 1, 0 ] }},
+                        responseTimeC : {$sum:{ "$cond": [{ "$eq": [ "$responseType", 'correct' ] }, "$responseTime", 0 ] }} ,
+                        wrongCount: {$sum: { "$cond": [{ "$eq": [ "$responseType", 'wrong' ] }, 1, 0 ] }},
+                        skipCount: {$sum: { "$cond": [{ "$eq": [ "$responseType", 'skip' ] }, 1, 0 ] }}
+                   }
+               },
+              { "$project": {
+                   _id : 0, //excludes the _id field
+                   "topicId" : "$_id.topicId",
+                   "userId" : "$_id.userId",
+                   "correctCount": "$correctCount",
+                   "wrongCount" : "$wrongCount",
+                   "skipCount": "$skipCount",
+                   "responseTimeC" : "$responseTimeC"
+                  }
+              }
+
+          ], function(err, result){
+              if (err) {
+                 console.log(err);
+                 done( -1 );
+             } else {
+
+              //    analyticsDbObj.close();
+                var totalQuesCount = result[0].correctCount + result[0].wrongCount + result[0].skipCount;
+                var avgResTimeCur =  result[0].responseTimeC/totalQuesCount;
+                 done(avgResTimeCur);
+             }
+          })
+      }, // end of function getCurrentGameStat
+
   getAnsStat: function(userId, gameId, responseType, done) {
     userAnalytics.aggregate(
             [

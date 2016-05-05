@@ -42,7 +42,6 @@ module.exports = {
                 done( { 'error': 'dbErr-dataLengthZero'} );
             }
             else {
-                console.log("Found one collectionData item: " );
                 var yearPresent = false,
                     notMatchedMonthObjArr = [];
                 collectionData.years.forEach(function(vals){
@@ -127,7 +126,6 @@ module.exports = {
                 done( { 'error': 'dbErr-dataLengthZero'} );
             }
             else {
-                console.log("Found one collectionData item: " );
                 var oldDate = collectionData.timeStamp;
                 oldDate = oldDate.getFullYear()+"-"+Number(oldDate.getMonth()+1)+"-"+oldDate.getDate();
                 oldDate = moment(oldDate,"YYYY-MM-DD");
@@ -270,8 +268,9 @@ module.exports = {
                     else {
                         console.log("Updated Record!!");
                     }
+                    done( { 'error': 'dbErr-NoItemFound'} );
                 });
-                done( { 'error': 'dbErr-NoItemFound'} );
+                // done( { 'error': 'dbErr-NoItemFound'} );
             }
             else if (collectionData.length === 0){
                 console.log("Zero found, creating collectionData item");
@@ -285,8 +284,9 @@ module.exports = {
                     else {
                         console.log("Updated Record!!");
                     }
+                    done( { 'error': 'dbErr-dataLengthZero'} );
                 });
-                done( { 'error': 'dbErr-dataLengthZero'} );
+                // done( { 'error': 'dbErr-dataLengthZero'} );
             }
             else {
                 console.log("Found one collectionData item: " );
@@ -347,7 +347,6 @@ module.exports = {
                     collectionData.skipPercentage = newRec.skipPercentage;
                 }
                 // Save data once  dataset is modified
-                console.log(collectionData);
                 collectionData.save(function(err){
                     if(err){
                         console.log("Error updating data" +err);
@@ -355,8 +354,9 @@ module.exports = {
                     else {
                         console.log("Record Updated!");
                     }
+                    done(collectionData);
                 });
-                done(collectionData);
+                // done(collectionData);
             }
         });
     }

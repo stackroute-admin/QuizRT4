@@ -17,10 +17,8 @@ var uuid = require('node-uuid'), // used to generate unique game ids
     questionBank = require('./questionBank'),
     LeaderBoard = require('./leaderboard.js'),
     MongoDB = require('./mongoService.js'),
-    userData = require('../analytics/createMonthlyUserData'),
-    storeData = require('../analytics/storeMapReduceAnalysis'),
-    updateStreakData = require('../analytics/updateStreakData'),
-    badgeEligibilityCheck = require('../badgesManager/badgeEligibilityCheck')
+    badgeEligibilityCheck = require('../badgesManager/badgeEligibilityCheck'),
+    storeAnalyticsData = require('../analytics/storeAnalyticsData');
 
 /**
 ** @param no constructor params
@@ -76,7 +74,7 @@ var GameManager = function() {
       }
       return false;
     } else {
-      var gameId = this.createNewGame( topicId, levelId, playersNeeded, 3 ); // create a new game
+      var gameId = this.createNewGame( topicId, levelId, playersNeeded, 1 ); // create a new game
       if ( gameId ) { // if the game was created successfully
         var isPlayerAdded = this.addPlayerToGame( gameId, topicId, incomingPlayer );
         if ( isPlayerAdded ) {
@@ -245,57 +243,25 @@ var GameManager = function() {
       if ( game.playersFinished == 1 ) { // start the timer when first player finishes the game
         game.timer = setTimeout( function() {
           console.log('\nSaving after 3s...');
-          self.storeResult( gameData, gameBoard, game );
-          var pAnalysisDataObj = gameData.preserveObj.getAnalysisData();
-          var userIdArr = [];
-          game.players.forEach(function(userObj) {
-              userIdArr.push(userObj.userId);
-              console.log("from game mgr  " +userObj.userId);
-              var userDataObj = userData.createMonthlyUserData(userObj.userId);
-              console.log("---->>" +userDataObj);
-              storeData.getMapReduceData(userDataObj,function(data) {
-                 console.log(data);
+          self.storeResult( gameData, gameBoard, game ,function() {
+              storeAnalyticsData(gameData,game.players,function() {
+                // call stuffs which needs updated data from db
+                // new badgeEligibilityCheck(userObj.userId,'gameFinish',gameData).check(gameData.gameClient);
               });
-            //   store analytics data to db userpointstats
-              var tempData = pAnalysisDataObj[userObj.userId];
-              tempData.userId=userObj.userId;
-              storeData.saveMRUserRespTimeStat(tempData,function(data) {
-                  console.log("Done saving data!!");
-              });
-            //   check badge eligibility for user
-              new badgeEligibilityCheck(userObj.userId,'gameFinish',gameData).check(gameData.gameClient);
           });
-          //update streak data to db
-          updateStreakData(gameData.preserveObj.getStreakData(userIdArr));
-        gameData.preserveObj.reset();
         }, 3000);
       }
       if ( game.playersFinished === game.players.length ) {
         console.log('\nSaving after all players finished..');
         clearTimeout( game.timer );
-        this.storeResult( gameData, gameBoard, game );
-        var pAnalysisDataObj = gameData.preserveObj.getAnalysisData();
-        var userIdArr = [];
-        console.log("GAme object  is ------------->>>>>>"+gameData.gameId);
-        console.log(game);
-        game.players.forEach(function(userObj) {
-            userIdArr.push(userObj.userId);
-            var userDataObj = userData.createMonthlyUserData(userObj.userId);
-            storeData.getMapReduceData(userDataObj,function(data) {
-               console.log(data);
+        this.storeResult( gameData, gameBoard, game,function() {
+            console.log("Abhiii------------------>> upadated db -------->>1111");
+            storeAnalyticsData(gameData,game.players,function() {
+                console.log("All log done MMMKMK");
+                // call stuffs which needs updated data from db 
+                // new badgeEligibilityCheck(userObj.userId,'gameFinish',gameData).check(gameData.gameClient);
             });
-            //   store analytics data to db userpointstats
-            var tempData = pAnalysisDataObj[userObj.userId];
-            tempData.userId=userObj.userId;
-            storeData.saveMRUserRespTimeStat(tempData,function(data) {
-                console.log("Done saving data!!");
-            });
-            // check badge eligibility for user
-            new badgeEligibilityCheck(userObj.userId,'gameFinish',gameData).check(gameData.gameClient);
         });
-        //update streak data to db
-        updateStreakData(gameData.preserveObj.getStreakData(userIdArr));
-        gameData.preserveObj.reset();
       }
     } else {
       console.log('WARN: Failed to find the game ' + gameData.gameId );
@@ -307,7 +273,7 @@ var GameManager = function() {
   ** @param gameData as Object, gameBoard as Object, game as Object
   **
   */
-  this.storeResult = function( gameData, gameBoard, game ) {
+  this.storeResult = function( gameData, gameBoard, game,cb ) {
     var noOfCallbacksFinished = 0,
         self = this;
 
@@ -316,6 +282,7 @@ var GameManager = function() {
       if ( noOfCallbacksFinished == game.players.length+1 ) {
         console.log('Saving game to Mongo completed. Game Popped.');
         self.popGame( gameData.gameId );
+        cb();
       }
     });
     var gameResultObj = {
@@ -349,6 +316,7 @@ var GameManager = function() {
             if ( noOfCallbacksFinished == game.players.length+1 ) { // check if saving game and updating all the userProfiles is done
               console.log('Saving game to Mongo completed. Game Popped.');
               self.popGame( gameData.gameId ); // delete the game from GameManager
+              cb();
             }
           });
           return true;

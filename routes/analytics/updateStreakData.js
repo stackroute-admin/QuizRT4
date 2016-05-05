@@ -3,7 +3,7 @@ var analyticsDbObj = require('.././analyticsDbConObj'),
     userPointsSchema = require('../../models/userPointsStat'),
     pointAndStreakObj = analyticsDbObj.model('userPointStat', userPointsSchema);
 
-var updateStreakData = function(gameData){
+var updateStreakData = function(gameData,done){
     // takeout userIdArr
     var userIdArr = Object.keys(gameData);
     pointAndStreakObj.find(
@@ -24,10 +24,10 @@ var updateStreakData = function(gameData){
 
                 if(rec.userStreakCurrent.streakDates.length!==0){
                     userStreakCurrent = createCurrentStreak(rec.userStreakCurrent,newData);
-                    console.log(userStreakCurrent);
+                    // console.log(userStreakCurrent);
                 }
                 else {
-                    console.log(newData);
+                    // console.log(newData);
                     userStreakCurrent = newData;
                 }
                 rec.userStreakCurrent = userStreakCurrent;
@@ -41,7 +41,7 @@ var updateStreakData = function(gameData){
                         console.log("Error updating data");
                     }
                     else {
-                        console.log("Record Updated!");
+                        console.log("Record Updated! hfdvvjdfvb");
                     }
                     if(count===record.length){
                         done();
@@ -52,11 +52,11 @@ var updateStreakData = function(gameData){
     );
 }
 
-var done = function(err,data) {
-    // comment below line when in production
-    // analyticsDbObj.close()
-    console.log("Done updating streak data");
-}
+// var done = function(err,data) {
+//     // comment below line when in production
+//     // analyticsDbObj.close()
+//     console.log("Done updating streak data");
+// }
 var createCurrentStreak = function(oldData, newData){
     var oldStreakDates = oldData.streakDates,
         //it will always have only one elememnt
