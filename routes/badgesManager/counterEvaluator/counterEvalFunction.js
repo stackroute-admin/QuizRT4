@@ -3,21 +3,69 @@ var Counters=function () {}
 Counters.prototype.getFunction = function (counter,data,flag) {
   switch (counter) {
       case 'nOfWin':
-        return counterEvaluator.getNumOfWin(data,flag);
+        return function (done) {
+          counterEvaluator.getNumOfWin(data,flag,             function(err,value) {
+              if(err)
+                console.error(err);
+              done(null,value);
+          });
+        };
       case 'nOfConsWin':
-        return counterEvaluator.getNumOfConsWin(data,flag);
+        return function(done) {
+          counterEvaluator.getNumOfConsWin(data,flag,         function(err,value) {
+            if(err)
+              console.error(err);
+            done(null,value);
+          });
+        };
       case 'avgResTimeCrctCurrentGame':
-        return counterEvaluator.getAvgResTimeCrctCurrentGame(data,flag);
+        return function(done) {
+          counterEvaluator.getAvgResTimeCrctCurrentGame(data,flag, function(err,value) {
+            if(err)
+              console.error(err);
+            done(null,value);
+          });
+        };
       case 'consLogin':
-        return counterEvaluator.getUserLoginCount(data,flag);
+        return function(done) {
+          counterEvaluator.getUserLoginCount(data,flag,       function(err,value) {
+            if(err)
+              console.error(err);
+            done(null,value);
+          });
+        };
       case 'nOfUniqTopicPlayed':
-        return counterEvaluator.getNumOfUniqueTopicPlayed(data,flag);
+        return function(done) {
+          counterEvaluator.getNumOfUniqueTopicPlayed(data,flag,       function(err,value) {
+            if(err)
+              console.error(err);
+            done(null,value);
+          });
+        };
       case 'nOfGamePlayed':
-        return counterEvaluator.getNumOfGamePlayed(data,flag);
+        return function(done) {
+          counterEvaluator.getNumOfGamePlayed(data,flag,       function(err,value) {
+            if(err)
+              console.error(err);
+            done(null,value);
+          });
+        };
       case 'nOfCrctResCurGame':
-        return counterEvaluator.getNumOfCrctResCount(data,flag);
+        return function(done) {
+          counterEvaluator.getNumOfCrctResCount(data,flag,       function(err,value) {
+            if(err)
+              console.error(err);
+            done(null,value);
+          });
+        };
       case 'nOfWinForATopic':
-        return counterEvaluator.getNumOfWinForTopic(data,flag);
+        return function(done) {
+          counterEvaluator.getNumOfWinForTopic(data,flag,       function(err,value) {
+            if(err)
+              console.error(err);
+            done(null,value);
+          });
+        };
   }
 };
 module.exports = Counters;
