@@ -67,6 +67,7 @@ angular.module('quizRT')
             userId: $rootScope.loggedInUser.userId,
             playerName: $rootScope.loggedInUser.name,
             playerPic: $rootScope.loggedInUser.imageLink,
+            questionPaper:$rootScope.playGame.questionPaper,
             playersNeeded: playersPerMatch
         };
         $rootScope.tournamentSocket.emit('joinTournament', playerData); // enter the tournament and wait for other players to join

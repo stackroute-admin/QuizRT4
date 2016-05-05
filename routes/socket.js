@@ -68,20 +68,47 @@ module.exports = function(server,sessionMiddleware,redisClient) {
         gamesOnDemand.prototype.showFriends = function () {
           return this.gamesOnDemandAttr;
         };
-        var gamesOnDemandObj=new gamesOnDemand();
+
+        //gamesOnDemandObj = null;
         client.on('sendInvitedFriends',function(data) {
           console.log(data);
-
+          gamesOnDemandObj=new gamesOnDemand();
           if(data){
             gamesOnDemandObj.addFriends(data);
             console.log("inside socket-----------------friendzzzzzz"+data.invitedFriendsList.length);
           }
           var temp=gamesOnDemandObj.showFriends();
           console.log("temp  inner"+temp.length);
+         // end client-on-join
         });
 
-        var temp=gamesOnDemandObj.showFriends();
-        console.log("temp  outer"+temp.length);
+        client.on('joinGamesOnDemand',function( playerData ) {
+           console.log( playerData.userId + ' joined. Wants to play ' + playerData.topicId );
+
+           // check if the user is authenticated and his session exists, if so add him to the game
+           console.log("inside gamesOnDemand ---------------");
+           if(playerData.firstUser){
+             addPlayersToGame(playerData);
+           }
+           else{
+           console.log(gamesOnDemandObj.gamesOnDemandAttr[0].invitedFriendsList);
+           var friendsInGame=gamesOnDemandObj.showFriends();
+           console.log(friendsInGame.length, friendsInGame, playerData, "everything");
+           for(var friendList in friendsInGame){
+               console.log(friendsInGame[friendList]);
+             for(var friend in friendsInGame[friendList].invitedFriendsList){
+               console.log(friend,"Inside Friend");
+               if(friendsInGame[friendList].invitedFriendsList[friend] ==playerData.userId){
+                  console.log("insidefinal");
+                 addPlayersToGame(playerData);
+               }
+             }
+           }
+         }
+           //addPlayersToGame(playerData);
+         });
+        //var temp=gamesOnDemandObj.showFriends();
+        //console.log("temp  outer"+temp.length);
 
         client.on('join',function( playerData ) {
           console.log( playerData.userId + ' joined. Wants to play ' + playerData.topicId );
@@ -90,27 +117,7 @@ module.exports = function(server,sessionMiddleware,redisClient) {
           addPlayersToGame(playerData);
         }); // end client-on-join
 
-        client.on('joinGamesOnDemand',function( playerData ) {
-          console.log( playerData.userId + ' joined. Wants to play ' + playerData.topicId );
 
-          // check if the user is authenticated and his session exists, if so add him to the game
-          console.log("inside gamesOnDemand ---------------");
-          if(playerData.firstUser){
-            addPlayersToGame(playerData);
-          }
-          else{
-          var friendsInGame=gamesOnDemandObj.showFriends();
-          console.log(friendsInGame.length);
-          for(var friendList in friendsInGame){
-            for(var friend in friendList.invitedFriendsList){
-              if(friend==playerData.userId){
-                addPlayersToGame(playerData);
-              }
-            }
-          }
-        }
-          //addPlayersToGame(playerData);
-        }); // end client-on-join
 
         var addPlayersToGame=function(playerData){
           console.log("this is the current player-------------"+playerData);
@@ -119,6 +126,7 @@ module.exports = function(server,sessionMiddleware,redisClient) {
               userId: playerData.userId,
               playerName: playerData.playerName,
               playerPic: playerData.playerPic,
+              score:0,
               client: client
             };
             var difficultyLevelTopic=[1,2,3,4,5];//for topics game fetch questions from all difficulty levels
@@ -146,7 +154,7 @@ module.exports = function(server,sessionMiddleware,redisClient) {
             GameManager.getGamePlayers(data.gameId).forEach( function( player, index) {
 
               if(player.userId==data.userId){
-                console.log("insude if getGame...................................");
+                console.log("insude if getGame..................................."+data.userId);
                 player.score+=data.scopeTime+10;
                 console.log("score is..................."+player.score);
                 player.client.emit('highLightOption',{correct:true,myScore:player.score,correctInd:data.correctIndex});

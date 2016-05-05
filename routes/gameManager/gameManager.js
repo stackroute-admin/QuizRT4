@@ -251,13 +251,13 @@ var GameManager = function() {
     var game = this.games.get( gameId ),
         self = this;
         console.log("inside start game........................................"+game);
-        console.log("difficultyLevel issssssssssss arry"+difficultyLevel.length);
+        console.log("difficultyLevel issssssssssss arry"+difficultyLevel);
         console.log("Questrion paperrrrrrrrrrrrr--------------"+questionPaper);
         if (difficultyLevel.length === 0) {
           difficultyLevel = [1,2,3,4,5];
 
         }
-        if(difficultyLevel!==null  && questionPaper !== undefined){
+        if(questionPaper === undefined || questionPaper===null){
     questionBank.getQuizQuestions( game.topicId, difficultyLevel, 5 , function( err, questions ) { // get questions from the questionBank
       console.log("popppppppppopokkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkoooooooooooo"+questions);
       if ( err ) {
@@ -298,7 +298,7 @@ var GameManager = function() {
     });// end getQuizQuestions
   }
   else{
-    prebuildQuestionBank.getPrebuildQuestions('T1',"Question Paper 3",2,function( err, questions) { // get questions from the questionBank
+    prebuildQuestionBank.getPrebuildQuestions('T1',questionPaper,2,function( err, questions) { // get questions from the questionBank
 console.log("insideeeeeeeeeeeeeeeeee  prebuildQuestionBank");
 console.log("jkjkjkjkjkjkjkjkkjkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+questions);
       if ( err ) {
@@ -392,6 +392,7 @@ console.log("jkjkjkjkjkjkjkjkkjkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+questions);
       gameBoard: gameBoard
     }
     game.players.forEach( function( player ) {
+      console.log("topicId---------------------  ---------------------"+gameResultObj.topicId);
       player.client.emit('takeResult', { error: null, gameResult: gameResultObj } );
       gameBoard.some( function( boardPlayer, index ) {
         if ( player.userId == boardPlayer.userId ) {

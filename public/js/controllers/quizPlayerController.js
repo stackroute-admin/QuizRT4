@@ -77,17 +77,28 @@ angular.module('quizRT')
           console.log("hi");
           $rootScope.socket.emit('joinGamesOnDemand', playerData);
           $rootScope.firstUser=false;
+          $scope.time = 30;
+          $scope.waitInterval = $interval(function () {
+            $scope.time--;
+            if($scope.time==0){
+              $interval.cancel($scope.waitInterval);
+
+            $location.path('/topic/'+$routeParams.topicId);
+            }
+          }, 1000);
         }
-        else if($location.path()==='/quizPlayer/'+$routeParams.topicId+'/'+$routeParams.urlId){
+        else if($location.path()==='/quizPlayer/'+$routeParams.topicName+'/'+$routeParams.topicId+'/'+$routeParams.urlId){
           console.log("second");
           $http.post( '/topicsHandler/topic/'+ $routeParams.topicId )
           .then( function( successResponse ) {
-            console.log("post");
+            console.log("post",successResponse);
             //$rootScope.playGame = {};
             playerData.topicId=$routeParams.topicId;
             playerData.url=$routeParams.urlId;
             playerData.firstUser=false;
             $rootScope.isPlayingAGame = true;
+            $scope.quizTitle = $routeParams.topicName;
+            console.log(playerData);
             $rootScope.socket.emit('joinGamesOnDemand', playerData);
           }, function( errorResponse ) {
             console.log(errorResponse.data.error);
@@ -106,7 +117,9 @@ angular.module('quizRT')
             console.log('Problem maintaining the user session!');
         });
 
+
         $rootScope.socket.once('startGame', function( startGameData ) {
+          $interval.cancel($scope.waitInterval);
           if ( startGameData.questions && startGameData.questions.length && startGameData.questions[0]) {
             $rootScope.freakgid = startGameData.gameId;
             $scope.playersCount = startGameData.playersNeeded;
@@ -185,7 +198,6 @@ angular.module('quizRT')
 
                         }
                           $scope.isDisabled = true;
-
                           var obj = {
                             gameId: startGameData.gameId,
                             topicId: startGameData.topicId,
@@ -230,8 +242,8 @@ angular.module('quizRT')
 
         });
         $rootScope.socket.on('highLightOption', function(data) {
-        //  $scope.myscore=data.myScore;
-        //  console.log('hello my score is......'+$scope.myscore);
+          $scope.myscore=data.myScore;
+          console.log('hello my score is......'+$scope.myscore);
           if(data.correct){
             console.log('hello');
             // $(data.elem.target).addClass('btn-success');

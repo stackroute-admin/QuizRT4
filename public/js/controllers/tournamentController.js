@@ -66,10 +66,10 @@
           $scope.refreshTournament( $scope.tournamentId );// call for the first time
 
           $scope.playTournament = function(levelId, topicId, title, topic_name,difficultyLevel,levelMultiplier,questionPaper) {
-
+            console.log(difficultyLevel,levelMultiplier,questionPaper);
             var tournamentId = levelId ? levelId.substring(0, levelId.indexOf('_')) : null;
             $rootScope.playGame = {};
-            console.log("pppppppppp ppppppppppppp"+difficultyLevel);
+            //console.log("pppppppppp ppppppppppppp"+difficultyLevel);
             $rootScope.playGame.levelId = levelId;
             $rootScope.playGame.tournamentId = tournamentId;
             $rootScope.playGame.topicId = topicId;

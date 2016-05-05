@@ -16,7 +16,7 @@
 //                        + Anil Sawant
 
 angular.module('quizRT', ['ngRoute', 'ngCookies'])
-    .run(function($cookies,$rootScope,$http,$location,socket,$routeParams) {
+    .run(function($cookies,$rootScope,$http,$location,socket) {
 
     $rootScope.initializeSockets = function() {
       console.log('Initializing sockets...');
@@ -103,12 +103,10 @@ angular.module('quizRT', ['ngRoute', 'ngCookies'])
   })
   .factory('socket', function($rootScope) {
     return function($rootScope, type) {
-      // var socket = io.connect('http://192.168.0.103:8082' + type, {'forceNew':true } );
-      var socket = io.connect('http://172.23.238.151:8080' + type, {'forceNew':true } );
-
-      // var socket = io.connect('http://127.0.0.1:8080'  + type, {
-      //   'forceNew': true
-      // });
+       var socket = io.connect('http://192.168.0.101:8081' + type, {'forceNew':true } );
+      /*var socket = io.connect('http://127.0.0.1:8080' + type, {
+        'forceNew': true
+      });*/
       // var socket = io.connect('http://quizart.stackroute.in:2000' + type, {'forceNew':true } );
       console.log('Socket initialized for ' + type);
 
@@ -201,7 +199,7 @@ angular.module('quizRT', ['ngRoute', 'ngCookies'])
           'controller': 'quizPlayerController',
           'reload':true
         })
-        .when('/quizPlayer/:topicId/:urlId',{
+        .when('/quizPlayer/:topicName/:topicId/:urlId',{
           'templateUrl': 'html/quizPlayer.html',
           'controller': 'quizPlayerController',
           'reload':true

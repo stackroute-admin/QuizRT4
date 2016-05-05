@@ -29,8 +29,13 @@ angular.module('quizRT')
 
     $scope.inviteFriends = function(topicId) {
       console.log("Invite Friends");
+      //$('#modal').modal('hide');
+      $('.modal-backdrop').remove();
+      $('body').removeClass('modal-open');
+
        $rootScope.playGame = {};
        $rootScope.playGame.topicId = topicId;
+       $rootScope.playGame.topicName = $scope.topic.topicName;
        $rootScope.isPlayingAGame = true; // to hide the footer-nav while playing a game
        $rootScope.firstUser=true;
        $scope.socket.emit('getUrl',$rootScope.loggedInUser);
@@ -42,7 +47,7 @@ angular.module('quizRT')
      });
        $http.post( '/topicsHandler/topic/'+ topicId )
          .then( function( successResponse ) {
-           $location.path( '/quizPlayer/'+$rootScope.playGame.topicId+'/'+$rootScope.playGame.url );
+           $location.path( '/quizPlayer/'+$rootScope.playGame.topicName+'/'+$rootScope.playGame.topicId+'/'+$rootScope.playGame.url );
          }, function( errorResponse ) {
            console.log(errorResponse.data.error);
          });
@@ -67,4 +72,3 @@ angular.module('quizRT')
     };
 
 });
-
