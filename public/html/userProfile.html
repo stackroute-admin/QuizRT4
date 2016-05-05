@@ -56,107 +56,111 @@
 		</div>
 		</div>
 	</div>
-
 	<!--  test-->
-			<div class="row sectionHeader">Search for People
-			</div>
-			<div class="row topic-info play-button-bar" >
-
+			<div class="row sectionHeader">Find a Friend</div>
+			<div class="row topic-info play-button-bar"  >
 				<!-- <div class="row topic-info" ng-hide="topicsFollowed.length > 0"> -->
 					<div id="foot" class="row">
-					 <div  class="col-xs-12 play-button-bar">
-						 <div class="InviteFriends" ng-controller="userProfileController">
-							 <button href="#inviteFriends" role="button" class="btn btn-info" ng-click="searchPeople1()" data-toggle="modal"><span class="glyphicon glyphicon-thumbs-up"></span> Search People</button>
-								<div class="modal fade" id="inviteFriends" tabindex="-1" role="dialog">
-									<div class="modal-dialog">
-										<div class="modal-content">
-											<div class="modal-header">
-												<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-												<h4 class="modal-title">Search For People </h4>
-											</div>
-											<div class="modal-body">
-																		 <label><input id="name" type="radio" class="option-input radio" name="rdoResult" ng-model="changedVal" value="name" ng-click="searchPeople1();clearSearch();getVal(changedVal)">name</label>
-																		 <label><input id="topic" type="radio" class="option-input radio"
-																				name="rdoResult" ng-model="changedVal" value="topic" ng-click="searchPeople1();clearSearch();getVal(changedVal)">topic</label>
-																		 <label><input id="name" type="radio" class="option-input radio"name="rdoResult" ng-model="changedVal" value="country" ng-click="searchPeople1();clearSearch();getVal(changedVal)">country</label>
+			     <div  class="col-xs-12 play-button-bar">
+			       <div class="InviteFriends" ng-controller="userProfileController">
+			         <button href="#inviteFriends" role="button" class="btn btn-info" ng-click="searchPeople1();clearSearch()" data-toggle="modal"><span class="glyphicon glyphicon-search"></span>Find a Friend</button>
+			          <div class="modal fade" id="inviteFriends" tabindex="-1" role="dialog">
+			            <div class="modal-dialog">
+			              <div class="modal-content">
+			                <div class="modal-header">
+			                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			                  <h4 class="modal-title">Find a Friend </h4>
+			                </div>
+			                <div class="modal-body" >
+																		 <label><input id="name" type="radio" class="option-input radio" name="rdoResult" ng-model="changedVal" value="name" ng-click="searchPeople1();clearSearch();getVal(changedVal);showOne()">name</label>
+																		 <label><input id="topic" type="radio" class="option-input radio"name="rdoResult" ng-model="changedVal" value="topic" ng-click="searchPeople1();clearSearch();getVal(changedVal);showThree()">topic</label>
+																		 <label><input id="name" type="radio" class="option-input radio"name="rdoResult" ng-model="changedVal" value="country" ng-click="searchPeople1();clearSearch();getVal(changedVal);showTwo()">country</label>
+																		 <!-- <hr> -->
+																 </br><input type="text" id="searchbox" class="form-control" ng-model = "user"  ng-change = 'searchPeople1(); userData(user);topicsList(user)' style="width:100px ,height:20px;" />
+																 <!-- <a class=" glyphicon glyphicon-remove clear" data-ng-click="clearSearch()"></a> -->
 
+			                  <div class="topTenTable row" ng-show="one">
+			                    <div class="thead">
+														  <div class="th col-xs-4">Image</div>
+			                      <div class="th col-xs-4">Name</div>
+														<div class="th col-xs-4">Country</div>
+			                    </div>
+			                    <div class="tbody">
 
-																 </br><input type="text" id="searchbox" class="form-control" ng-model = "user"  ng-change = 'searchPeople1(); userData(user)' style="width:100px ,height:20px;" />
-																 <a class=" glyphicon glyphicon-remove clear" data-ng-click="clearSearch()"></a>
-
-												<div class="topTenTable row" ng-show="changedVal=='name'">
-													<div class="thead">
-														<div class="th col-xs-6">Name</div>
-														<div class="th col-xs-6">Country</div>
-													</div>
-													<div class="tbody">
-
-														<div class="tr-wrap" ng-repeat="item in searchPeople">
-															<div class="tr row" ng-click="toggleSelectFriend($index)">
-																	<div class="td col-xs-6"><label><a href="#" class = "link" ng-click="selectedUser(item)" >{{item.name}}</a><label></div>
-																<div class="td col-xs-6"><label>{{item.country}}<label></div>
-															</div>
-														</div>
+			                      <div class="tr-wrap" ng-repeat="item in searchPeople">
+			                        <div class="tr row" ng-click="toggleSelectFriend($index)">
+			                          <!-- <div class="td col-xs-6"><label><input type="button" name="name" value={{item.name}} ng-click="selectedUser(item)"></input><label></div> -->
+																  <div class="td col-xs-4"><label><img src="{{item.imageLink}}" alt="userImage" "/><label></div>
+																  <div class="td col-xs-4"><label><a href="#" class = "link" ng-click="selectedUser(item)" >{{item.name}}</a><label></div>
+			                          <div class="td col-xs-4"><label>{{item.country}}<label></div>
+			                        </div>
+			                      </div>
 									 </div><!-- end tbody-->
-												</div><!-- end topTenTable -->
+			                  </div><!-- end topTenTable -->
 
-									<div class="topTenTable row" ng-show="changedVal=='country'">
-													<div class="thead">
-														<div class="th col-xs-6">Name</div>
-														<div class="th col-xs-6">Country</div>
-													</div>
+									<div class="topTenTable row" ng-show="two">
+			                    <div class="thead">
+														  <div class="th col-xs-4">Image</div>
+			                      <div class="th col-xs-4">Name</div>
+														<div class="th col-xs-4">Country</div>
+			                    </div>
+			                    <div class="tbody">
+
+			                      <div class="tr-wrap" ng-repeat="item in searchPeople">
+			                        <div class="tr row" ng-click="toggleSelectFriend($index)">
+																  <div class="td col-xs-4"><label><img src="{{item.imageLink}}" alt="UserImage"/><label></div>
+			                          <!-- <div class="td col-xs-6"><label><input type="button" name="name" value={{item.name}} ng-click="selectedUser(item)"></input><label></div> -->
+																  <div class="td col-xs-4"><label><a href="#" class = "link" ng-click="selectedUser(item)" >{{item.name}}</a><label></div>
+			                          <div class="td col-xs-4"><label>{{item.country}}<label></div>
+			                        </div>
+			                      </div>
+									 </div><!-- end tbody-->
+
+			                  </div><!-- end topTenTable -->
+
+									<div class="topTenTable row" id="xxx"  ng-show="three" >
+			                    <div class="thead">
+			                      <div class="th col-xs-12">Topics List</div>
+
+			                    </div>
+			                    <div class="tbody">
+
+										  <div class="tr-wrap" ng-repeat="topic in topicsData">
+	 													<div class="td col-xs-12"><label ng-click="selectedTopic(topic._id);userData();showFour()" ><span>{{topic._id}}</span></label></div>
+	 												</div>
+									 </div><!-- end tbody-->
+			                  </div><!-- end topTenTable -->
+
+									<div class="topTenTable row" ng-show="four">
+			                    <div class="thead">
+														<div class="th col-xs-3">Image</div>
+			                      <div class="th col-xs-3">Name</div>
+										  <div class="th col-xs-3">Topic</div>
+										   <div class="th col-xs-3">GamesPlayed</div>
+														<!-- <div class="th col-xs-4">topic</div>
+														<div class="th col-xs-4">no of topic played</div> -->
+			                    </div>
 													<div class="tbody">
-														<div class="tr-wrap" ng-repeat="item in searchPeople">
-															<div class="tr row" ng-click="toggleSelectFriend($index)">
-																	<div class="td col-xs-6"><label><a href="#" class = "link" ng-click="selectedUser(item)" >{{item.name}}</a><label></div>
-																<div class="td col-xs-6"><label>{{item.country}}<label></div>
-															</div>
-														</div>
-												</div><!-- end tbody-->
-										</div><!-- end topTenTable -->
-
-									<div class="topTenTable row" ng-show="changedVl" ng-hide={{item.id}}>
-													<div class="thead">
-														<!-- <div class="th col-xs-12">Topics   List</div> -->
-													</div>
-													<div class="tbody">
-															<div class="tr-wrap" ng-repeat="item in searchPeople">
-															<!-- <div class="tr row" ng-click="toggleSelectFriend($index)"> -->
-															<div class="td col-xs-12"><label ng-click="showme" ><span>{{item._id}}</span></label></div>
-														</div>
-												</div><!-- end tbody-->
-									</div><!-- end topTenTable -->
-
-
-
-									<div class="topTenTable row" ng-show="">
-													<div class="thead">
-														<div class="th col-xs-4">Name</div>
-														<div class="th col-xs-4">Topic</div>
-														<div class="th col-xs-4">GamesPlayed</div>
-													</div>
-													<div class="tbody">
-														<div class="tr-wrap" ng-repeat="item in searchPeople">
-															<div class="tr row" ng-click="toggleSelectFriend($index)">
-																			<div class="td col-xs-4"><label><a href="#" class = "link" ng-click="selectedUser(item)" >{{item.name}}</a><label></div>
-																			<div class="td col-xs-4"><label>{{item.topicId}}<label></div>
-																			<div class="td col-xs-4"><label>{{item.totalGames}}<label></div>
-															</div>
-														</div>
-												</div><!-- end tbody-->
-									 </div><!-- end topTenTable -->
-
-											</div><!-- end modal-body -->
-										</div><!-- /.modal-content -->
-									</div><!-- /.modal-dialog -->
-						 </div><!-- /.modal -->
-						</div>
+																		<div class="tr-wrap" ng-repeat="item in topicSortList | orderBy:'-gamesPlayed'">
+																			<div class="tr row"  ng-click="toggleSelectFriend($index)">
+																				<div class="td col-xs-3"><label><img src="{{item.image}}" alt="UserImage"/></label></div>
+																							<div class="td col-xs-3"><label><a href="#" class = "link" ng-click="selectedUser(item)" >{{item.name}}</a><label></div>
+																							<div class="td col-xs-3"><label>{{item.topicId}}<label></div>
+																							<div class="td col-xs-3"><label>{{item.gamesPlayed}}<label></div>
+																			</div>
+																		</div>
+																</div><!-- end tbody-->
+			                  </div><!-- end topTenTable -->
+			                </div><!-- end modal-body -->
+			              </div><!-- /.modal-content -->
+			            </div><!-- /.modal-dialog -->
+			       </div><!-- /.modal -->
+			      </div>
 				</div>
 			</div>
 		</div>
 
 			<!--end test  -->
-
 
 		<div class="row sectionHeader">Favourite Topics
 		</div>

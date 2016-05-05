@@ -67,7 +67,7 @@ angular.module('quizRT')
            params : {topic:data}
          }) .then(
            function(successResponse) {
-             $scope.topics = successResponse.data;
+             $scope.topicsData = successResponse.data;
            },
            function(errorResponse) {
              console.log('Error in fetching data.');
@@ -81,38 +81,51 @@ angular.module('quizRT')
 
           $scope.searchPeople1 = function(){
             var inputData;
-
-        //     $scope.topicHide = {
-        //     show: true,
-        //     hide: false
-        // };
-        $scope.hideTopic=function(changedTopicVal){
-        $scope.changedTopicVal = null;
-        }
-            $scope.getVal=function(changedVal){
-              radioVal=changedVal;
-              console.log(radioVal);
+              $scope.getVal=function(changedVal){
+              $scope.radioVal=changedVal;
+              console.log('radio'+ $scope.radioVal);
             }
+              console.log('radio'+ $scope.radioVal);
+              $scope.showOne = function (){
+                  $scope.one = true;
+                  $scope.two = false;
+                  $scope.three = false;
+                  $scope.four = false;
+                }
+
+                $scope.showTwo = function (){
+                  $scope.one = false;
+                  $scope.two = true; // now show this one
+                  $scope.three = false;
+                  $scope.four = false;
+                }
+                $scope.showThree = function (){
+                  $scope.one = false;
+                  $scope.two = false; // now show this one
+                  $scope.three = true;
+                  $scope.four = false;
+                }
+                $scope.showFour = function (){
+                  $scope.one = false;
+                  $scope.two = false; // now show this one
+                  $scope.three = false;
+                   $scope.four = true;
+                }
 
             $scope.clearSearch = function(){
-              // $scope.changedVal = null;
-              // $scope.changedTopicVal = null;
               $scope.user = null;
               $scope.topicData = null;
+              $scope.topicsData = null;
                $scope.searchPeople = null;
             }
-            // var  topicVal = "";
-            $scope.selectedTopic=function(value){
+                $scope.selectedTopic=function(value){
                   $scope.topicVal = value;
                   console.log("inside function:"+  $scope.topicVal);
                 }
-            // console.log("outside function:"+ $scope.topicVal);
-            // topicVal =  $scope.topicVal
-            // console.log(topicVal+"............................");
-            $scope.userData = function (user) {
-                inputData = {name:user,radio:radioVal,selectTopic:$scope.topicVal};
-                console.log("user......."+user);
 
+                $scope.userData = function (user) {
+                inputData = {name:user,radio:$scope.radioVal,selectTopic:$scope.topicVal};
+                console.log("user......."+user);
        $http({
           method : 'GET',
           url : '/userProfile/searchPeople',
@@ -120,8 +133,29 @@ angular.module('quizRT')
         }) .then(
           function(successResponse) {
             $scope.searchPeople = successResponse.data;
-            $scope.topicData = false;
-            console.log(  $scope.searchPeople);
+            $scope.topicSortList = [];
+            // console.log( $scope.topicSortList+"///////////////////////////");
+
+                  if ($scope.topicVal) {
+                    for (var i = 0; i < $scope.searchPeople.length; i++) {
+                        angular.forEach($scope.searchPeople[i], function(value, key){
+                          if (key =='topicsPlayed') {
+                            var topicKey = value;
+                            angular.forEach(topicKey,function(value,index){
+
+                              if (value.topicId == $scope.topicVal) {
+
+                                 $scope.topicSortList.push({topicId:value.topicId,gamesPlayed:value.gamesPlayed,name:$scope.searchPeople[i].name,image:$scope.searchPeople[i].imageLink,_id:$scope.searchPeople[i]._id});
+
+                              }
+                            });
+                          }
+                        });
+                    }
+                  }
+                  console.log( $scope.topicSortList+"/////////after//////////////////");
+
+
           },
           function(errorResponse) {
             console.log('Error in fetching data.');
@@ -130,7 +164,6 @@ angular.module('quizRT')
           }
         )
       }
-
     }
     $scope.selectedUser=function(selectedLocal) {
       console.log('user obj'+selectedLocal);
