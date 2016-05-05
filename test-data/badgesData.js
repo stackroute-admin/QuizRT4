@@ -86,8 +86,8 @@ var badgesData = [
     badgeId:"wiseOne",
     badgeName:"Wise One",
     badgeDesc:"You got it all right, O wise one!! I bow to thy wisdom. Keep going!!",
-    badgeRule:"Answer all questions correctly in any game to get this badge",
     badgeUrl:"../images/badges/gold.png",
+    badgeRule:"Answer all questions correctly in any game to get this badge",
     badgeDep:["nOfCrctResCurGame"],
     badgeFunct: function(nOfCrctResCurGame) {
         if(nOfCrctResCurGame==100) {return true}

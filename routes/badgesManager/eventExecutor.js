@@ -18,7 +18,7 @@ EventExecutor.prototype.execute = function (callback) {
     }).bind(this)]);
     //Adding no of Consecutive Wins counter
     asynchrony.add('nOfConsWin',[(function(done) {
-      counterEvaluator.getNumOfConsWin(this.event.userId,function(err,data) {
+      counterEvaluator.getConsWinCount(this.event.userId,function(err,data) {
         if(err) return done(err);
         done(null,data);
       });
@@ -30,9 +30,46 @@ EventExecutor.prototype.execute = function (callback) {
         done(null,data);
       });
     }).bind(this)]);
+    //Adding consecutive login
+    asynchrony.add('consLogin',[(function(done) {
+      counterEvaluator.getUserLoginCount(this.event.userId,function(err,data) {
+        if(err) return done(err);
+        done(null,data);
+      });
+    }).bind(this)]);
 
+    //Adding number of unique topic played by the player
+    asynchrony.add('nOfUniqTopicPlayed',[(function(done) {
+      counterEvaluator.getNumOfUniqueTopicPlayed(this.event.userId,function(err,data) {
+        if(err) return done(err);
+        done(null,data);
+      });
+    }).bind(this)]);
+
+    //Adding number of game played by the player
+    asynchrony.add('nOfGamePlayed',[(function(done) {
+      counterEvaluator.getNumOfGamePlayed(this.event.userId,function(err,data) {
+        if(err) return done(err);
+        done(null,data);
+      });
+    }).bind(this)]);
+    //Adding percentage of correct response in a current game by the player
+    asynchrony.add('nOfCrctResCurGame',[(function(done) {
+      counterEvaluator.getNumOfCrctResCount(this.event.userId,this.event.gameData.gameId,function(err,data) {
+        if(err) return done(err);
+        done(null,data);
+      });
+    }).bind(this)]);
+
+    //Adding number of win for a topic by the player
+    asynchrony.add('nOfWinForATopic',[(function(done) {
+      counterEvaluator.getNumOfWinForTopic(this.event.userId,this.event.gameData.topicId,function(err,data) {
+        if(err) return done(err);
+        done(null,data);
+      });
+    }).bind(this)]);
     badgesManager.fetchAllBadges(function(err,docs) {
-        if(err) return console.log(err);;
+        if(err) return console.log(err);
         docs.forEach(function(doc){
           var dep=new Array(doc.badgeDep);
           dep.push(doc.badgeFunct);
