@@ -70,8 +70,6 @@ friendshipSchema.statics.getAcceptanceState = function getAcceptanceState(users)
   return deferred.promise;
 };
 
-
-
 Friendship = mongoose.model('friendship', friendshipSchema,'friendship_Collection');
 
 module.exports = Friendship;

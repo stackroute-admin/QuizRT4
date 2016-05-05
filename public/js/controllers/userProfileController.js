@@ -124,9 +124,7 @@ angular.module('quizRT')
       $('.modal-backdrop').remove();
       $scope.viewUserProfile(selectedLocal.userId)
     }
-    $rootScope.notificationSocket.on('updateCounter', function(data) {
-      console.log(data);
-    });
+
     $http({
       method: 'GET',
       url: '/userProfile/profileData'
@@ -134,9 +132,6 @@ angular.module('quizRT')
     .then(function(successResponse) {
       $scope.data = successResponse.data.user;
       $rootScope.loggedInUser = successResponse.data.user;
-
-      //emit an event to bootstrap notifications
-        $rootScope.notificationSocket.emit('userInit',successResponse.data.user);
       $scope.topicsFollowed = [];
       if ($rootScope.loggedInUser.topicsPlayed != null) {
         for (var i = 0; i < $rootScope.loggedInUser.topicsPlayed.length; i++) {
@@ -219,9 +214,7 @@ angular.module('quizRT')
               data: notificationsMeta,
               url: '/notifications'
             }).then(function(notificationRes) {
-              //$rootScope.$broadcast('sent:a:frndreq', 1);
-                $rootScope.notificationSocket.emit('updateNotificationCount', notificationsMeta);
-
+              $rootScope.$broadcast('sent:a:frndreq', 1);
             })
           }, function(failureResponse) {
             console.log(failureResponse);
