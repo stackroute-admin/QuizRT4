@@ -75,7 +75,7 @@ module.exports = {
             }
         });
     },
-    // mber of win in a topic by user
+    // number of win in a topic by user
     getNumOfWinForTopic: function(userId,topicId,done){
         getGameStat.getTopicPlayedCountForUser(userId,topicId)
         .then(function(data) {
@@ -84,14 +84,26 @@ module.exports = {
         .fail(function(err) {
             done(err,null);
         });
+    },
+    // get consecutive win count
+    getConsWinCount : function(userId , done){
+        getGameStat.getConsWinCount(userId)
+        .then(function(data) {
+            done(null,data);
+        })
+        .fail(function(err) {
+            done(err,null);
+        });
+    },
+    // get consecutive login
+    getNOfConsLogin:function(userId,done){
+        getGameStat.getNOfConsLogin(userId)
+        .then(function(data) {
+            done(null,data);
+        })
+        .fail(function(err) {
+            done(err,null);
+        });
     }
+    //
 }
-
-
-// getGameStat.getCurrentGameStat('mz','b39e1380-ffab-11e5-9529-53801e3bf90e',function (data) {
-//     console.log(data);
-// })
-
-getGameStat.getTopicPlayedCountForUser('mddz','T2').then(function(data) {
-    console.log(data);
-})

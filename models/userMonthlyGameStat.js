@@ -6,6 +6,7 @@ var mongoose = require('mongoose'),
     userMapReduceSchema = mongoose.Schema({
         userId: String,
         timeStamp: Date,
+        consecutiveCount:Number,
         years :[
                 {
                 yearVal : Number,

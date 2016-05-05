@@ -13,8 +13,10 @@ var userAnalyticsSchema = require('../models/userAnalytics'),
     Profile = require("../models/profile"),
     Q = require('q');
 
-   /*var mongoose = require('mongoose');
-   mongoose.connect('mongodb://localhost/quizRT3');*/
+
+   // var mongoose = require('mongoose');
+   // mongoose.connect('mongodb://localhost/quizRT3');
+
 
 module.exports = {
     // function to return game stat for a given game and a user
@@ -494,6 +496,50 @@ module.exports = {
             });
          return deferred.promise;
      },
+
+     getNOfConsLogin: function(userId){
+         var deferred = Q.defer();
+         // fetch sorted userId according to totalpoints
+         userMonthlyVisitStat.findOne({'userId':userId},
+         {'consecutiveCount':1,_id:0},
+              function(err, result){
+                  if (err) {
+                     console.log(err);
+                     deferred.resolve(0);
+                 }
+                 else {
+                     if(result){
+                         deferred.resolve(result.consecutiveCount);
+                     }
+                     else {
+                         deferred.resolve(0);
+                     }
+                 }
+             });
+          return deferred.promise;
+      },
+    //  get consecutive win count for user
+     getConsWinCount: function(userId){
+         var deferred = Q.defer();
+         // fetch sorted userId according to totalpoints
+         mapReduceObjPoint.findOne({userId:userId},
+                                {consWinCount:1},
+                function(err, result){
+                  if (err) {
+                     console.log(err);
+                     deferred.resolve(0) ;
+                 }
+                 else {
+                     if(result.consWinCount){
+                         deferred.resolve(result.consWinCount) ;
+                     }
+                     else {
+                         deferred.resolve(0) ;
+                     }
+                 }
+             });
+          return deferred.promise;
+      },
 
 
     getUserAvgRespTimeRank: function(userId){

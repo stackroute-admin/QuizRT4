@@ -5,7 +5,8 @@ var userMapReduceSchema = require('../../models/userMonthlyGameStat'),
     userPointsSchema = require('../../models/userPointsStat'),
     analyticsDbObj = require('.././analyticsDbConObj'),
     mapReduceObj = analyticsDbObj.model('userMonthlyGamePlayedStat', userMapReduceSchema),
-    mapReduceObjVisit = analyticsDbObj.model('userMonthlyVisitCountStat', userMapReduceSchema);
+    mapReduceObjVisit = analyticsDbObj.model('userMonthlyVisitCountStat', userMapReduceSchema),
+    moment = require('moment');
     mapReduceObjPoint = analyticsDbObj.model('userPointStat', userPointsSchema);
 
 module.exports = {
@@ -100,6 +101,8 @@ module.exports = {
             }
             if (!collectionData) {
                 console.log("No item found, creating collectionData item");
+                // add consecutiveCount  for login
+                collectionData.consecutiveCount = 1;
                 new mapReduceObjVisit(newRec).save(function(err){
                     if(err){
                         console.log("Error updating data");
@@ -111,6 +114,7 @@ module.exports = {
                 done( { 'error': 'dbErr-NoItemFound'} );
             }
             else if (collectionData.length === 0){
+                collectionData.consecutiveCount = 1;
                 console.log("Zero found, creating collectionData item");
                 new mapReduceObjVisit(newRec).save(function(err){
                     if(err){
@@ -124,6 +128,23 @@ module.exports = {
             }
             else {
                 console.log("Found one collectionData item: " );
+                var oldDate = collectionData.timeStamp;
+                oldDate = oldDate.getFullYear()+"-"+Number(oldDate.getMonth()+1)+"-"+oldDate.getDate();
+                oldDate = moment(oldDate,"YYYY-MM-DD");
+                var oldNextDate = oldDate.add(1, 'days');
+                oldNextDate = oldNextDate.format('YYYY-MM-DD');
+                oldDate = moment(oldDate,"YYYY-MM-DD").format('YYYY-MM-DD');
+                var newDate = new Date();
+
+                newDate = newDate.getFullYear()+"-"+Number(newDate.getMonth()+1)+"-"+newDate.getDate();
+                newDate = moment(newDate,"YYYY-MM-DD").format('YYYY-MM-DD');
+
+                // check if we need to increment "consecutiveCount" in db
+                collectionData.consecutiveCount = 1;
+                collectionData.timeStamp = new Date();
+                if( oldNextDate === newDate){
+                    collectionData.consecutiveCount += 1;
+                }
                 var yearPresent = false,
                     notMatchedMonthObjArr = [];
                 collectionData.years.forEach(function(vals){
