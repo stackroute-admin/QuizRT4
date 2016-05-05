@@ -39,6 +39,11 @@ var badgesManager = function(){
     Badge.find({badgeId:{$in:badgeIds}},callback);
   };
 
+  //Get one badge by ID from DB
+  this.getBadgeById = function(badgeId,callback){
+    Badge.findOne({badgeId:badgeId},callback);
+  };
+
   //Add badges to user profile
   this.addBadgesToUser = function(userId, badgeId, callback){
     Profile.findOneAndUpdate({userId:userId}, {$push:{badges:badgeId}}, {upsert:false, new:true}, callback);
