@@ -6,16 +6,14 @@ angular.module('quizRT')
       });
 
     $scope.sendNotification = function(userEvent, notification) {
-      //trigger event that is subscribed by the clients.
-      $rootScope.notificationSocket.emit('respond:to:frndreq', notification);
-
+      notification.userAcceptance = userEvent;
       //submit user actions
 
       $http.get('/notifications/updateStatus/' + notification).success(function(response) {
-          console.log(notification);
-          $http.get('/notifications')
+          $http.get('/notifications/')
             .success(function(data, status, headers, config) {
               $scope.notificationData = data;
+              $rootScope.notificationSocket.emit('respond:to:frndreq', notification); //notification);
             });
         })
         // $http.post("/notifications/updateStatus", "abcdefk").success(function(response) {

@@ -30,6 +30,7 @@
 
 				<div >
 					<button class="play-now-button btn btn-success" ng-disabled="friendUser.disableButton" ng-click="sendFriendRequest(friendUser)">{{friendUser.buttonText}}</button>
+					<button class="play-now-button btn btn-warning" ng-show ="friendUser.acceptanceState == 1" ng-click="Unfriend(friendUser)">Unfriend</button>
 				</div>
 			</div>
 

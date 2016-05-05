@@ -48,8 +48,7 @@ friendshipSchema.statics.getFriends = function search(user){
   return deferred.promise;
 };
 
-friendshipSchema.statics.getAcceptanceStat
-e = function getAcceptanceState(users){
+friendshipSchema.statics.getAcceptanceState = function getAcceptanceState(users){
   var deferred = Q.defer();
   var userIds = profile.find({userId : { $in : _.values(users) }})
   .select({'_id' : 1})

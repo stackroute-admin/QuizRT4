@@ -146,18 +146,8 @@ router.post('/sendFriendRequest', function(req,res,next) {
   })
 });
 
-router.post('/acceptFriendRequest', function(req,res,next) {
-  var friendship = new FriendShip(req.body);
-  friendship.update({"_id" : {$all : req.body}} , { $set : { acceptanceState : 1 , lastUpdatedDate : new Date() } } ,{upsert : false} , function(err, doc){
-    if (err)
-      return res.send(500, { error: 'MONGOERROR' });
-     res.end();
-  });
-});
-
-router.post('/rejectFriendRequest', function(req,res,next) {
-  var friendship = new FriendShip(req.body);
-  friendship.update({"_id" : {$all : req.body}} , { $set : { acceptanceState : 2 , lastUpdatedDate : new Date() } } ,{upsert : false} , function(err, doc){
+router.post('/unfriendUser', function(req,res,next) {
+  FriendShip.remove({"userIds" : {$all : [req.body.currentUserProfile, req.body.friendUserId]}} ,function(err, doc){
     if (err)
       return res.send(500, { error: 'MONGOERROR' });
      res.end();

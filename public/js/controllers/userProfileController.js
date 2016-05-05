@@ -77,20 +77,37 @@ angular.module('quizRT')
       )
     }
 
-
-
     $scope.searchPeople1 = function(){
       var inputData;
-      $scope.hideTopic=function(changedTopicVal){
-        $scope.changedTopicVal = null;
-      }
       $scope.getVal=function(changedVal){
-        radioVal=changedVal;
+        $scope.radioVal=changedVal;
+        console.log('radio'+ $scope.radioVal);
+      }
+
+      $scope.showOne = function (){
+        $scope.one = true;
+        $scope.three = false;
+        $scope.four = false;
+      }
+
+      $scope.showThree = function (){
+        $scope.one = false;
+        //  $scope.two = false; // now show this one
+        $scope.three = true;
+        $scope.four = false;
+      }
+
+      $scope.showFour = function (){
+        $scope.one = false;
+        //  $scope.two = false; // now show this one
+        $scope.three = false;
+        $scope.four = true;
       }
 
       $scope.clearSearch = function(){
         $scope.user = null;
         $scope.topicData = null;
+        $scope.topicsData = null;
         $scope.searchPeople = null;
       }
 
@@ -98,9 +115,9 @@ angular.module('quizRT')
         $scope.topicVal = value;
         console.log("inside function:"+  $scope.topicVal);
       }
-      $scope.userData = function (user) {
-        inputData = {name:user,radio:radioVal,selectTopic:$scope.topicVal};
 
+      $scope.userData = function (user) {
+        inputData = {name:user,radio:$scope.radioVal,selectTopic:$scope.topicVal};
         $http({
           method : 'GET',
           url : '/userProfile/searchPeople',
@@ -108,7 +125,24 @@ angular.module('quizRT')
         }) .then(
           function(successResponse) {
             $scope.searchPeople = successResponse.data;
-            $scope.topicData = false;
+            $scope.topicSortList = [];
+            if ($scope.topicVal) {
+              for (var i = 0; i < $scope.searchPeople.length; i++) {
+                angular.forEach($scope.searchPeople[i], function(value, key){
+                  if (key =='topicsPlayed') {
+                    var topicKey = value;
+                    angular.forEach(topicKey,function(value,index){
+
+                      if (value.topicId == $scope.topicVal) {
+
+                        $scope.topicSortList.push({topicId:value.topicId,gamesPlayed:value.gamesPlayed,name:$scope.searchPeople[i].name,image:$scope.searchPeople[i].imageLink,userId:$scope.searchPeople[i].userId});
+
+                      }
+                    });
+                  }
+                });
+              }
+            }
           },
           function(errorResponse) {
             console.log('Error in fetching data.');
@@ -117,167 +151,149 @@ angular.module('quizRT')
           }
         )
       }
-
     }
     $scope.selectedUser=function(selectedLocal) {
       $('body').removeClass('modal-open');
       $('.modal-backdrop').remove();
       $scope.viewUserProfile(selectedLocal.userId)
     }
+  }
 
+  $http({
+    method: 'GET',
+    url: '/userProfile/profileData'
+  })
+  .then(function(successResponse) {
+    $scope.data = successResponse.data.user;
+    $rootScope.loggedInUser = successResponse.data.user;
+    $rootScope.friends = successResponse.data.friends;
+    $scope.topicsFollowed = [];
+    if ($rootScope.loggedInUser.topicsPlayed != null) {
+      for (var i = 0; i < $rootScope.loggedInUser.topicsPlayed.length; i++) {
+        if ($rootScope.loggedInUser.topicsPlayed[i].isFollowed) {
+          $scope.topicsFollowed.push($rootScope.loggedInUser.topicsPlayed[i]);
+        }
+      }
+    }
+    $rootScope.myImage = $rootScope.loggedInUser.imageLink;
+    $rootScope.fakeMyName = $rootScope.loggedInUser.name;
+    $rootScope.topperImage = $rootScope.loggedInUser.imageLink;
+    $rootScope.userIdnew = $rootScope.loggedInUser.userId;
+    //console.log($scope.topicsFollowed);
+
+  }, function(errorResponse) {
+    if (errorResponse.status === 401) {
+      $rootScope.isAuthenticatedCookie = false;
+      console.log('User not authenticated by Passport.');
+    }
+    $rootScope.serverErrorMsg = errorResponse.data.error;
+    $rootScope.serverErrorStatus = errorResponse.status;
+    $rootScope.serverErrorStatusText = errorResponse.statusText;
+    $location.path('/error');
+    console.log('User profile could not be loaded!');
+  });
+
+
+  $scope.viewUserProfile = function(user) {
     $http({
       method: 'GET',
-      url: '/userProfile/profileData'
+      url: '/userProfile/profileData/' + user,
+      params: {
+        userId: user
+      }
     })
     .then(function(successResponse) {
-      console.log(successResponse.data);
-      $scope.data = successResponse.data.user;
-      $rootScope.loggedInUser = successResponse.data.user;
-      $rootScope.friends = successResponse.data.friends;
-      $scope.topicsFollowed = [];
-      if ($rootScope.loggedInUser.topicsPlayed != null) {
-        for (var i = 0; i < $rootScope.loggedInUser.topicsPlayed.length; i++) {
-          if ($rootScope.loggedInUser.topicsPlayed[i].isFollowed) {
-            $scope.topicsFollowed.push($rootScope.loggedInUser.topicsPlayed[i]);
+      $rootScope.friendUser = successResponse.data.user;
+      $rootScope.friendUser.acceptanceState = successResponse.data.isfriend == null ? undefined : successResponse.data.isfriend["acceptanceState"];
+      $rootScope.friendUser.buttonText = $rootScope.friendUser.acceptanceState == 0 ? 'Request Sent' : $rootScope.friendUser.acceptanceState == 1 ? 'Friends' : $rootScope.friendUser.acceptanceState == 2 ? 'Cannot Send Request' : 'Send Friend Request'
+      $rootScope.friendUser.disableButton = $rootScope.friendUser.acceptanceState != undefined;
+      $scope.friendUser.topicsFollowed = [];
+      if ($rootScope.friendUser.topicsPlayed != null) {
+        for (var i = 0; i < $rootScope.friendUser.topicsPlayed.length; i++) {
+          if ($rootScope.friendUser.topicsPlayed[i].isFollowed) {
+            $scope.friendUser.topicsFollowed.push($rootScope.friendUser.topicsPlayed[i]);
           }
         }
       }
-      $rootScope.myImage = $rootScope.loggedInUser.imageLink;
-      $rootScope.fakeMyName = $rootScope.loggedInUser.name;
-      $rootScope.topperImage = $rootScope.loggedInUser.imageLink;
-      $rootScope.userIdnew = $rootScope.loggedInUser.userId;
-      //console.log($scope.topicsFollowed);
-
+      $location.path('/friendUserProfile/' + $rootScope.friendUser.name);
     }, function(errorResponse) {
-      if (errorResponse.status === 401) {
-        $rootScope.isAuthenticatedCookie = false;
-        console.log('User not authenticated by Passport.');
-      }
-      $rootScope.serverErrorMsg = errorResponse.data.error;
-      $rootScope.serverErrorStatus = errorResponse.status;
-      $rootScope.serverErrorStatusText = errorResponse.statusText;
-      $location.path('/error');
-      console.log('User profile could not be loaded!');
+      console.log(errorResponse);
     });
+  };
 
-
-    $scope.viewUserProfile = function(user) {
-      $http({
-        method: 'GET',
-        url: '/userProfile/profileData/' + user,
-        params: {
-          userId: user
-        }
-      })
-      .then(function(successResponse) {
-        $rootScope.friendUser = successResponse.data.user;
-        $rootScope.friendUser.acceptanceState = successResponse.data.isfriend == null ? undefined : successResponse.data.isfriend["acceptanceState"];
-        $rootScope.friendUser.buttonText = $rootScope.friendUser.acceptanceState == 0 ? 'Send Request Reminder' : $rootScope.friendUser.acceptanceState == 1 ? 'Unfriend' : $rootScope.friendUser.acceptanceState == 2 ? 'Cannot Send Request' : 'Send Friend Request'
-        $scope.friendUser.topicsFollowed = [];
-        if ($rootScope.friendUser.topicsPlayed != null) {
-          for (var i = 0; i < $rootScope.friendUser.topicsPlayed.length; i++) {
-            if ($rootScope.friendUser.topicsPlayed[i].isFollowed) {
-              $scope.friendUser.topicsFollowed.push($rootScope.friendUser.topicsPlayed[i]);
-            }
+  $scope.sendFriendRequest = function(currentUserProfile) {
+    if (currentUserProfile) {
+      if ($rootScope.friendUser.acceptanceState == undefined) {
+        var friendshipData = {
+          userIds: [],
+          acceptanceState: 0,
+          lastUpdatedDate: new Date()
+        };
+        friendshipData.userIds.push($rootScope.loggedInUser);
+        friendshipData.userIds.push(currentUserProfile); // to do : Should work on retrieving the Object
+        $http({
+          method: 'POST',
+          data: friendshipData,
+          url: 'userProfile/userSettings/sendFriendRequest'
+        })
+        .then(function(successResponse) {
+          $rootScope.friendUser.buttonText = "Request Sent";
+          $rootScope.friendUser.disableButton = true;
+          var notificationsMeta = {
+            from: $rootScope.loggedInUser.userId,
+            to: currentUserProfile.userId,
+            type: 'FRND',
           }
-        }
-        $location.path('/friendUserProfile/' + $rootScope.friendUser.name);
-      }, function(errorResponse) {
-        console.log(errorResponse);
-      });
-    };
-
-    $scope.sendFriendRequest = function(currentUserProfile) {
-      if (currentUserProfile) {
-        if ($rootScope.friendUser.acceptanceState == undefined) {
-          var friendshipData = {
-            userIds: [],
-            acceptanceState: 0,
-            lastUpdatedDate: new Date()
-          };
-          friendshipData.userIds.push($rootScope.loggedInUser);
-          friendshipData.userIds.push(currentUserProfile); // to do : Should work on retrieving the Object
           $http({
             method: 'POST',
-            data: friendshipData,
-            url: 'userProfile/userSettings/sendFriendRequest'
+            data: notificationsMeta,
+            url: '/notifications'
+          }).then(function(notificationRes) {
+            console.log(notificationRes);
+            $rootScope.$broadcast('sent:a:frndreq', 1);
           })
-          .then(function(successResponse) {
-            $rootScope.friendUser.buttonText = "Request Sent";
-            $rootScope.friendUser.disableButton = true;
-            var notificationsMeta = {
-              from: $rootScope.loggedInUser.userId,
-              to: currentUserProfile.userId,
-              type: 'FRND',
-            }
-            $http({
-              method: 'POST',
-              data: notificationsMeta,
-              url: '/notifications'
-            }).then(function(notificationRes) {
-              console.log(notificationRes);
-              $rootScope.$broadcast('sent:a:frndreq', 1);
-            })
-          }, function(failureResponse) {
-            console.log(failureResponse);
-          })
-        };
-      }
-    };
-
-    $scope.acceptFriendRequest = function(user, friendUser) {
-      $http({
-        method: 'POST',
-        data: {
-          user,
-          friendUser
-        },
-        url: 'userProfile/userSettings/acceptFriendRequest'
-      })
-      .then(function(successResponse) {
-        console.log('Friend Request Accepted');
-      }, function(failureResponse) {
-        console.log(failureResponse);
-      });
+        }, function(failureResponse) {
+          console.log(failureResponse);
+        })
+      };
     }
+  };
 
-    $scope.rejectFriendRequest = function(user, friendUser) {
-      $http({
-        method: 'POST',
-        data: {
-          user,
-          friendUser
-        },
-        url: 'userProfile/userSettings/rejectFriendRequest'
-      })
-      .then(function(successResponse) {
-        console.log('Friend Request Accepted');
-      }, function(failureResponse) {
-        console.log(failureResponse);
-      });
-    }
-
-    $scope.showFollowedTopic = function(topicID) {
-      var path = '/topic/' + topicID;
-      $location.path(path);
-    };
-    $scope.play = function() {
-      $location.path("/categories");
-    }
-    $rootScope.socket.on('refreshUser', function(refreshData) {
-      console.log('Refresh user recevied.');
-      $rootScope.loggedInUser = refreshData.user;
-    });
-    $rootScope.tournamentSocket.on('refreshUser', function(refreshData) {
-      console.log('Refresh user recevied.');
-      $rootScope.loggedInUser = refreshData.user;
-    });
+  $scope.Unfriend = function(user) {
+    var currentUserProfile = $rootScope.loggedInUser._id;
+    var friendUserId = user._id
     $http({
-      method: 'GET',
-      url: '/tournamentHandler/tournaments'
+      method: 'POST',
+      data: {
+        friendUserId,currentUserProfile
+      },
+      url: 'userProfile/userSettings/unfriendUser'
+    }).
+    then(function(response){
+      $scope.viewUserProfile(user.userId)
     })
-    .success(function(data) {
-      $scope.tournaments = data;
-    });
   }
-});
+
+  $scope.showFollowedTopic = function(topicID) {
+    var path = '/topic/' + topicID;
+    $location.path(path);
+  };
+  $scope.play = function() {
+    $location.path("/categories");
+  }
+  $rootScope.socket.on('refreshUser', function(refreshData) {
+    console.log('Refresh user recevied.');
+    $rootScope.loggedInUser = refreshData.user;
+  });
+  $rootScope.tournamentSocket.on('refreshUser', function(refreshData) {
+    console.log('Refresh user recevied.');
+    $rootScope.loggedInUser = refreshData.user;
+  });
+  $http({
+    method: 'GET',
+    url: '/tournamentHandler/tournaments'
+  })
+  .success(function(data) {
+    $scope.tournaments = data;
+  });
+})
