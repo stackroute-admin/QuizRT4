@@ -112,12 +112,12 @@ angular.module('quizRT')
                    $scope.four = true;
                 }
 
-            $scope.clearSearch = function(){
-              $scope.user = null;
-              $scope.topicData = null;
-              $scope.topicsData = null;
-               $scope.searchPeople = null;
-            }
+              $scope.clearSearch = function(){
+                $scope.user = null;
+                $scope.topicData = null;
+                $scope.topicsData = null;
+                 $scope.searchPeople = null;
+              }
                 $scope.selectedTopic=function(value){
                   $scope.topicVal = value;
                   console.log("inside function:"+  $scope.topicVal);
@@ -125,49 +125,43 @@ angular.module('quizRT')
 
                 $scope.userData = function (user) {
                 inputData = {name:user,radio:$scope.radioVal,selectTopic:$scope.topicVal};
-                console.log("user......."+user);
-       $http({
-          method : 'GET',
-          url : '/userProfile/searchPeople',
-          params : inputData
-        }) .then(
-          function(successResponse) {
-            $scope.searchPeople = successResponse.data;
-            $scope.topicSortList = [];
-            // console.log( $scope.topicSortList+"///////////////////////////");
+                 $http({
+                    method : 'GET',
+                    url : '/userProfile/searchPeople',
+                    params : inputData
+                  }) .then(
+                    function(successResponse) {
+                      $scope.searchPeople = successResponse.data;
+                      $scope.topicSortList = [];
+                            if ($scope.topicVal) {
+                              for (var i = 0; i < $scope.searchPeople.length; i++) {
+                                  angular.forEach($scope.searchPeople[i], function(value, key){
+                                    if (key =='topicsPlayed') {
+                                      var topicKey = value;
+                                      angular.forEach(topicKey,function(value,index){
 
-                  if ($scope.topicVal) {
-                    for (var i = 0; i < $scope.searchPeople.length; i++) {
-                        angular.forEach($scope.searchPeople[i], function(value, key){
-                          if (key =='topicsPlayed') {
-                            var topicKey = value;
-                            angular.forEach(topicKey,function(value,index){
+                                        if (value.topicId == $scope.topicVal) {
 
-                              if (value.topicId == $scope.topicVal) {
+                                           $scope.topicSortList.push({topicId:value.topicId,gamesPlayed:value.gamesPlayed,name:$scope.searchPeople[i].name,image:$scope.searchPeople[i].imageLink,_id:$scope.searchPeople[i]._id});
 
-                                 $scope.topicSortList.push({topicId:value.topicId,gamesPlayed:value.gamesPlayed,name:$scope.searchPeople[i].name,image:$scope.searchPeople[i].imageLink,_id:$scope.searchPeople[i]._id});
-
+                                        }
+                                      });
+                                    }
+                                  });
                               }
-                            });
-                          }
-                        });
+                            }
+                    },
+                    function(errorResponse) {
+                      console.log('Error in fetching data.');
+                      console.log(errorResponse.status);
+                      console.log(errorResponse.statusText);
                     }
-                  }
-                  console.log( $scope.topicSortList+"/////////after//////////////////");
-
-
-          },
-          function(errorResponse) {
-            console.log('Error in fetching data.');
-            console.log(errorResponse.status);
-            console.log(errorResponse.statusText);
-          }
-        )
-      }
-    }
-    $scope.selectedUser=function(selectedLocal) {
-      console.log('user obj'+selectedLocal);
-    }
+                  )
+                }
+              }
+              $scope.selectedUser=function(selectedLocal) {
+                console.log('user obj'+selectedLocal);
+              }
         //end test
 
 
