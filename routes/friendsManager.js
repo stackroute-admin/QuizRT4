@@ -3,7 +3,7 @@ var User = require('../models/user.js'),
     Profile = require('../models/profile.js');
 
 
-var FriendsManager = function() {
+module.exports = function(redisClient) {
 
 var getUserDetails = function(client, onlineUsers, myuserId) {
 
@@ -40,7 +40,7 @@ var getUserDetails = function(client, onlineUsers, myuserId) {
    });
  };
 
- this.getOnlineFriends = function(client, redisClient, myuserId) {
+getOnlineFriends = function(client, myuserId) {
     var onlineUsers = [];
     var updated = 0;
     redisClient.keys("sess:*", function(error, keys) {
@@ -57,5 +57,3 @@ var getUserDetails = function(client, onlineUsers, myuserId) {
  };
 
 };
-
-module.exports = new FriendsManager();

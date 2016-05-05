@@ -19,11 +19,14 @@
 var GameManagerClass = require('./gameManager/gameManager.js'),
     GameManager = new GameManagerClass(),
     TournamentManager = require('./tournamentManager/tournamentManager.js'),
-    FriendsManager = require('./friendsManager.js');
     uuid= require('node-uuid');
 
 module.exports = function(server,sessionMiddleware,redisClient) {
+  
+  FriendsManager = require('./friendsManager.js')(redisClient);
+
   var io = require('socket.io')(server);
+
   io.use(function(socket,next){
     sessionMiddleware(socket.request, socket.request.res, next);
   });
@@ -221,7 +224,7 @@ module.exports = function(server,sessionMiddleware,redisClient) {
 
         client.on('getOnlineFriends', function(myuserId) {
           console.log("Get Online Friends for ", myuserId.userId);
-          FriendsManager.getOnlineFriends(client, redisClient, myuserId.userId);
+          getOnlineFriends(client, myuserId.userId);
         });
 
       });// end normalGameSocket
@@ -385,3 +388,5 @@ module.exports = function(server,sessionMiddleware,redisClient) {
                   });
               });
 }
+
+
