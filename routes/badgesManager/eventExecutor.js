@@ -38,8 +38,8 @@ EventExecutor.prototype.execute = function (callback) {
         var badgeCounters = _.uniq(_.flatten(_.pluck(badgeData,'badgeDep'))),
             readOnlyCounters = _.difference(badgeCounters,counters);
 
-        console.log('Execute counters : '+ counters);
-        console.log('Read-only counters : '+ readOnlyCounters);
+        // console.log('Execute counters : '+ counters);
+        // console.log('Read-only counters : '+ readOnlyCounters);
 
         var params = {};
         params.userId = userId;
@@ -57,7 +57,7 @@ EventExecutor.prototype.execute = function (callback) {
         badgeData.forEach(function(badge){
           var dep=new Array(badge.badgeDep);
           dep.push(badge.badgeFunct);
-          console.log(dep);
+        //   console.log(dep);
           asynchrony.invoke(dep).then(function(condition) {
             if(condition){
               callback.apply(null,[badge.badgeId]);

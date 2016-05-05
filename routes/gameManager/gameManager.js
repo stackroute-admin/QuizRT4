@@ -255,11 +255,12 @@ var GameManager = function() {
         console.log('\nSaving after all players finished..');
         clearTimeout( game.timer );
         this.storeResult( gameData, gameBoard, game,function() {
-            console.log("Abhiii------------------>> upadated db -------->>1111");
             storeAnalyticsData(gameData,game.players,function() {
-                console.log("All log done MMMKMK");
-                // call stuffs which needs updated data from db 
-                // new badgeEligibilityCheck(userObj.userId,'gameFinish',gameData).check(gameData.gameClient);
+                // call stuffs which needs updated data from db
+                game.players.forEach(function(userObj) {
+                    new badgeEligibilityCheck(userObj.userId,'gameFinish',gameData).check(gameData.gameClient);
+                });
+
             });
         });
       }

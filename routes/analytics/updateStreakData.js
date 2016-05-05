@@ -41,7 +41,7 @@ var updateStreakData = function(gameData,done){
                         console.log("Error updating data");
                     }
                     else {
-                        console.log("Record Updated! hfdvvjdfvb");
+                        console.log("Record Updated!");
                     }
                     if(count===record.length){
                         done();

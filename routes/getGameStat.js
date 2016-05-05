@@ -427,7 +427,6 @@ module.exports = {
                                            deferred.resolve( { 'error': 'dbErr11'} );
                                        } else {
                                         //    console.log("Rank is " + winRankObj[res[0].wins]);
-                                            console.log(res);
                                             if( res.length >= 1 ){
                                                 deferred.resolve({'label':'Total Wins','rank' : winRankObj[res[0].wins]});
                                             }

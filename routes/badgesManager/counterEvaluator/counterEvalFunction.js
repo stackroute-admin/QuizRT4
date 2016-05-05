@@ -7,8 +7,7 @@ Counters.prototype.getFunction = function (counter,data,flag) {
           counterEvaluator.getNumOfWin(data,flag, function(err,value) {
               if(err)
                 console.error(err);
-              console.log("type "+ (typeof value));
-              done(null,value[0].wins+1);
+              done(null,value);
           });
         };
       case 'nOfConsWin':
