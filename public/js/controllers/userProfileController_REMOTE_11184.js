@@ -148,17 +148,6 @@ angular.module('quizRT')
                                   });
                               }
                             }
-      console.log(data);
-    });
-
-                                           $scope.topicSortList.push({topicId:value.topicId,gamesPlayed:value.gamesPlayed,name:$scope.searchPeople[i].name,image:$scope.searchPeople[i].imageLink,_id:$scope.searchPeople[i]._id});
-
-                                        }
-                                      });
-                                    }
-                                  });
-                              }
-                            }
                     },
                     function(errorResponse) {
                       console.log('Error in fetching data.');
@@ -174,7 +163,6 @@ angular.module('quizRT')
                 $scope.viewUserProfile(selectedLocal.userId)
               }
 
->>>>>>> aa2d6e4ace2ff21b291170bb5d64ade33960dcec
     $http({
       method: 'GET',
       url: '/userProfile/profileData'
@@ -183,9 +171,7 @@ angular.module('quizRT')
       console.log(successResponse.data);
       $scope.data = successResponse.data.user;
       $rootScope.loggedInUser = successResponse.data.user;
-
-      //emit an event to bootstrap notifications
-        $rootScope.notificationSocket.emit('userInit',successResponse.data.user);
+      $rootScope.friends = successResponse.data.friends;
       $scope.topicsFollowed = [];
       if ($rootScope.loggedInUser.topicsPlayed != null) {
         for (var i = 0; i < $rootScope.loggedInUser.topicsPlayed.length; i++) {
@@ -267,9 +253,8 @@ angular.module('quizRT')
               data: notificationsMeta,
               url: '/notifications'
             }).then(function(notificationRes) {
-              //$rootScope.$broadcast('sent:a:frndreq', 1);
-                $rootScope.notificationSocket.emit('updateNotificationCount', notificationsMeta);
-
+              console.log(notificationRes);
+              $rootScope.$broadcast('sent:a:frndreq', 1);
             })
           }, function(failureResponse) {
             console.log(failureResponse);

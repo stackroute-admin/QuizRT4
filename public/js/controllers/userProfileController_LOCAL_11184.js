@@ -140,17 +140,17 @@ angular.module('quizRT')
 
                                         if (value.topicId == $scope.topicVal) {
 
-                                           $scope.topicSortList.push({topicId:value.topicId,gamesPlayed:value.gamesPlayed,name:$scope.searchPeople[i].name,image:$scope.searchPeople[i].imageLink,_id:$scope.searchPeople[i]._id});
-
-                                        }
-                                      });
-                                    }
-                                  });
-                              }
-                            }
+<<<<<<< HEAD
+    }
+    $scope.selectedUser=function(selectedLocal) {
+      $('body').removeClass('modal-open');
+      $('.modal-backdrop').remove();
+      $scope.viewUserProfile(selectedLocal.userId)
+    }
+    $rootScope.notificationSocket.on('updateCounter', function(data) {
       console.log(data);
     });
-
+=======
                                            $scope.topicSortList.push({topicId:value.topicId,gamesPlayed:value.gamesPlayed,name:$scope.searchPeople[i].name,image:$scope.searchPeople[i].imageLink,_id:$scope.searchPeople[i]._id});
 
                                         }
