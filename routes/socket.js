@@ -42,12 +42,14 @@ FriendsManager = require('./friendsManager.js')(redisClient);
         client.on('disconnect', function() {
           if ( client.request.session && client.request.session.user ) {
             GameManager.popPlayer( client.request.session.user ); // pop the user from all the games
+            delUserTTLInfo(client.request.session.user);
             console.log( client.request.session.user + ' disconnected from QuizRT server. Socket Id: ' + client.id);
           }
         });
         client.on('logout', function( userData, done) {
           console.log( client.request.session.user + ' logged out.');
           done( GameManager.popPlayer( client.request.session.user ) );
+          delUserTTLInfo(client.request.session.user);
           client.request.session.user = null;
       		client.request.logout();
         });
@@ -393,4 +395,25 @@ FriendsManager = require('./friendsManager.js')(redisClient);
                       console.log('recieved a notification');
                   });
               });
+
+      /*Storing User Activity in Redis */
+      var activeSessionTimeout = 300 /* 5 mins */
+
+      /*Delete user infor from Redis */
+      var delUserTTLInfo = function(user) {
+         var redisKey = "User:"+user;
+       
+         redisClient.del(redisKey, function(err, result) {
+             if (err)
+              console.log(err, result);
+         }); 
+      }; 
+
+      /*Refresh User Info */
+      refreshUserTTL = function(user, next) {
+        var redisKey = "User:"+user;
+        redisClient.setex(redisKey, activeSessionTimeout, "Active", function(err, result) { 
+           next();
+        }); 
+     };
 }
