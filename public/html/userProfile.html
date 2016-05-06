@@ -125,24 +125,35 @@
 													</div><!-- end topTenTable -->
 
 
-
-													<div class="topTenTable row" ng-show="">
+													<div class="topTenTable row" id="xxx"  ng-show="three" >
 														<div class="thead">
-															<div class="th col-xs-4">Name</div>
-															<div class="th col-xs-4">Topic</div>
-															<div class="th col-xs-4">GamesPlayed</div>
+															<div class="th col-xs-12">Topics List</div>
 														</div>
 														<div class="tbody">
-															<div class="tr-wrap" ng-repeat="item in searchPeople">
-																<div class="tr row" ng-click="toggleSelectFriend($index)">
-																	<div class="td col-xs-4"><label><a href="#" class = "link" ng-click="selectedUser(item)" >{{item.name}}</a><label></div>
-																		<div class="td col-xs-4"><label>{{item.topicId}}<label></div>
-																			<div class="td col-xs-4"><label>{{item.totalGames}}<label></div>
+															<div class="tr-wrap" ng-if="user" ng-repeat="topic in topicsData">
+																<div class="td col-xs-12"><label ng-click="selectedTopic(topic._id);userData();showFour()" ><span>{{topic._id}}</span></label></div>
+															</div>
+														</div><!-- end tbody-->
+													</div><!-- end topTenTable -->
+
+													<div class="topTenTable row" ng-show="four">
+														<div class="thead">
+															<div class="th col-xs-3">Image</div>
+															<div class="th col-xs-3">Name</div>
+															<div class="th col-xs-3">Topic</div>
+															<div class="th col-xs-3">GamesPlayed</div>
+														</div>
+														<div class="tbody">
+															<div class="tr-wrap" ng-if="user" ng-repeat="item in topicSortList | orderBy:'-gamesPlayed'">
+																<div class="tr row"  ng-click="toggleSelectFriend($index)">
+																	<div class="td col-xs-3"><label><img src="{{item.image}}" alt="UserImage"/></label></div>
+																	<div class="td col-xs-3"><label><a href="#" class = "link" ng-click="selectedUser(item)" >{{item.name}}</a><label></div>
+																		<div class="td col-xs-3"><label>{{item.topicId}}<label></div>
+																			<div class="td col-xs-3"><label>{{item.gamesPlayed}}<label></div>
 																			</div>
 																		</div>
 																	</div><!-- end tbody-->
 																</div><!-- end topTenTable -->
-
 															</div><!-- end modal-body -->
 														</div><!-- /.modal-content -->
 													</div><!-- /.modal-dialog -->
@@ -237,23 +248,19 @@
 							</div>
 						</section><!--  End invitations Section -->
 
-
-						<!--  Invitations Section -->
 						<section>
 							<div class="row sectionHeader">Friends</div>
-							<div class="row topic-info" ng-hide="friends.length > 0">
-								Inbox is empty.
-							</div>
 							<div class="row topic-info" ng-show="friends.length > 0">
-								{{friends}}
-					</div> <!-- end topicinfo row -->
+								<div class="friendsHolder"  ng-repeat="friend in friends">
+									<div class="topic-panel panel panel-default">
+										<div class="panel-body content">
+											<a><img ng-src="{{friend.imageLink}}" ng-click="viewUserProfile(friend.userId)"></a>
+										</div>
+									</div>
+								</div><!-- end friendsHolder-->
+							</div> <!-- end friendsinfo row -->
 
-					<div id="foot" class="row">
-						<div col-xs-12 class="play-button-bar">
-							<button class="play-now-button btn btn-success" ng-click="redirectTo('userTeams')">Show All</button>
-						</div>
-					</div>
-				</section><!--  End invitations Section -->
+						</section><!--  End friends Section -->
 
 
 						<!--  Tournament Section -->
@@ -284,13 +291,6 @@
 			</div><!-- end container -->
 
 			<!-- All Javascript at the bottom of the page for faster page loading -->
-
-			<!-- First try for the online version of jQuery-->
-
-
-			<!-- If no online access, fallback to our hardcoded version of jQuery -->
-
-
 
 			<!-- Custom JS -->
 			<!-- <script src="/js/userprofile.js"></script> -->

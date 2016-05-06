@@ -71,6 +71,21 @@ friendshipSchema.statics.getAcceptanceState = function getAcceptanceState(users)
   return deferred.promise;
 };
 
+friendshipSchema.statics.getFriendsListData = function getFriendsListData(userId){
+  var deferred = Q.defer();
+  this.model('friendship').getFriends(userId).then(function(friends){
+    var userIds = profile.find({userId : { $in : _.values(friends) }})
+    .select({'_id' : 1 , 'imageLink' : 1 , 'userId' : 1})
+    .exec(function(err,docs){
+      if(err){
+        console.log(err)
+      }
+      deferred.resolve(docs);
+    })
+  });
+  return deferred.promise;
+}
+
 Friendship = mongoose.model('friendship', friendshipSchema,'friendship_Collection');
 
 module.exports = Friendship;

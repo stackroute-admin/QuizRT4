@@ -207,6 +207,7 @@ angular.module('quizRT')
       $rootScope.friendUser.acceptanceState = successResponse.data.isfriend == null ? undefined : successResponse.data.isfriend["acceptanceState"];
       $rootScope.friendUser.buttonText = $rootScope.friendUser.acceptanceState == 0 ? 'Request Sent' : $rootScope.friendUser.acceptanceState == 1 ? 'Friends' : $rootScope.friendUser.acceptanceState == 2 ? 'Cannot Send Request' : 'Send Friend Request'
       $rootScope.friendUser.disableButton = $rootScope.friendUser.acceptanceState != undefined;
+      $rootScope.friendUser.friends = successResponse.data.friends;
       $scope.friendUser.topicsFollowed = [];
       if ($rootScope.friendUser.topicsPlayed != null) {
         for (var i = 0; i < $rootScope.friendUser.topicsPlayed.length; i++) {
@@ -222,8 +223,6 @@ angular.module('quizRT')
   };
 
   $scope.sendFriendRequest = function(currentUserProfile) {
-    if (currentUserProfile) {
-      if ($rootScope.friendUser.acceptanceState == undefined) {
         var friendshipData = {
           userIds: [],
           acceptanceState: 0,
@@ -251,13 +250,27 @@ angular.module('quizRT')
           }).then(function(notificationRes) {
             console.log(notificationRes);
             $rootScope.$broadcast('sent:a:frndreq', 1);
-          })
-        }, function(failureResponse) {
+          }
+      , function(failureResponse) {
           console.log(failureResponse);
         })
-      };
-    }
+    })
   };
+
+    $scope.Unfriend = function(user) {
+      var currentUserProfile = $rootScope.loggedInUser._id;
+      var friendUserId = user._id
+      $http({
+        method: 'POST',
+        data: {
+            friendUserId,currentUserProfile
+        },
+        url: 'userProfile/userSettings/unfriendUser'
+      }).
+      then(function(response){
+        $scope.viewUserProfile(user.userId)
+      })
+    }
 
   $scope.Unfriend = function(user) {
     var currentUserProfile = $rootScope.loggedInUser._id;
