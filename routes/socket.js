@@ -22,7 +22,6 @@ var GameManagerClass = require('./gameManager/gameManager.js'),
     uuid= require('node-uuid');
 
 module.exports = function(server,sessionMiddleware,redisClient) {
-
 FriendsManager = require('./friendsManager.js')(redisClient);
 
   var io = require('socket.io')(server);

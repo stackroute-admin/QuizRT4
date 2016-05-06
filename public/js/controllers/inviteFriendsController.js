@@ -46,22 +46,25 @@ angular.module('quizRT')
        $rootScope.isPlayingAGame = true; // to hide the footer-nav while playing a game
        $rootScope.firstUser=true;
        $scope.socket.emit('getUrl',$rootScope.loggedInUser);
-       $scope.socket.on('catchUrl',function(data){
-        if(data){
-          $rootScope.playGame.url=data;
-          console.log($rootScope.playGame.url);
-        }
-       });
-       $http.post( '/topicsHandler/topic/'+ topicId )
-         .then( function( successResponse ) {
-           $location.path( '/quizPlayer/'+$rootScope.playGame.topicName+'/'+$rootScope.playGame.topicId+'/'+$rootScope.playGame.url );
-         }, function( errorResponse ) {
-           console.log(errorResponse.data.error);
-         });
+     }
+   };
+     $scope.socket.once('catchUrl',function(data){
+       console.log("once--------"+data);
+       if(data){
+         $rootScope.playGame.url=data;
+         console.log($rootScope.playGame.url);
 
-        $rootScope.socket.emit("sendInvitedFriends",{'invitedFriendsList':$scope.selectedFriends,'url':$rootScope.playGame.url});
-      } 
-    };
+         $http.post( '/topicsHandler/topic/'+ $rootScope.playGame.topicId )
+           .then( function( successResponse ) {
+             $location.path( '/quizPlayer/'+$rootScope.playGame.topicName+'/'+$rootScope.playGame.topicId+'/'+$rootScope.playGame.url );
+           }, function( errorResponse ) {
+             console.log(errorResponse.data.error);
+           });
+
+         var obj = {'invitedFriendsList':$scope.selectedFriends, 'url':$rootScope.playGame.url};
+         $rootScope.socket.emit("sendInvitedFriends", obj);
+       }
+    });
 
     $scope.toggleSelectFriend = function(index) {
       console.log("Selected id", $scope.onlineFriends[index]);
