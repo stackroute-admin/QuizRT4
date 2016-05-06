@@ -26,9 +26,8 @@
   font-family:'Roboto Condensed', sans-serif;
   color:#FFF;
   background: #27ae60;
-  padding-left: 30px;
-  margin-right: -50px;
-  margin-left: 20px;
+  padding-left: 10px;
+  margin-left: 10px;
   border-radius: 5px;
 }
 .profile .badge-img{
@@ -42,8 +41,8 @@
   padding-left: 10px;
 }
 .streak-row{
-  padding-top: 20px;
+  padding-top: 30px;
 }
 .streak-details{
-  padding-top: 10px;
+  padding-top: 15px;
 }
