@@ -118,8 +118,6 @@ router.get('/profileData/:userId' ,function(req,res){
           res.json({ error: null, user:profileData , isfriend  , friends });
         })
       })
-
-
     }
   })
 });
