@@ -172,13 +172,15 @@ router.get('/getCurrentGameStat', function(req, res, next) {
                     })
                     // now final touchup to "tempObj"
                     for (var k in tempObj){
-                        var vCount = tempObj[k]["Visit Count"];
-                        var gpCount = tempObj[k]["Game Played Count"];
-                        resultArr.push({
-                                        "Month": k,
-                                        "Visit Count": vCount,
-                                        "Game Played Count": gpCount
-                                    });
+                        if( k !== "undefined" ){
+                            var vCount = tempObj[k]["Visit Count"];
+                            var gpCount = tempObj[k]["Game Played Count"];
+                            resultArr.push({
+                                            "Month": k,
+                                            "Visit Count": vCount,
+                                            "Game Played Count": gpCount
+                                        });
+                        }
                     }
                     // res.json([{"Month":"April","Visit Count":8,"Game Played Count":8},
                     //     {"Month":"May","Visit Count":12,"Game Played Count":20},

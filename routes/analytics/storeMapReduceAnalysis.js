@@ -101,7 +101,7 @@ module.exports = {
             if (!collectionData) {
                 console.log("No item found, creating collectionData item");
                 // add consecutiveCount  for login
-                collectionData.consecutiveCount = 1;
+                newRec.consecutiveCount = 1;
                 new mapReduceObjVisit(newRec).save(function(err){
                     if(err){
                         console.log("Error updating data");
@@ -113,7 +113,7 @@ module.exports = {
                 done( { 'error': 'dbErr-NoItemFound'} );
             }
             else if (collectionData.length === 0){
-                collectionData.consecutiveCount = 1;
+                newRec.consecutiveCount = 1;
                 console.log("Zero found, creating collectionData item");
                 new mapReduceObjVisit(newRec).save(function(err){
                     if(err){
