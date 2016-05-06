@@ -276,4 +276,48 @@ angular.module('quizRT', ['ngRoute','ngAnimate', 'ngCookies','angular-c3-simple'
         .otherwise({
           redirectTo : '/404'
         });
+    })
+    .service('$ajaxService', function($http){
+      this.getAllBadges = function(data, callback) {
+        $http({
+          url: '/badgesHandler',
+          data: data,
+          // dataType: 'json',
+          method: 'post'
+        }).then(function(results) {
+          callback(null,results);
+        }, function errorCall(data) {
+          callback(data,null);
+        });
+      };
+      this.getBadgesById = function(data, callback) {
+        $http({
+          url: '/badgesHandler',
+          data: data,
+          // dataType: 'json',
+          method: 'post'
+        }).then(function(results) {
+          callback(null,results);
+        }, function errorCall(data) {
+          callback(data,null);
+        });
+      };
+    })
+    .service('$badges',function(){
+      var allBadges = [];
+      var userBadges = [];
+      return{
+        getAllBadges : function(){
+          return allBadges;
+        },
+        getUserBadges : function(){
+          return userBadges;
+        },
+        setAllBadges : function(value){
+           allBadges = value;
+        },
+        setUserBadges : function(value){
+          userBadges = value;
+        }
+      }
     });
