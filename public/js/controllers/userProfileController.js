@@ -18,7 +18,6 @@
 angular.module('quizRT')
     .controller('userProfileController',function($http,$scope,$rootScope,$location,ngToast,$ajaxService, $badges){
 
-
       function init(){
         $ajaxService.getBadgesById({badgeIds: $rootScope.loggedInUser.badges,
         requestType:'getBadgesById'},
@@ -31,7 +30,6 @@ angular.module('quizRT')
             lastWonBadge : []
           });
           $scope.lastWonBadge = $scope.userBadgeArr[$scope.userBadgeArr.length-1];
-          console.log($scope.lastWonBadge);
         });
       }
 

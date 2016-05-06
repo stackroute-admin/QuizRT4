@@ -37,8 +37,9 @@ angular.module('quizRT')
         $location.path('/login');
       } else {
         $rootScope.hideFooterNav = false;
-        $rootScope.stylesheetName="badges";
+        //$rootScope.stylesheetName="badges";
         //$scope.badgeUrl="../images/badges/handshake.png";
         init();
+        
       }
   });
