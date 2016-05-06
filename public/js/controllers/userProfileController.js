@@ -184,6 +184,7 @@ angular.module('quizRT')
                     var streakToDate =day+" "+monthNames[monthIndex]+" "+year;
                     $rootScope.loggedInUser['streakDays']=len;
                     $rootScope.loggedInUser['streakDate']='('+streakFromDate+' - '+streakToDate+')';
+                    $rootScope.loggedInUser['bestScore'] = response.data[i].userStreak.bestScore;
                   }
                   else{
                     $rootScope.loggedInUser['streakDate']='';
@@ -203,6 +204,7 @@ angular.module('quizRT')
                     var streakToDate =day+" "+monthNames[monthIndex]+" "+year;
                     $rootScope.loggedInUser['streakDaysCur']=lenC;
                     $rootScope.loggedInUser['streakDateCur']='('+streakFromDate+' - '+streakToDate+')';
+                    $rootScope.loggedInUser['bestScoreCur'] = response.data[i].userStreakCurrent.bestScore;
                   }
                   else{
                     $rootScope.loggedInUser['streakDateCur']='';
