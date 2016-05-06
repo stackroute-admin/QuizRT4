@@ -87,4 +87,20 @@
 				</div>
 
 			</div> <!-- end topicinfo row -->
+			<section>
+				<div class="row sectionHeader">Friends</div>
+				<div class="row topic-info" ng-show="friendUser.friends.length > 0">
+					<div class="friendsHolder"  ng-repeat="friend in friendUser.friends">
+						<div class="topic-panel panel panel-default">
+							<div class="panel-body content td col-xs-4">
+								<a><img ng-src="{{friend.imageLink}}" ng-click="viewUserProfile(friend.userId)"></a>
+							</div>
+						</div>
+					</div><!-- end friendsHolder-->
+		</div> <!-- end friendsinfo row -->
+
+
 	</div><!-- end container -->
+
+
+</section><!--  End friends Section -->

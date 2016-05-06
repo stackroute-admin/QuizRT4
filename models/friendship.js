@@ -9,9 +9,9 @@ friendshipSchema = new mongoose.Schema({
 });
 
 function getUserIds(userToSearch,user){
-   var deferred = Q.defer();
-   var doc = [];
-   mongoose.model('friendship')
+  var deferred = Q.defer();
+  var doc = [];
+  mongoose.model('friendship')
   .find({userIds : userToSearch , acceptanceState : 1})
   .populate('userIds')
   .exec(function(err,docs){
@@ -56,19 +56,34 @@ friendshipSchema.statics.getAcceptanceState = function getAcceptanceState(users)
     }
     var userIds = _.pluck(docs,'_id');
     userIds.map(function(e){
-        mongoose.model('friendship')
-                .findOne({userIds : { $all : userIds}}, {'acceptanceState' : 1 , '_id' : 0 })
-                .exec(function(err,docs){
-                  if (err) {
-                    console.log(err);
-                  }
+      mongoose.model('friendship')
+      .findOne({userIds : { $all : userIds}}, {'acceptanceState' : 1 , '_id' : 0 })
+      .exec(function(err,docs){
+        if (err) {
+          console.log(err);
+        }
 
-                  deferred.resolve(docs);
-                });
+        deferred.resolve(docs);
+      });
     })
   });
   return deferred.promise;
 };
+
+friendshipSchema.statics.getFriendsListData = function getFriendsListData(userId){
+  var deferred = Q.defer();
+  this.model('friendship').getFriends(userId).then(function(friends){
+    var userIds = profile.find({userId : { $in : _.values(friends) }})
+    .select({'_id' : 1 , 'imageLink' : 1 , 'userId' : 1})
+    .exec(function(err,docs){
+      if(err){
+        console.log(err)
+      }
+      deferred.resolve(docs);
+    })
+  });
+  return deferred.promise;
+}
 
 Friendship = mongoose.model('friendship', friendshipSchema,'friendship_Collection');
 

@@ -196,6 +196,7 @@ angular.module('quizRT')
 
 
     $scope.viewUserProfile = function(user) {
+      console.log(user);
       $http({
         method: 'GET',
         url: '/userProfile/profileData/' + user,
@@ -209,6 +210,7 @@ angular.module('quizRT')
         $rootScope.friendUser.buttonText = $rootScope.friendUser.acceptanceState == 0 ? 'Request Sent' : $rootScope.friendUser.acceptanceState == 1 ? 'Friends' : $rootScope.friendUser.acceptanceState == 2 ? 'Cannot Send Request' : 'Send Friend Request'
         $rootScope.friendUser.disableButton = $rootScope.friendUser.acceptanceState != undefined;
         $scope.friendUser.topicsFollowed = [];
+        $scope.friendUser.friends = successResponse.data.friends;
         if ($rootScope.friendUser.topicsPlayed != null) {
           for (var i = 0; i < $rootScope.friendUser.topicsPlayed.length; i++) {
             if ($rootScope.friendUser.topicsPlayed[i].isFollowed) {
@@ -223,15 +225,13 @@ angular.module('quizRT')
     };
 
     $scope.sendFriendRequest = function(currentUserProfile) {
-      if (currentUserProfile) {
-        if ($rootScope.friendUser.acceptanceState == undefined) {
           var friendshipData = {
             userIds: [],
             acceptanceState: 0,
             lastUpdatedDate: new Date()
           };
           friendshipData.userIds.push($rootScope.loggedInUser);
-          friendshipData.userIds.push(currentUserProfile); // to do : Should work on retrieving the Object
+          friendshipData.userIds.push(currentUserProfile);
           $http({
             method: 'POST',
             data: friendshipData,
@@ -256,8 +256,6 @@ angular.module('quizRT')
           }, function(failureResponse) {
             console.log(failureResponse);
           })
-        };
-      }
     };
 
     $scope.Unfriend = function(user) {

@@ -40,7 +40,10 @@ router.get('/profileData', function(req, res, next) {
           res.writeHead(500, {'Content-type': 'application/json'});
           res.end(JSON.stringify({ error: 'We could not find you in our database. Try again later.'}) );
         }else {
-          res.json({ error: null, user:profileData });
+          FriendShip.getFriendsListData(req.session.user).then(function(friends){
+              res.json({ error: null, user:profileData , friends : friends });
+          })
+
         }
       });
     }
@@ -97,7 +100,6 @@ router.get('/searchPeople',function(req,res,next){
 
 router.get('/profileData/:userId' ,function(req,res){
   var user = req.params.userId;
-  console.log(user);
   Profile.findOne({userId: user})
   .populate("topicsPlayed.topicId")
   .exec(function(err,profileData){
@@ -110,9 +112,14 @@ router.get('/profileData/:userId' ,function(req,res){
       res.writeHead(500, {'Content-type': 'application/json'});
       res.end(JSON.stringify({ error: 'We could not find the user in our database. Try again later.'}) );
     }else {
-      Friendship.getAcceptanceState({user : req.session.user,frienduser :user}).then(function(isfriend){
-        res.json({ error: null, user:profileData , isfriend  });
+      FriendShip.getFriendsListData(user).then(function(friends){
+        console.log(friends);
+        Friendship.getAcceptanceState({user : req.session.user,frienduser :user}).then(function(isfriend){
+          res.json({ error: null, user:profileData , isfriend  , friends });
+        })
       })
+
+
     }
   })
 });
