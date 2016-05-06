@@ -87,6 +87,15 @@ app.use( function( req, res, next ) {
   }
 });
 
+/* Refresh User TTL, used to identify active users */
+app.use( function( req, res, next) {
+  if (req.session && req.session.user) {
+     refreshUserTTL(req.session.user, next)
+  }
+  else {
+     next();
+  }
+}); 
 app.use('/userProfile', profileHandler);
 app.use('/topicsHandler', topicsHandler);
 app.use('/tournamentHandler', tournamentHandler);

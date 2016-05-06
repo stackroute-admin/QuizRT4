@@ -1,59 +1,58 @@
 var User = require('../models/user.js'),
-    Friend = require('../models/friendship.js'),
-    Profile = require('../models/profile.js');
+  Friend = require('../models/friendship.js'),
+  Profile = require('../models/profile.js');
 
 
 module.exports = function(redisClient) {
 
-var getUserDetails = function(client, onlineUsers, myuserId) {
+  getOnlineFriends = function(client, myuserId) {
 
     var onlineFriends = [];
     var friends = [];
 
     Friend.getFriends(myuserId)
-          .then(function(friends) {
-             if (friends.length != 0) {
-                var updated = 0;
-		friends.forEach(function(profile) {
-                 Profile.findOne({userId: profile}). then (function (profile) {
-                    var onlineFriend = {id:profile.userId , name: profile.name, image: profile.imageLink, badge: profile.badge, wins:profile.wins, country:profile.country};
+      .then(function(friends) {
+        if (friends.length != 0) {
+          var updated = 0;
+          friends.forEach(function(profile) {
+            Profile.findOne({
+              userId: profile
+            }).then(function(profile) {
+              var onlineFriend = {
+                id: profile.userId,
+                name: profile.name,
+                image: profile.imageLink,
+                badge: profile.badge,
+                wins: profile.wins,
+                country: profile.country
+              };
 
-		    if (onlineUsers.indexOf(profile.userId) != -1)
-		      onlineFriend.online = true;
-		    else
-		      onlineFriend.online = false;
+              /* Check in Redis if the User is Active */
+              var redisKey = "User:" + profile.userId;
+              redisClient.exists(redisKey, function(err, result) {
+                if (result != 1) {
+                  onlineFriend.online = false;
+                } else {
+                  onlineFriend.online = true;
+                }
+                onlineFriends.push(onlineFriend);
 
-		    onlineFriends.push(onlineFriend);
-		    onlineFriends.sort(function(a,b) {
-		       return (b.online - a.online);
-		    });
+                if (++updated == friends.length) {
+                  onlineFriends.sort(function(a, b) {
+                    return (b.online - a.online);
+                  });
+                  client.emit('onlineFriends', onlineFriends);
+                  console.log("emitted OnlineFriends");
+                }
 
-                    if (++updated == friends.length) {
-	                 client.emit('onlineFriends', onlineFriends);
-	                 console.log("emitted OnlineFriends");
-                    }
-                });
+              });
 
-	      });
+            });
 
-	    };
-   });
- };
-
-getOnlineFriends = function(client, myuserId) {
-    var onlineUsers = [];
-    var updated = 0;
-    redisClient.keys("sess:*", function(error, keys) {
-       keys.forEach(function(key) {
-         redisClient.get(key, function(error, session) {
-            session = JSON.parse(session);
-            onlineUsers.push (session.user);
-            if (++updated == keys.length){
-               getUserDetails(client, onlineUsers, myuserId);
-            }
           });
-       });
-    });
- };
+
+        };
+      });
+  };
 
 };

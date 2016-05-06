@@ -5,12 +5,13 @@ var Notification = require('../models/notifications');
 
 router.route('/')
   .get(function(req, res) {
-    Notification.find({
-      'metaData.to': req.session.user
-    }).where('seen').equals(false).select('_id metaData').where('seen').equals(false).sort('-dateAdded').exec(function(err, data) {
-      res.send(data);
-    });
-
+		  if (req.session && req.session.user) { 
+		  Notification.find({
+				  'metaData.to': req.session.user
+				  }).where('seen').equals(false).select('_id metaData').where('seen').equals(false).sort('-dateAdded').exec(function(err, data) {
+					  res.send(data);
+					  });
+		  }
 
   })
   .post(function(req, res) {

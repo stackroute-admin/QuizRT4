@@ -10,11 +10,12 @@ angular.module('quizRT')
         console.log("Trigger get online Friends", $rootScope.loggedInUser);
         $rootScope.socket.emit('getOnlineFriends', $rootScope.loggedInUser);
 
-         $rootScope.socket.on('onlineFriends', function( data) {
-           console.log("Got Friends",data, "online", $scope.onlineFriends);
-           $scope.onlineFriends = data;
-        });
     };
+
+    $rootScope.socket.on('onlineFriends', function( data) {
+      console.log("Got Friends",data, "online", $scope.onlineFriends);
+      $scope.onlineFriends = data;
+    });
 
     $scope.reset = function() {
       console.log("reset friends list");
