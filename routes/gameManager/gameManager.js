@@ -260,7 +260,6 @@ var GameManager = function() {
                 game.players.forEach(function(userObj) {
                     new badgeEligibilityCheck(userObj.userId,'gameFinish',gameData).check(gameData.gameClient);
                 });
-
             });
         });
       }

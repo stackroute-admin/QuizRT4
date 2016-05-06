@@ -15,14 +15,14 @@ badgeEligibilityCheck.prototype.check = function (gameClient) {
   var eventExecutor=new EventExecutor(new Event(this.userId,this.eventType,this.gameData));
   eventExecutor.execute((function (badgeId) {
       //console.log(badgeId);
-    new BadgesManager().addBadgesToUser(this.userId, badgeId, function(err,doc) {
+    new BadgesManager().addBadgesToUser(this.userId, badgeId, (function(err,doc) {
       if(err)
           console.log(err);
       //TODO socket stuffs
     //   gameData.emit()
     console.log("emitingg...");
-      //gameClient.emit('gameBadge',{userId:this.userId,badgeId:badgeId});
-    });
+    gameClient.emit('gameBadge',{userId:this.userId,badgeId:badgeId});
+  }).bind(this));
   }).bind(this));
 };
 module.exports=badgeEligibilityCheck;

@@ -61,19 +61,23 @@ angular.module('quizRT')
           ngToast.create({
             className :"warning",
             content : "You have won the badge!!!",
-            dismissButton: true
+            dismissButton: true,
+            timeout:60000
           });
         }
         $rootScope.socket.on('gameBadge',function(data) {
+          console.log('hello from tost'+data.userId);
           if($rootScope.loggedInUser.userId===data.userId){
               console.log("user is " + data.userId);
               console.log("badge is "+ data.badgeId);
               ngToast.create({
                 className :"warning",
-                content : "You have won the "+data.badgeId+" badge!!!"
+                content : "You have won the "+data.badgeId+" badge!!!",
+                dismissButton: true,
+                timeout:60000
               });
-              $rootScope.loggedInUser.badgeCount = 12;
-              console.log($rootScope.loggedInUser.badgeCount);
+              //$rootScope.loggedInUser.badgeCount = 12;
+              //console.log($rootScope.loggedInUser.badgeCount);
           }
           else {
               console.log("I am not the user for this badge");
