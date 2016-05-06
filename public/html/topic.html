@@ -1,0 +1,121 @@
+<!--
+//Copyright {2016} {NIIT Limited, Wipro Limited}
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+//
+//   Name of Developers  Raghav Goel, Kshitij Jain, Lakshay Bansal, Ayush Jain, Saurabh Gupta, Akshay Meher
+//
+-->
+<div class="container fullHeight">
+  <div class="content">
+    <div class="">
+      <div class="topic-header">
+        <h1>{{topic.topicName}}<br><small>{{topic.topicDescription}}</small></h1>
+      </div><!--end topic-header-->
+
+
+      <div class="row">
+        <div class="col-xs-6 topic-icon">
+          <img ng-src="{{topic.topicIcon}}"  class="img-responsive" alt="">
+          <div class="follow">
+            <h3>
+            <span title="Unfollow this topic" class="glyphicon glyphicon-heart" ng-show="userTopicFollowState" ng-click="followUnfollow()" style="color: red;"></span>
+            <span title="Follow this topic" class="glyphicon glyphicon-heart-empty" ng-hide="userTopicFollowState" ng-click="followUnfollow()"></span>
+            <span>{{topicFollowers}}</span>
+          </h3>
+          </div>
+        </div><!--end topic-icon-->
+        <div class="col-xs-6 topic-user">
+          <div class="wins row">
+            <div class="col-xs-8">
+              <h4>#Wins</h4>
+            </div>
+            <div class="col-xs-4" id="numwins">
+              <h4>{{topic.userStats.topicWins}}</h4>
+            </div>
+          </div> <!--end wins-->
+          <div class="losses row">
+            <div class="col-xs-8">
+              <h4>#Losses</h4>
+            </div>
+            <div class="col-xs-4" id="numloss">
+              <h4>{{topic.userStats.topicLosses}}</h4>
+            </div>
+          </div> <!--end losses-->
+          <div class=" losses row">
+            <div class="progress col-xs-10 col-sm-10 col-md-10 col-lg-10">
+              <div class="progress-bar progress-bar-striped progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" id="level-bar" style="width:{{topic.userStats.levelPercentage}}%">
+                     <span id="levelperc">{{topic.userStats.levelPercentage}}%</span>
+                </div>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-lg-2">  <button class="btn btn-info">Level <span id="levelnum">{{topic.userStats.topicLevel}}</span></button><button class="btn btn-success">Points: <span id="exp">{{topic.userStats.points}}</span></button></div>
+          </div>
+
+        </div> <!--end topic-user-->
+      </div><!--end row-->
+      <hr>
+    </div><!--end topic-info-->
+    <div id="foot" class="row">
+     <div  class="col-xs-12 play-button-bar">
+      <button id="startGameButton" role="button" class="btn btn-success" ng-click="playGame(topicId)">Play Now</button>
+
+       <div class="InviteFriends" ng-controller="inviteFriendsController">
+         <button href="#inviteFriends" role="button" class="btn btn-info" ng-click="getOnlineFriends()" data-toggle="modal"><span class="glyphicon glyphicon-thumbs-up"></span> Play With Friends</button>
+          <div class="modal fade" id="inviteFriends" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Invite Your Friends</h4>
+                </div>
+                <div class="modal-body">
+
+                  <div class="topTenTable row">
+                    <div class="thead header">
+                      <div class="th col-xs-3">Image</div>
+                      <div class="th col-xs-3">Name</div>
+                      <div class="th col-xs-2">Country</div>
+                      <div class="th col-xs-2">Badge</div>
+                      <div class="th col-xs-2">wins</div>
+
+                    </div>
+                    <div class="tbody">
+                      <div class="tr-wrap" ng-repeat="friend in onlineFriends">
+                        <div class="tr row friendslist" ng-click=" friend.online &&  toggleSelectFriend($index)" ng-class="{online: (friend.online == true), selected: (friend.selected == true) }" >
+                          <div class="td col-xs-3 image"><img src = {{friend.image}} alt="User Image"></img></div>
+                          <div class="td col-xs-3 data">{{friend.name}}</div>
+                          <div class="td col-xs-2 data">{{friend.country}}</div>
+                          <div class="td col-xs-2 data">{{friend.badge}}</div>
+                          <div class="td col-xs-2 data">{{friend.wins}}</div>
+                        </div>
+                      </div>
+                    </div><!-- end tbody -->
+
+                    <div class="alert alert-warning" ng-show ="selectedFriends.length >= maxFriends">
+                      <strong>Warning!</strong> Can Invite maximum of {{selectedFriends.length}} Friends.
+                    </div>
+                  </div><!-- end Table -->
+                </div><!-- end modal-body -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-info pull-left" ng-click="Refresh()"><span class="glyphicon glyphicon-refresh"></span></button>
+                  <button type="button" class="btn btn-info" ng-click="inviteFriends(topicId)">Send Invite</button>
+                  <button type="button" class="btn btn-default" ng-click="reset()" data-dismiss="modal">Close</button>
+                </div>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+       </div><!-- /.modal -->
+      </div>
+    </div>
+   </div>
+  </div><!--end content-->
+</div><!--end container-->
