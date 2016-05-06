@@ -574,12 +574,16 @@ module.exports = {
                      deferred.resolve(0) ;
                  }
                  else {
-                     if(result.consWinCount){
-                         deferred.resolve(result.consWinCount) ;
-                     }
-                     else {
-                         deferred.resolve(0) ;
-                     }
+                     if(result)
+                         if(result.consWinCount){
+                             deferred.resolve(result.consWinCount) ;
+                         }
+                         else {
+                             deferred.resolve(0) ;
+                         }
+                    else {
+                        deferred.resolve(0) ;
+                    }
                  }
              });
           return deferred.promise;

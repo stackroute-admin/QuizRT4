@@ -5,12 +5,25 @@ var express = require('express'),
     mongoose = require('mongoose');
 
 
-router.get('/getAllBadges', function (req, res) {
-  badgesManager.fetchAllBadges(function(err, docs){
-    if(err)
-      console.log(err);
-    res.json(docs);
-  });
+router.post('/', function (req, res) {
+  var userId = req.body.userId;
+  switch(req.body.requestType){
+    case 'getAllBadges' :
+      badgesManager.fetchAllBadges(function(err, docs){
+        if(err)
+          console.log(err);
+        res.json(docs);
+      });
+      break;
+    case 'getBadgesById' :
+      var badgeIds = req.body.badgeIds;
+      badgesManager.getBadgesById(badgeIds, function(err, docs){
+        if(err)
+          console.log(err);
+        res.json(docs);
+      });
+      break;
+  }
 });
 
 module.exports = router;

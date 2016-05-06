@@ -16,7 +16,23 @@
 //                        + Anil Sawant
 
 angular.module('quizRT')
-    .controller('userProfileController',function($http,$scope,$rootScope,$location,ngToast){
+    .controller('userProfileController',function($http,$scope,$rootScope,$location,ngToast,$ajaxService, $badges){
+
+      function init(){
+        $ajaxService.getBadgesById({badgeIds: $rootScope.loggedInUser.badges,
+        requestType:'getBadgesById'},
+          function(err, result){
+          if(err)
+            console.log(err);
+          $badges.setUserBadges(result.data);
+          $scope = angular.extend($scope,{
+            userBadgeArr : $badges.getUserBadges(),
+            lastWonBadge : []
+          });
+          $scope.lastWonBadge = $scope.userBadgeArr[$scope.userBadgeArr.length-1];
+        });
+      }
+
       // redirect to login page if the user's isAuthenticated cookie doesn't exist
       if( !$rootScope.isAuthenticatedCookie ){
         $rootScope.logInLogOutErrorMsg = 'You are logged out. Kindly Login...';
@@ -99,6 +115,7 @@ angular.module('quizRT')
           $rootScope.fakeMyName = $rootScope.loggedInUser.name;
           $rootScope.topperImage = $rootScope.loggedInUser.imageLink;
           $rootScope.userIdnew = $rootScope.loggedInUser.userId;
+          init();
           $http({method : 'GET',url:'/analyticsDataHandler/getGameVisitStatForUser',
                   params:{
                               userId:$rootScope.userIdnew,

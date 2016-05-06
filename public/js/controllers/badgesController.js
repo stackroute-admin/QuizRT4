@@ -15,7 +15,20 @@
 //   Name of Developers Abhishek Kumar , Ghulam Rabbani
 
 angular.module('quizRT')
-    .controller('badgesController',function($http,$scope,$rootScope,$location){
+    .controller('badgesController',function($http,$scope,$rootScope,$location,$badges,$ajaxService){
+
+      function init(){
+        $ajaxService.getAllBadges({requestType:'getAllBadges'},
+          function(err, result){
+          if(err)
+            console.log(err);
+          $badges.setAllBadges(result.data);
+          $scope = angular.extend($scope,{
+            badgeArr : $badges.getAllBadges(),
+            userBadgeArr : $badges.getUserBadges()
+          });
+        });
+      }
 
       // redirect to login page if the user's isAuthenticated cookie doesn't exist
       if( !$rootScope.isAuthenticatedCookie ){
@@ -24,11 +37,9 @@ angular.module('quizRT')
         $location.path('/login');
       } else {
         $rootScope.hideFooterNav = false;
-        $rootScope.stylesheetName="badges";
-
+        //$rootScope.stylesheetName="badges";
         //$scope.badgeUrl="../images/badges/handshake.png";
-        $http.get('badgesHandler/getAllBadges').then(function(response){
-          $scope.badgeArr = response.data;
-        });
+        init();
+        
       }
   });

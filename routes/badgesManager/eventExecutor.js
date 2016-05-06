@@ -45,7 +45,6 @@ EventExecutor.prototype.execute = function (callback) {
         params.userId = userId;
         params.gameData = gameData;
 
-        //console.log(counterEval.getFunction(counters[0], params, true));
         counters.forEach(function(counter){
           asynchrony.add(counter,[counterEval.getFunction(counter, params, true)]);
         });
@@ -57,7 +56,6 @@ EventExecutor.prototype.execute = function (callback) {
         badgeData.forEach(function(badge){
           var dep=new Array(badge.badgeDep);
           dep.push(badge.badgeFunct);
-        //   console.log(dep);
           asynchrony.invoke(dep).then(function(condition) {
             if(condition){
               callback.apply(null,[badge.badgeId]);
