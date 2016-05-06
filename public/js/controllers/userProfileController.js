@@ -221,7 +221,6 @@ angular.module('quizRT')
     });
   };
 
-<<<<<<< HEAD
   $scope.sendFriendRequest = function(currentUserProfile) {
     if (currentUserProfile) {
       if ($rootScope.friendUser.acceptanceState == undefined) {
@@ -244,30 +243,6 @@ angular.module('quizRT')
             from: $rootScope.loggedInUser.userId,
             to: currentUserProfile.userId,
             type: 'FRND',
-=======
-
-    $scope.viewUserProfile = function(user) {
-      console.log(user);
-      $http({
-        method: 'GET',
-        url: '/userProfile/profileData/' + user,
-        params: {
-          userId: user
-        }
-      })
-      .then(function(successResponse) {
-        $rootScope.friendUser = successResponse.data.user;
-        $rootScope.friendUser.acceptanceState = successResponse.data.isfriend == null ? undefined : successResponse.data.isfriend["acceptanceState"];
-        $rootScope.friendUser.buttonText = $rootScope.friendUser.acceptanceState == 0 ? 'Request Sent' : $rootScope.friendUser.acceptanceState == 1 ? 'Friends' : $rootScope.friendUser.acceptanceState == 2 ? 'Cannot Send Request' : 'Send Friend Request'
-        $rootScope.friendUser.disableButton = $rootScope.friendUser.acceptanceState != undefined;
-        $scope.friendUser.friends = successResponse.data.friends;
-        $scope.friendUser.topicsFollowed = [];
-        if ($rootScope.friendUser.topicsPlayed != null) {
-          for (var i = 0; i < $rootScope.friendUser.topicsPlayed.length; i++) {
-            if ($rootScope.friendUser.topicsPlayed[i].isFollowed) {
-              $scope.friendUser.topicsFollowed.push($rootScope.friendUser.topicsPlayed[i]);
-            }
->>>>>>> c92f7e2... Firnd List
           }
           $http({
             method: 'POST',
