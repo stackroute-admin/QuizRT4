@@ -248,19 +248,16 @@
 							</div>
 						</section><!--  End invitations Section -->
 
-						<section>
-							<div class="row sectionHeader">Friends</div>
-							<div class="row topic-info" ng-show="friends.length > 0">
-								<div class="friendsHolder"  ng-repeat="friend in friends">
-									<div class="topic-panel panel panel-default">
-										<div class="panel-body content">
-											<a><img ng-src="{{friend.imageLink}}" ng-click="viewUserProfile(friend.userId)"></a>
-										</div>
-									</div>
-								</div><!-- end friendsHolder-->
-							</div> <!-- end friendsinfo row -->
 
-						</section><!--  End friends Section -->
+								<section ng-show="friends.length > 0">
+									<div class="row sectionHeader">Friends</div>
+									<div class="row topic-info" >
+										<div class="friendList panel-body content td col-xs-4" ng-repeat="friend in friends">
+											<a ng-click="viewUserProfile(friend.userId)"><p class="friendName">{{friend.userId}}</p><img ng-click="viewUserProfile(friend.userId)" class="img-circle img-responsive pull-left" width="120px" height="120px" ng-src="{{friend.imageLink}}"></a>
+										</div>
+									</div> <!-- end friendsinfo row -->
+
+							</section><!--  End friends Section -->
 
 
 						<!--  Tournament Section -->

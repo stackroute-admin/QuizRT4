@@ -55,52 +55,49 @@
 			</div>
 		</div>
 
-			<div class="row sectionHeader">Favourite Topics
-			</div>
-			<div class="row topic-info" ng-hide="friendUser.topicsFollowed.length > 0">
-				You have not followed any topics as yet. How about picking some topics from below.
-			</div>
-			<div class="row topic-info" ng-show="friendUser.topicsFollowed.length > 0">
-				<div class="topicsholder"  ng-repeat="topic in friendUser.topicsFollowed|limitTo:a|orderBy:'-level'">
+		<div class="row sectionHeader">Favourite Topics
+		</div>
+		<div class="row topic-info" ng-hide="friendUser.topicsFollowed.length > 0">
+			You have not followed any topics as yet. How about picking some topics from below.
+		</div>
+		<div class="row topic-info" ng-show="friendUser.topicsFollowed.length > 0">
+			<div class="topicsholder"  ng-repeat="topic in friendUser.topicsFollowed|limitTo:a|orderBy:'-level'">
 
-					<div class="topic-panel panel panel-default">
-						<div class="panel-body content">
+				<div class="topic-panel panel panel-default">
+					<div class="panel-body content">
 
-							<a><img ng-src="{{topic.topicId.topicIcon}}" ng-click="showFollowedTopic(topic.topicId._id)"></a>
-							<span class="badge">{{topic.level}}</span>
+						<a><img ng-src="{{topic.topicId.topicIcon}}" ng-click="showFollowedTopic(topic.topicId._id)"></a>
+						<span class="badge">{{topic.level}}</span>
 
-						</div>
-
-						<div class="panel-footer">
-							<p>{{topic.topicId.topicName}}</p>
-							<span class="win-loss">
-								<span class="wins">{{topic.gamesWon}}</span> /<span class= "played"> {{topic.gamesPlayed}} </span>
-							</span>
-						</div>
 					</div>
-				</div><!-- end topicsholder-->
 
-				<div class="col-xs-3 topicsholder" ng-if="topicsFollowed.length>11">
-					<div>
-						<button ng-if="topicsFollowed.length>=8" ng-click="seeHide(topicsFollowed.length)"><img ng-src="{{btnImg}}" class="img-rounded"></button>
+					<div class="panel-footer">
+						<p>{{topic.topicId.topicName}}</p>
+						<span class="win-loss">
+							<span class="wins">{{topic.gamesWon}}</span> /<span class= "played"> {{topic.gamesPlayed}} </span>
+						</span>
 					</div>
 				</div>
+			</div><!-- end topicsholder-->
 
-			</div> <!-- end topicinfo row -->
-			<section>
-				<div class="row sectionHeader">Friends</div>
-				<div class="row topic-info" ng-show="friendUser.friends.length > 0">
-					<div class="friendsHolders"  ng-repeat="friend in friendUser.friends">
-						<div class="topic-panel panel panel-default">
-							<div class="panel-body content td col-xs-4">
-								<a><img ng-src="{{friend.imageLink}}" ng-click="viewUserProfile(friend.userId)"></a>
-							</div>
-						</div>
-					</div><!-- end friendsHolder-->
-		</div> <!-- end friendsinfo row -->
+			<div class="col-xs-3 topicsholder" ng-if="topicsFollowed.length>11">
+				<div>
+					<button ng-if="topicsFollowed.length>=8" ng-click="seeHide(topicsFollowed.length)"><img ng-src="{{btnImg}}" class="img-rounded"></button>
+				</div>
+			</div>
+
+		</div> <!-- end topicinfo row -->
+
+		<section>
+			<div class="row sectionHeader">Friends</div>
+			<div class="row topic-info" ng-show="friendUser.friends.length > 0">
+				<div class="friendList panel-body content td col-xs-4" ng-repeat="friend in friendUser.friends">
+					<a><p class="friendName">{{friend.userId}}</p><img class="img-circle img-responsive pull-left" width="120px" height="120px" ng-src="{{friend.imageLink}}" ng-click="viewUserProfile(friend.userId)"></a>
+				</div>
+			</div> <!-- end friendsinfo row -->
 
 
-	</div><!-- end container -->
+		</div><!-- end container -->
 
 
-</section><!--  End friends Section -->
+	</section><!--  End friends Section -->
