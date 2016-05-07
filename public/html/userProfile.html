@@ -24,10 +24,10 @@
 			<img ng-src="{{loggedInUser.imageLink}}" class="img-circle img-responsive pull-left">
 			<div class="row">
 				<div class="col-xs-3 col-md-4 col-lg-4">
-					<img ng-src={{lastWonBadge.badgeUrl}} class="img img-responsive pull-left badge-img">
+					<img ng-if="lastWonBadge.badgeUrl" ng-src={{lastWonBadge.badgeUrl}} class="img img-responsive pull-left badge-img">
 				</div>
 				<div class="col-xs-9 col-md-8 col-lg-8">
-					<h4 class="badge-name">{{lastWonBadge.badgeName}}</h4>
+					<h4 ng-if='lastWonBadge.badgeName' class="badge-name">{{lastWonBadge.badgeName}}</h4>
 				</div>
 			</div>
 			<h4 class="user-name">{{loggedInUser.name}}, {{loggedInUser.age}}</h4>
@@ -67,7 +67,7 @@
 			<div class="row streak-row">
 				<div class="col-xs-4" id="current-streak">
 					<span class="glyphicon glyphicon-star glyph"></span>
-					<p>Current Win Streak</p>
+					<p>Current Streak</p>
 				</div>
 				<div class="col-xs-8 streak-details">
 					<span class="glyphicon glyphicon-chevron-right"></span>
@@ -79,7 +79,7 @@
 			<div class="row streak-row">
 				<div class=" col-xs-4" id="streak">
 					<span class="glyphicon glyphicon-certificate glyph"></span>
-					<p>Longest Win Streak</p>
+					<p>Longest Streak</p>
 				</div>
 				<div class=" col-xs-8 streak-details">
 					<span class="glyphicon glyphicon-chevron-right"></span>

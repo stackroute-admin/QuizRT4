@@ -21,7 +21,7 @@ module.exports = {
                 console.log("No item found, creating collectionData item");
                 new mapReduceObj(newRec).save(function(err){
                     if(err){
-                        console.log("Error updating data");
+                        console.log("Error updating data"+err);
                     }
                     else {
                         console.log("Updated Record!!");
@@ -33,7 +33,7 @@ module.exports = {
                 console.log("Zero found, creating collectionData item");
                 new mapReduceObj(newRec).save(function(err){
                     if(err){
-                        console.log("Error updating data");
+                        console.log("Error updating data"+err);
                     }
                     else {
                         console.log("Updated Record!!");
@@ -79,7 +79,7 @@ module.exports = {
                 // Save data once  dataset is modified
                 collectionData.save(function(err){
                     if(err){
-                        console.log("Error updating data");
+                        console.log("Error updating data"+err);
                     }
                     else {
                         console.log("Record Updated!");
@@ -104,7 +104,7 @@ module.exports = {
                 newRec.consecutiveCount = 1;
                 new mapReduceObjVisit(newRec).save(function(err){
                     if(err){
-                        console.log("Error updating data");
+                        console.log("Error updating data" +err);
                     }
                     else {
                         console.log("Updated Record!!");
@@ -117,7 +117,7 @@ module.exports = {
                 console.log("Zero found, creating collectionData item");
                 new mapReduceObjVisit(newRec).save(function(err){
                     if(err){
-                        console.log("Error updating data");
+                        console.log("Error updating data"+err);
                     }
                     else {
                         console.log("Updated Record!!");
@@ -180,7 +180,7 @@ module.exports = {
                 // Save data once  dataset is modified
                 collectionData.save(function(err){
                     if(err){
-                        console.log("Error updating data");
+                        console.log("Error updating data"+err);
                     }
                     else {
                         console.log("Record Updated!");
@@ -203,7 +203,7 @@ module.exports = {
                 console.log("No item found, creating collectionData item");
                 new mapReduceObjPoint(newRec).save(function(err){
                     if(err){
-                        console.log("Error updating data");
+                        console.log("Error updating data"+err);
                     }
                     else {
                         console.log("Updated Record!!");
@@ -215,7 +215,7 @@ module.exports = {
                 console.log("Zero found, creating collectionData item");
                 new mapReduceObjPoint(newRec).save(function(err){
                     if(err){
-                        console.log("Error updating data");
+                        console.log("Error updating data"+err);
                     }
                     else {
                         console.log("Updated Record!!");
@@ -236,7 +236,7 @@ module.exports = {
                 // Save data once  dataset is modified
                 collectionData.save(function(err){
                     if(err){
-                        console.log("Error updating data");
+                        console.log("Error updating data"+err);
                     }
                     else {
                         console.log("Record Updated!");
@@ -263,7 +263,7 @@ module.exports = {
                 newRec.totalPoint = 0;
                 new mapReduceObjPoint(newRec).save(function(err){
                     if(err){
-                        console.log("Error updating data");
+                        console.log("Error updating data"+err);
                     }
                     else {
                         console.log("Updated Record!!");

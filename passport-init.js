@@ -85,7 +85,7 @@ module.exports = function(passport){
 				// already exists
 				if (user) {
 					console.log('User already exists with username: '+username);
-					return done('Username already exists. Kindly use a new one.');
+					return done(null,false,{ message: 'Username already exists. Kindly use a new one.' });
 				} else {
 					// if there is no user, create the user
 					var newUser = new User();
