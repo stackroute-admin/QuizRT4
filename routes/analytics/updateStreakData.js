@@ -19,7 +19,12 @@ var updateStreakData = function(gameData,done){
                 rec.consWinCount = 0;
                 // when user wins increment the consWinCount
                 if(newData.bestRank===1){
-                    rec.consWinCount = oldConsWinCount + 1;
+                    if( oldConsWinCount != undefined ){
+                        rec.consWinCount = oldConsWinCount + 1;
+                    }
+                    else {
+                        rec.consWinCount = 1;
+                    }
                 }
 
                 if(rec.userStreakCurrent.streakDates.length!==0){
@@ -38,7 +43,7 @@ var updateStreakData = function(gameData,done){
                 rec.save(function(err){
                     count+=1;
                     if(err){
-                        console.log("Error updating data");
+                        console.log("Error updating data "+err);
                     }
                     else {
                         console.log("Record Updated!");

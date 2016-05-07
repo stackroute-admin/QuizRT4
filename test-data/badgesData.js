@@ -29,8 +29,8 @@ var badgesData = [
     badgeUrl:"../images/badges/gold.png",
     badgeRule:"Answer questions fast and precise in any game to get this badge",
     badgeDep:["avgResTimeCrctCurrentGame"],
-    badgeFunct: function(avgResTimeCrctCurrentGames) {
-        if(avgResTimeCrctCurrentGame<0.5) {return true}
+    badgeFunct: function(avgResTimeCrctCurrentGame) {
+        if(avgResTimeCrctCurrentGame < 4 && avgResTimeCrctCurrentGame > 0) {return true}
         else return false
       }
   },
@@ -113,7 +113,7 @@ var badgesData = [
     badgeUrl:"../images/badges/silver.png",
     badgeRule:"Win three consecutive games to get this badge",
     badgeDep:["nOfConsWin"],
-    badgeFunct: function(nOfWinForATopic) {
+    badgeFunct: function(nOfConsWin) {
         if(nOfConsWin==3) {return true}
         else return false
       }

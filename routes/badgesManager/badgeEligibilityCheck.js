@@ -20,7 +20,7 @@ badgeEligibilityCheck.prototype.check = function (gameClient) {
           console.log(err);
       //TODO socket stuffs
     //   gameData.emit()
-    console.log("emitingg...");
+    console.log("emitingg..."+badgeId + "  "+ this.userId);
     gameClient.emit('gameBadge',{userId:this.userId,badgeId:badgeId});
   }).bind(this));
   }).bind(this));
