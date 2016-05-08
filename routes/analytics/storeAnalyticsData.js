@@ -2,6 +2,8 @@ var storeData = require('./storeMapReduceAnalysis'),
     userData = require('./createMonthlyUserData'),
     updateStreakData = require('./updateStreakData');
 
+// File to take game data after the game finish and store them in
+// respective analyticsDB collection.
 
 var storeAnalyticsData = function( gameData, gamePlayerObj, done ) {
     var pAnalysisDataObj = gameData.preserveObj.getAnalysisData();

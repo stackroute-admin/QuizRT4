@@ -4,6 +4,7 @@ var moment = require('moment');
 mongoose.connect('mongodb://localhost/quizRT3');
 
 // get overall points for all users across different topics and tournaments
+// and store data in "userpointstats" collection present in "analyticsDB"
 
 var o = {};
 o.map = function () {
