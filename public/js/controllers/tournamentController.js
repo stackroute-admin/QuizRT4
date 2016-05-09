@@ -50,6 +50,7 @@
                  });
 
                  $scope.tournament = successResponse.data.tournament;
+            //  console.log("jjjjjjjjjjjjjjjj    jjjjjjjjjjjjjjjjjjj"+successResponse.data.tournament.topics["topicName"]);
                  $rootScope.playersPerMatch = successResponse.data.tournament.playersPerMatch;
 
                  $rootScope.loggedInUser.tournaments.forEach(function(tournament){
@@ -64,14 +65,19 @@
           }
           $scope.refreshTournament( $scope.tournamentId );// call for the first time
 
-          $scope.playTournament = function(levelId, topicId, title, topic_name) {
+          $scope.playTournament = function(levelId, topicId, title, topic_name,difficultyLevel,levelMultiplier,questionPaper) {
+            console.log(difficultyLevel,levelMultiplier,questionPaper);
             var tournamentId = levelId ? levelId.substring(0, levelId.indexOf('_')) : null;
             $rootScope.playGame = {};
+            //console.log("pppppppppp ppppppppppppp"+difficultyLevel);
             $rootScope.playGame.levelId = levelId;
             $rootScope.playGame.tournamentId = tournamentId;
             $rootScope.playGame.topicId = topicId;
             $rootScope.playGame.topicName = topic_name;
+            $rootScope.playGame.levelMultiplier = levelMultiplier;
             $rootScope.playGame.tournamentTitle = title;
+            $rootScope.playGame.difficultyLevel = difficultyLevel;
+            $rootScope.playGame.questionPaper = questionPaper;
             if ( $rootScope.playGame.topicId && $rootScope.playGame.tournamentId ) {
               $location.path( '/tournamentArena' );
               $rootScope.hideFooterNav = true;

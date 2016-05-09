@@ -54,6 +54,7 @@
     "mongoose": "^4.3.4",
     "mongoose-function": "^0.1.0",
     "morgan": "^1.6.1",
+    "n3-charts": "^2.0.24",
     "node-uuid": "^1.4.7",
     "passport": "^0.3.2",
     "passport-facebook": "^2.0.0",
@@ -72,7 +73,10 @@
     "socket.io": "^1.4.4",
     "supervisor": "^0.9.1",
     "underscore": "^1.8.3",
+<<<<<<< HEAD
+=======
     "unicode": "^0.6.1",
+>>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
     "url": "^0.11.0"
   },
   "devDependencies": {

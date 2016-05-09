@@ -1,0 +1,2 @@
+
+friendshipRequestHandler = require('./')

@@ -140,5 +140,6 @@ angular.module('quizRT')
           alert('Error in uploading user profile picture.')
         });
       });
+
     }
   });

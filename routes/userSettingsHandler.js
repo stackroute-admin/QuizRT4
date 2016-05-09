@@ -2,7 +2,8 @@ var router = require('express').Router(),
     fs = require('fs'),
     path = require('path'),
     formidable = require('formidable'),
-    Profile = require("../models/profile");
+    Profile = require("../models/profile"),
+    FriendShip = require("../models/friendship");
 
 // to handle profile pic upload
 router.post('/profilePic', function(req,res,next) {
@@ -127,6 +128,29 @@ router.post('/updateProfile', function(req,res,next) {
       profileData.imageLink = updatedUser.imageLink;
       validateAndSaveProfile( profileData, res );
     }
+  });
+});
+
+router.post('/sendFriendRequest', function(req,res,next) {
+  var friendship = new FriendShip(req.body);
+  friendship.save(function(err, updatedUserProfile ) {
+    if ( err ) {
+      console.log('Could not Send Friend Request!');
+      console.error(err);
+      res.writeHead(500,{'Content-Type':'application/json'});
+      res.end( JSON.stringify({ error:'Could not Send Friend Request'}) );
+    }else {
+      console.log("User profile updated sucessfully!!\n");
+      res.end( JSON.stringify({ error:null, updatedUserProfile: updatedUserProfile }) );
+    }
+  })
+});
+
+router.post('/unfriendUser', function(req,res,next) {
+  FriendShip.remove({"userIds" : {$all : [req.body.currentUserProfile, req.body.friendUserId]}} ,function(err, doc){
+    if (err)
+      return res.send(500, { error: 'MONGOERROR' });
+     res.end();
   });
 });
 

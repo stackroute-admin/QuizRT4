@@ -1,0 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
+var mongoose = require('mongoose');
+var analyticsDbConObj = mongoose.createConnection('mongodb://localhost/analyticsDB');
+module.exports = analyticsDbConObj;

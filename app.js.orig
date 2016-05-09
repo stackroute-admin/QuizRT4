@@ -53,15 +53,17 @@ var express = require('express'),
     });
     // mongoose.connect('mongodb://localhost/QuizART');
     mongoose.connect('mongodb://localhost/quizRT3');
-
 //mongoose.connect('mongodb://quizart.stackroute.in/quizRT3');
  // mongoose.connect('mongodb://172.23.238.253/quizRT3');
+<<<<<<< HEAD
   // }),
+=======
+//  }),
+>>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
 mongoose.connection.on('error', console.error.bind(console, 'Failed to establish connection to MongoDB@StackRouteHost:PORT/quizRT3'));
 mongoose.connection.on('open', function() {
   console.log('Connected to MongoDB@StackRouteHost:PORT/quizRT3');
 });
-require('./routes/socket.js')(server,sessionMiddleware);
 require('./routes/socket.js')(server,sessionMiddleware,redisClient);
 app.use(logger('dev'));
 app.use(cookieParser());
@@ -90,6 +92,18 @@ app.use( function( req, res, next ) {
     res.end( JSON.stringify( { error: 'User session does not exist. Kindly do a fresh login.'} ));
   }
 });
+<<<<<<< HEAD
+app.use('/userProfile', profileHandler);
+app.use('/topicsHandler', topicsHandler);
+app.use('/tournamentHandler', tournamentHandler);
+app.use('/',confTournamentHandler);
+app.use('/analyticsDataHandler',analyticsDataHandler);
+app.use('/badgesHandler', badgesHandler);
+// server.listen(8080, function() {
+// server.listen(8080, function() {
+server.listen(7000, function() {
+  console.log('App started for Quiz Play!! Please use ur IP e.g 123.23.123.23:2000');
+=======
 
 /* Refresh User TTL, used to identify active users */
 app.use( function( req, res, next) {
@@ -99,16 +113,17 @@ app.use( function( req, res, next) {
   else {
      next();
   }
-});
+}); 
 app.use('/userProfile', profileHandler);
 app.use('/topicsHandler', topicsHandler);
 app.use('/tournamentHandler', tournamentHandler);
+//app.use('/',confTournamentHandler);
 app.use('/QuestionPaperRetriever',questionPaperRetriever);
 app.use('/notifications',notificationsRoute);
-app.use('/analyticsDataHandler',analyticsDataHandler);
-app.use('/badgesHandler', badgesHandler);
+
 // server.listen(8080, function() {
 // server.listen(8080, function() {
 var listener = server.listen(8080, function() {
   console.log('App started for Quiz Play!! Please use ur IP e.g 123.23.123.23:'+listener.address().port);
+>>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
 });

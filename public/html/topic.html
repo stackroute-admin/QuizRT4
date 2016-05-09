@@ -71,10 +71,66 @@
          </div>
        </div><!--end row-->
       <hr>
+<<<<<<< HEAD
       <div id="foot" class="row">
 			<div  class="col-xs-12 play-button-bar">
 					<button id="startGameButton" class="btn btn-success" ng-click="playGame(topicId)">Play Now</button>
 			</div>
 		</div><!--end of foot-->
+=======
+    </div><!--end topic-info-->
+    <div id="foot" class="row">
+     <div  class="col-xs-12 play-button-bar">
+      <button id="startGameButton" role="button" class="btn btn-success" ng-click="playGame(topicId)">Play Now</button> 
+
+       <div class="InviteFriends" ng-controller="inviteFriendsController">
+         <button href="#inviteFriends" role="button" class="btn btn-info play-button" ng-click="getOnlineFriends()" data-toggle="modal"><span class="glyphicon glyphicon-thumbs-up"></span> Play With Friends</button>
+          <div class="modal fade" id="inviteFriends" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Invite Your Friends</h4>
+                </div>
+                <div class="modal-body">
+
+                  <div class="topTenTable row">
+                    <div class="thead header">
+                      <div class="th col-xs-3">Image</div>
+                      <div class="th col-xs-3">Name</div>
+                      <div class="th col-xs-2">Country</div>
+                      <div class="th col-xs-2">Badge</div>
+                      <div class="th col-xs-2">wins</div>
+
+                    </div>
+                    <div class="tbody">
+                      <div class="tr-wrap" ng-repeat="friend in onlineFriends">
+                        <div class="tr row friendslist" ng-click=" friend.online &&  toggleSelectFriend($index)" ng-class="{online: (friend.online == true), selected: (friend.selected == true) }" >
+                          <div class="td col-xs-3 image"><img src = {{friend.image}} alt="User Image"></img></div>
+                          <div class="td col-xs-3 data">{{friend.name}}</div>
+                          <div class="td col-xs-2 data">{{friend.country}}</div>
+                          <div class="td col-xs-2 data">{{friend.badge}}</div>
+                          <div class="td col-xs-2 data">{{friend.wins}}</div>
+                        </div>
+                      </div>
+                    </div><!-- end tbody -->
+
+                    <div class="alert alert-warning" ng-show ="showWarning">
+                      <strong>Alert!</strong> Should Invite minimum of {{minFriends}} Friends, selected {{selectedFriends.length}} Friends !!.
+                    </div>
+                  </div><!-- end Table -->
+                </div><!-- end modal-body -->
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-info pull-left" ng-click="Refresh()"><span class="glyphicon glyphicon-refresh"></span></button>
+                  <button type="button" class="btn btn-info" ng-click="inviteFriends(topicId)" nf-if="showWarning: data-dismiss='modal'">Send Invite</button>
+                  <button type="button" class="btn btn-default" ng-click="reset()" data-dismiss="modal">Close</button>
+                </div>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+       </div><!-- /.modal -->
+      </div>
+    </div>
+   </div>
+>>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
   </div><!--end content-->
 </div><!--end container-->

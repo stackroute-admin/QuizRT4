@@ -34,5 +34,7 @@ var mongoose = require('mongoose'),
       topicId: [{type: String, required: true, ref: 'Topics'}]
     }),
     Question = mongoose.model('Question', questionSchema,'questionBank');
+    // Question = mongoose.model('Question', questionSchema,'question_bank_collection');
+
 
 module.exports = Question;

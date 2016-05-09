@@ -12,16 +12,16 @@
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
-   
+
 -->
 
 
 <div class="container" id="tournamentCreation" ng-controller="tournamentCreationController">
     <div id="heading">
-        <h4>Tournament Creation</h4>
+        <h4>Tournament</h4>
         <hr>
     </div>
-    
+
     <form name="myForm" class="form-horizontal">
         <div class="form-group">
             <label class="control-label col-sm-3" for="title">Title</label>
@@ -44,11 +44,11 @@
         <div class="form-group" id ="levels">
             <label class="control-label col-sm-3" for="levels">Levels</label>
             <div class="col-sm-9" >
-                
+
                 <ul ng-init="tempArray = ['1']">
                     <li ng-repeat="level in tempArray track by $index">
                         <span>Level {{$index + 1}} :</span>
-                        <select ng-model="initialTopic" ng-change="selectionChange(initialTopic.topicName , $index)" ng-options="topic.topicName for topic in topics">
+                        <select ng-model="initialTopic" ng-change="selectionChange(initialTopic.topicName , $index,'topicId')" ng-options="topic.topicName for topic in topics">
                             <option value="">-- choose topic --</option>
                         </select>
                         <img ng-src="images/add-icon.png" ng-click="tempArray.push($index)">
