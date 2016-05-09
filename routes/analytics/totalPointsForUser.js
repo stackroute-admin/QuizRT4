@@ -38,7 +38,7 @@ o.reduce = function (key, values ) {
 // o.out = {replace:'testMapReduceOutput22'}
 
 userProfile.mapReduce(o, function (err, results) {
-  console.log(results)
+  // console.log(results)
 
 
   var storeData = require('./storeMapReduceAnalysis');

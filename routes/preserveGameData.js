@@ -75,7 +75,7 @@ PreserveGameData.prototype.getRequiredGameData = function(userIdArr){
         getGameStat.getWinCountForUser(userIdArr)
         ]).spread(function(res1,res2,res3){
             resultArr.push(res1,res2,res3);
-            console.log(resultArr);
+            // console.log(resultArr);
             deferred.resolve(resultArr);
     });
     return deferred.promise;

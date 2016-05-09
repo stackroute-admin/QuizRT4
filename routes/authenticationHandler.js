@@ -30,7 +30,7 @@ module.exports = function(passport){
         clickStreamStat.userLoginStatSave(data);
         var userDataObj = userData.createMonthlyUserData(data.userId);
         storeData.saveMapReduceVisitCount(userDataObj,function(data) {
-            console.log(data);
+            console.log("Updated monthly data!");
         });
 		res.send({error:null});
 	});

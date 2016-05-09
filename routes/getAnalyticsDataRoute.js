@@ -130,7 +130,7 @@ router.get('/getCurrentGameStat', function(req, res, next) {
                     res.json(resultArr);
             });
         }
-        console.log(resultArr);
+        // console.log(resultArr);
     } else {
       console.log('User not authenticated. Returning.');
       res.writeHead(401);

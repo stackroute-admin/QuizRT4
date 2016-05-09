@@ -76,7 +76,7 @@ o.finalize  = function (key, reducedValue) {
 // o.out = {replace:'testMapReduceOutput'}
 
 userAnalytics.mapReduce(o, function (err, results) {
-  console.log(results);
+  // console.log(results);
 
     var storeData = require('./storeMapReduceAnalysis');
     results.forEach(function(newRec){

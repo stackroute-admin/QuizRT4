@@ -19,7 +19,7 @@ var eventsManager = function(){
       Event.findOneAndUpdate({eventType:eventObj.eventType},eventObj,{upsert:true, new:true},function(err, doc) {
           if(err)
             console.log(err);
-          console.log(doc);
+        //   console.log(doc);
       });
     });
   };

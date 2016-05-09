@@ -37,7 +37,7 @@ var userAnalytics=require('../models/userAnalytics'),
                             }
 
                         });
-                        console.log(resObj);
+                        // console.log(resObj);
                     }
                 });
     };

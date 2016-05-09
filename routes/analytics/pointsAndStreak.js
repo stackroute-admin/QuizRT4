@@ -178,13 +178,11 @@ userProfile.mapReduce(o, function (err, results) {
      if ( tempStreak.streakDates.length >= finalStreak.streakDates.length ){
          finalStreak = tempStreak;
      }
-    console.log(dataObj);
-    console.log(finalStreak);
         var combinedDataObj = newRec._id;
         combinedDataObj.totalPoint = newRec.value.value;
         combinedDataObj.userStreak = finalStreak;
         storeData.saveMapReduceUserPoints(combinedDataObj,function(data) {
-            console.log(data);
+            console.log("Done storing streak data");
         });
   });
 

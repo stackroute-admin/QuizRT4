@@ -120,9 +120,9 @@ module.exports = function(server,sessionMiddleware) {
         });
         client.on( 'gameFinished', function( game ) {
             game.preserveObj=preserveData;
-            game.gameClient = client;
-          GameManager.finishGame( game );
-          preserveData.show();
+            game.gameClient = io.of('/normalGame');
+            GameManager.finishGame( game );
+            preserveData.show();
         //   initialize the obj again
         // var preserveData = new PreserveGameData();
         //   getUserAnalyticsForGame(client.request.session.user, game.gameId);

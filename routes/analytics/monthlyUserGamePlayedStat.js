@@ -106,14 +106,14 @@ userAnalytics.mapReduce(o, function (err, results) {
    // console.log(results);
   console.log("Done with Map Reduce Operation!");
   // Now pass MR analysed data to function which checks existing data
-  // and adds to that, so that data doesn't get overridden every time 
+  // and adds to that, so that data doesn't get overridden every time
   // but it gets updated with the new data.
   var storeData = require('./storeMapReduceAnalysis');
   results.forEach(function(newRec){
       var combinedDataObj = newRec._id;
       combinedDataObj.years = newRec.value.years;
       storeData.getMapReduceData(combinedDataObj,function(data) {
-          console.log(data);
+          console.log("Done updating data!");
       });
   });
 

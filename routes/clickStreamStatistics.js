@@ -31,7 +31,7 @@ var userAnalyticsSave =  function(data,type){
             console.error(err);
         }
         else{
-            console.log('addedd successfully');
+            console.log('clickStream data added successfully');
         }
     });
 };
