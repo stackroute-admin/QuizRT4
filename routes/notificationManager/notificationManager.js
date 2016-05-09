@@ -8,19 +8,21 @@ Notification = require('../../models/notifications');
 
 module.exports = {
   handleResponse : function(metadata, client) {
+    var $this = this;
     if (metadata.type === 'FRND') {
       var acceptanceState = metadata.event === 'accept' ? 1 : 2 ;
       var query = [];
+      Notification.update({$and : [{'metaData.from' : metadata.from} , {'metaData.to' : metadata.to[0] }]} , {seen : true}, {upsert:true},function(result){
+        $this.getNotifications(metadata.to[0],client);
+      })
       Profile.getUserIdFromId(metadata.from, metadata.to).then(function(ret) {
         query = ret.map(function(e) { return e._id });
-        console.log(query);
-        Friends.update({'userIds': {$all: query}}, {$set: {'acceptanceState': acceptanceState}}, function(data) {
+        Friends.update({'userIds': {$all: query}}, {$set: {'acceptanceState': acceptanceState , 'lastUpdatedDate' : new Date()}}, function(data) {
           console.log('Friend Request Accepted');
         })
       })
     } else if (metadata.type === 'GRPPLAY') {
        /*remove the notification From DB */
-       console.log(metadata, "list");
        Notification.remove({'metaData.url' : metadata.url})
        .then(function (data) {
            console.log("removed Data",data);

@@ -5,9 +5,9 @@ angular.module('quizRT')
    $rootScope.notificationSocket.emit("getMyNotifications", $rootScope.loggedInUser.userId);
 
    /*Listen For Notifications */
-   $rootScope.notificationSocket.on('NotificationList', function(data) { 
+   $rootScope.notificationSocket.on('NotificationList', function(data) {
       console.log("got some notifications", data);
-      $scope.notificationData = data; 
+      $scope.notificationData = data;
       $rootScope.notificationCount = data.length;
    });
 
@@ -17,15 +17,14 @@ angular.module('quizRT')
        /*Get Complete Data */
        $rootScope.notificationSocket.emit('getMyNotifications', $rootScope.loggedInUser.userId);
    });
-   
+
    $scope.sendNotification = function(userEvent, notificationData) {
       notificationData.event = userEvent;
-      console.log("Sending data", notificationData);
       $rootScope.notificationSocket.emit('response', notificationData);
       $rootScope.notificationCount -= 1;
    };
 
-   $rootScope.notificationSocket.on('playGame', function(data) { 
+   $rootScope.notificationSocket.on('playGame', function(data) {
       console.log(data);
       $location.path(data.url);
    });
