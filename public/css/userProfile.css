@@ -86,7 +86,7 @@ footer .nav img {
   white-space: nowrap;
   width: 102%;
   display: inline-block;
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: hidden;
   margin-top: 20px;
 }
@@ -167,6 +167,72 @@ height:100%;
 
 #win, #games, #age, #winpercentage{
 text-align: center;
+}
+.xxx label{
+color: wheat;
+}
+
+.radioBtn{
+color: wheat;
+}
+input[type=radio] {
+ /*margin: 0 13px 0 13px;*/
+  border: 5px;
+  width: 100%;
+  height: 2em;
+  background: red;
+  margin-top: 20px;
+
+}
+label {
+ text-align: center;
+margin: 0 20px 0 20px;
+}
+
+#searchbox{
+ text-align: center;
+ margin-left: auto;
+ margin-right: auto;
+ margin-top: 20px;
+ margin-bottom: 20px;
+ width: 350px;
+ height: 50px;
+ color: black;
+ text-decoration-style: solid;
+
+}
+.modalTable{
+ margin-top: 20px;
+ font-size: 20px;
+font-weight: 10px;
+}
+.modalTableRow{
+margin-left:15px;
+color:skyblue;
+}
+.modalTableRow a{
+/*margin-left:15px;*/
+font-size: 15px;
+font-weight: 20px;
+color:grey;
+}
+.tableValue{
+color: grey;
+font-size: 15px;
+padding-left: 0px;
+padding-right:0px;
+}
+.tableHead {
+color: #252830;
+padding-left: 0px;
+padding-right:0px;
+}
+.modalTable img{
+height: 50px;
+width: 50px;
+}
+#mySlider{
+  display: block;
 }
 
 @media(min-width:768px){
@@ -284,6 +350,9 @@ text-align: center;
 }
 
 @media (max-width:500px){
+  #searchbox{
+  width:200px;
+}
   h4 {
     font-size: 2em;
   }
@@ -381,4 +450,11 @@ text-align: center;
 
   .friendName{
     text-align: center;
+  }
+  @media (max-width: 640px)
+  {
+      #mySlider
+      {
+          display: none;
+      }
   }
