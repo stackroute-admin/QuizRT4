@@ -44,6 +44,7 @@ angular.module('quizRT')
        $rootScope.playGame = {};
        $rootScope.playGame.topicId = topicId;
        $rootScope.playGame.topicName = $scope.topic.topicName;
+       $rootScope.playGame.expiredUrl=true;
        $rootScope.isPlayingAGame = true; // to hide the footer-nav while playing a game
        $rootScope.firstUser=true;
        $scope.socket.emit('getUrl',$rootScope.loggedInUser);
@@ -62,7 +63,8 @@ angular.module('quizRT')
              console.log(errorResponse.data.error);
            });
 
-         var obj = {'user': $rootScope.loggedInUser.userId, 'invitedFriendsList':$scope.selectedFriends, 'url':$rootScope.playGame.url};
+         var url = '/quizPlayer/'+$rootScope.playGame.topicName+'/'+$rootScope.playGame.topicId+'/'+$rootScope.playGame.url;
+         var obj = {'user': $rootScope.loggedInUser.userId, 'invitedFriendsList':$scope.selectedFriends, 'url':url};
          $rootScope.socket.emit("sendInvitedFriends", obj);
          $rootScope.notificationSocket.emit("sendInvitedFriends", obj);
        }

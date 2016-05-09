@@ -25,13 +25,14 @@ var questionPaper = require('../models/questionPaper'),
 
 router.route('/getQPaper/:topicId')
       .get(function(request,response){
+        console.log(request.params.topicId);
         questionPaper.find({'topics' : request.params.topicId})
-                           .select('Name')
+                           .select('name')
                            .exec(function(err, questionPaperNames) {
                              if (err) {
                                return response.send(err);
                              }
-                             return response.send(questionPaperNames);
+                             return response.send(questionPaperNames.map(function(e){return e.name}));
                            });
       });
 

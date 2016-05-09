@@ -58,12 +58,21 @@
               <input type="radio" ng-change="selectionChange(false, $index,'isRandom')" ng-model="isRandom" value="prebuilt"> Prebuilt
             </label>
             <br>
-            <label>Select a difficulty Level</label>
-            <select ng-model="selectedDifficultyLevel" ng-change = "selectionChange(selectedDifficultyLevel,$index,'difficultyLevel')" ng-options="a for a in difficultyLevels">
-            </select>
-              <label>Select a score multiplier</label>
+
+            <!-- <select ng-model="selectedDifficultyLevel" ng-change = "selectionChange(selectedDifficultyLevel,$index,'difficultyLevel')" ng-options="a for a in difficultyLevels">
+            </select> -->
+            <label>Select a score multiplier</label>
             <select ng-model="selectedMultiplierLevel" ng-change = "selectionChange(selectedMultiplierLevel,$index,'levelMultiplier')" ng-options="a for a in levelMultiplier">
             </select>
+            <label ng-if="isRandom=='prebuilt'">Question Paper
+            <select ng-model="selectedQuestionPaper" ng-change = "selectionChange(selectedQuestionPaper,$index,'questionPaper')" ng-options="a for a in questionPaper">
+              <option value="">-- choose Question Paper --</option>
+            </select>
+          </label><br>
+            <label ng-if="isRandom=='random'">Select a difficulty Level:</label>
+            <rzslider ng-if="isRandom=='random'" rz-slider-model="slider[$index].minValue"  rz-slider-high="slider[$index].maxValue"  rz-slider-options="slider[$index].options" ng-click = "selectionChange([slider.minValue,slider.maxValue],$index,'difficultyLevel')"></rzslider>
+          <br>
+
             <img ng-src="images/add-icon.png" ng-click="tempArray.push($index)">
             <img ng-src="images/delete-icon.png" ng-click="tempArray.splice($index,1)">
 

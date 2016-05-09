@@ -19,7 +19,23 @@ module.exports = {
         })
       })
     } else if (metadata.type === 'GRPPLAY') {
-      //method to update fields
+       /*remove the notification From DB */
+       console.log(metadata, "list");
+       Notification.remove({'metaData.url' : metadata.url})
+       .then(function (data) {
+           console.log("removed Data",data);
+          //method to update fields
+          if (metadata.event == 'accept') {
+            /* Send the URL to Client Back */
+            client.emit('playGame', metadata);
+          }
+          else if (metadata.event == 'reject') {
+            /* Nothing, User Rejected */
+            metadata.url = "/userProfile/";
+            client.emit('playGame', metadata);
+          }
+
+       });
     } else {
       //do nothing throw error
     }
@@ -41,9 +57,10 @@ module.exports = {
   inviteFriendsToPlay: function(data, client) {
     console.log(data, "invited to play");
     var notificationsMeta = {
-      from: data.user,
-      to  : data.invitedFriendsList,
-      type: "GRPPLAY"
+       from: data.user,
+       to  : data.invitedFriendsList,
+       type: "GRPPLAY",
+       url : data.url
     }
     this.saveNotification(notificationsMeta);
     /* Send Update to User on notification */
