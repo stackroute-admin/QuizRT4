@@ -164,6 +164,7 @@ angular.module('quizRT')
     url: '/userProfile/profileData'
   })
   .then(function(successResponse) {
+    console.log(successResponse);
     $scope.data = successResponse.data.user;
     $rootScope.loggedInUser = successResponse.data.user;
     $rootScope.friends = successResponse.data.friends;
@@ -179,8 +180,7 @@ angular.module('quizRT')
     $rootScope.fakeMyName = $rootScope.loggedInUser.name;
     $rootScope.topperImage = $rootScope.loggedInUser.imageLink;
     $rootScope.userIdnew = $rootScope.loggedInUser.userId;
-    //console.log($scope.topicsFollowed);
-
+    $rootScope.notificationCount = successResponse.data.notificationCount;
   }, function(errorResponse) {
     if (errorResponse.status === 401) {
       $rootScope.isAuthenticatedCookie = false;
