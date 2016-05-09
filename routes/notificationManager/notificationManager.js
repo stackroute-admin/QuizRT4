@@ -1,6 +1,6 @@
 var Profile = require("../../models/profile"),
-    Friends = require("../../models/friendship"),
-    Notification = require('../../models/notifications');
+Friends = require("../../models/friendship"),
+Notification = require('../../models/notifications');
 
 //FRND for friend Request
 //GRPPLAY for group play
@@ -8,32 +8,14 @@ var Profile = require("../../models/profile"),
 
 module.exports = {
   handleResponse : function(metadata, client) {
-    console.log(metadata);
     if (metadata.type === 'FRND') {
-      if (metadata.event === 'accept') {
-        var acceptanceState = 1;
-      } else {
-        var acceptanceState = 2;
-      }
-      //method to update fields
+      var acceptanceState = metadata.event === 'accept' ? 1 : 2 ;
       var query = [];
       Profile.getUserIdFromId(metadata.from, metadata.to).then(function(ret) {
-        query = ret.map(function(e) {
-          return e._id
-        });
-
-        //db.getCollection('friendship_Collection').update({'userIds':{$all:['572aa8e7801d83e02d564a56', '572aa8c5801d83e02d564a54']}},{$set:{'acceptanceState':1}})
+        query = ret.map(function(e) { return e._id });
         console.log(query);
-        Friends.update({
-          'userIds': {
-            $all: query
-          }
-        }, {
-          $set: {
-            'acceptanceState': acceptanceState
-          }
-        }, function(data) {
-          console.log(data);
+        Friends.update({'userIds': {$all: query}}, {$set: {'acceptanceState': acceptanceState}}, function(data) {
+          console.log('Friend Request Accepted');
         })
       })
     } else if (metadata.type === 'GRPPLAY') {
@@ -59,9 +41,9 @@ module.exports = {
   inviteFriendsToPlay: function(data, client) {
     console.log(data, "invited to play");
     var notificationsMeta = {
-       from: data.user, 
-       to  : data.invitedFriendsList,
-       type: "GRPPLAY"
+      from: data.user,
+      to  : data.invitedFriendsList,
+      type: "GRPPLAY"
     }
     this.saveNotification(notificationsMeta);
     /* Send Update to User on notification */
@@ -69,25 +51,37 @@ module.exports = {
   },
 
   getNotifications: function(userId, client) {
-        Notification.find({
-        'metaData.to': userId
-        }).where('seen').equals(false).select('_id metaData').where('seen').equals(false).sort('-dateAdded').exec(function(err, data) {
-            console.log(data);
-            client.emit('NotificationList', data);
-        });
+    Notification.find({
+      'metaData.to': userId
+    }).where('seen').equals(false).select('_id metaData').where('seen').equals(false).sort('-dateAdded').exec(function(err, data) {
+      console.log(data);
+      client.emit('NotificationList', data);
+    });
   },
 
   handleFriendRequest: function(data, client){
     /* Store the Meta Data */
-    console.log("Received Friend Request");
-    this.saveNotification(data);
+    var friendship = new Friends({userIds : [data.from._id , data.to._id] , acceptanceState : 0 , lastUpdatedDate : new Date()});
+    friendship.save(function(err, updatedUserProfile ) {
+      console.log('Data Saved');
+    })
+    var notification = new Notification({
+      dateAdded: new Date(),
+      metaData: {from : data.from.userId , to : data.to.userId , type : 'FRND'},
+      seen: false
+    });
+    notification.save(function(reply) {
+      //res.send(reply);
+      console.log("save reply",reply);
+    });
+
     /* Send Update to User on notification */
-    this.updateUserNotification([data.to], client);
+    this.updateUserNotification([data.to.userId], client);
   },
 
   updateUserNotification: function(users, client) {
-     client.broadcast.emit("NewNotification", users);
-     console.log("Sent update for users", users);
+    client.broadcast.emit("NewNotification", users);
+    console.log("Sent update for users", users);
   }
-  
+
 }

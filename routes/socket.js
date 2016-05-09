@@ -395,20 +395,20 @@ FriendsManager = require('./friendsManager.js')(redisClient);
                   client.on('respond:to:frndreq',function(data){
                       console.log('recieved a notification');
                   });
- 
+
                   client.on('getMyNotifications', function(user) {
                       console.log("Get Notification for User", user.userId);
                       NotificationManager.getNotifications(user.userId, client);
                   });
- 
+
                   client.on('sendInvitedFriends', function(data) {
                       NotificationManager.inviteFriendsToPlay(data, client);
                   });
 
                   client.on('sendFriendRequest', function(data) {
-                      NotificationManager.handleFriendRequest(data, client);
+                      NotificationManager.handleFriendRequest(data , client);
                   });
-             
+
                   client.on('response', function(data) {
                       NotificationManager.handleResponse(data, client);
                   });
@@ -420,18 +420,18 @@ FriendsManager = require('./friendsManager.js')(redisClient);
       /*Delete user infor from Redis */
       var delUserTTLInfo = function(user) {
          var redisKey = "User:"+user;
-       
+
          redisClient.del(redisKey, function(err, result) {
              if (err)
               console.log(err, result);
-         }); 
-      }; 
+         });
+      };
 
       /*Refresh User Info */
       refreshUserTTL = function(user, next) {
         var redisKey = "User:"+user;
-        redisClient.setex(redisKey, activeSessionTimeout, "Active", function(err, result) { 
+        redisClient.setex(redisKey, activeSessionTimeout, "Active", function(err, result) {
            next();
-        }); 
+        });
      };
 }
