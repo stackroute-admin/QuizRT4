@@ -19,6 +19,7 @@
 var GameManagerClass = require('./gameManager/gameManager.js'),
     GameManager = new GameManagerClass(),
     TournamentManager = require('./tournamentManager/tournamentManager.js'),
+    NotificationManager = require('./notificationManager/notificationManager.js'),
     uuid= require('node-uuid');
 
 module.exports = function(server,sessionMiddleware,redisClient) {
@@ -393,6 +394,23 @@ FriendsManager = require('./friendsManager.js')(redisClient);
               .on('connection', function(client) {
                   client.on('respond:to:frndreq',function(data){
                       console.log('recieved a notification');
+                  });
+ 
+                  client.on('getMyNotifications', function(user) {
+                      console.log("Get Notification for User", user.userId);
+                      NotificationManager.getNotifications(user.userId, client);
+                  });
+ 
+                  client.on('sendInvitedFriends', function(data) {
+                      NotificationManager.inviteFriendsToPlay(data, client);
+                  });
+
+                  client.on('sendFriendRequest', function(data) {
+                      NotificationManager.handleFriendRequest(data, client);
+                  });
+             
+                  client.on('response', function(data) {
+                      NotificationManager.handleResponse(data, client);
                   });
               });
 

@@ -230,31 +230,13 @@ angular.module('quizRT')
         };
         friendshipData.userIds.push($rootScope.loggedInUser);
         friendshipData.userIds.push(currentUserProfile); // to do : Should work on retrieving the Object
-        $http({
-          method: 'POST',
-          data: friendshipData,
-          url: 'userProfile/userSettings/sendFriendRequest'
-        })
-        .then(function(successResponse) {
-          $rootScope.friendUser.buttonText = "Request Sent";
-          $rootScope.friendUser.disableButton = true;
-          var notificationsMeta = {
-            from: $rootScope.loggedInUser.userId,
-            to: currentUserProfile.userId,
-            type: 'FRND',
-          }
-          $http({
-            method: 'POST',
-            data: notificationsMeta,
-            url: '/notifications'
-          }).then(function(notificationRes) {
-            console.log(notificationRes);
-            $rootScope.$broadcast('sent:a:frndreq', 1);
-          }
-      , function(failureResponse) {
-          console.log(failureResponse);
-        })
-    })
+        var notificationsMeta = {
+           from: $rootScope.loggedInUser.userId,
+           to: currentUserProfile.userId,
+           type: 'FRND',
+        }
+
+        $rootScope.notificationSocket.emit('sendFriendRequest', notificationsMeta);
   };
 
     $scope.Unfriend = function(user) {

@@ -2,7 +2,8 @@
 
   <h2>Your notifications</h2>
   <div class="" ng-repeat="notification in notificationData">
-    Notification from {{notification.metaData.from}} {{notification.metaData.type}}
+    <span ng-if="((notification.metaData.type == 'FRND'))">FriendShip Request from {{notification.metaData.from}} </span>
+    <span ng-if="((notification.metaData.type == 'GRPPLAY'))">Invite to Play Game from {{notification.metaData.from}} </span>
     <a ng-click="sendNotification('accept',notification.metaData)">Accept</a>
     <a ng-click="sendNotification('reject',notification.metaData)">Reject</a>
   </div>
