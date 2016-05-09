@@ -44,6 +44,7 @@ angular.module('quizRT')
        $rootScope.playGame = {};
        $rootScope.playGame.topicId = topicId;
        $rootScope.playGame.topicName = $scope.topic.topicName;
+       $rootScope.playGame.expiredUrl=true;
        $rootScope.isPlayingAGame = true; // to hide the footer-nav while playing a game
        $rootScope.firstUser=true;
        $scope.socket.emit('getUrl',$rootScope.loggedInUser);

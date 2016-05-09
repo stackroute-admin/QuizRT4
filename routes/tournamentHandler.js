@@ -120,7 +120,7 @@ router.route('/createTournament')
         newFileName = slug(tournament.title) + '_' + file.name,
 
         imageUrl = 'images/tournamentIcons/' + newFileName;
-    
+
       fs.rename(file.path, 'public/' + imageUrl, function(err) {
         if (err) throw err;
         console.log('Tournament Icon saved successfully');
@@ -187,6 +187,7 @@ function saveTournament(req, res, tournament) {
           topic['isRandom'] = levelsTopicArray[cnt].isRandom;
           topic['difficultyLevel'] = levelsTopicArray[cnt].difficultyLevel;
           topic['levelMultiplier'] = levelsTopicArray[cnt].levelMultiplier;
+          topic['questionPaper'] = levelsTopicArray[cnt].questionPaper;
           topics.push(topic);
         }
 

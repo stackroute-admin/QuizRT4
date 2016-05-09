@@ -52,6 +52,26 @@ angular.module('quizRT')
         );
       //stub for diff level.
       $scope.difficultyLevels = [1, 2, 3, 4, 5];
+    //  $scope.questionPaper='';
+      $scope.slider = [{
+        minValue: 0,
+        maxValue: 10,
+        options: {
+          floor: 0,
+          ceil: 10,
+          step: 1
+        }
+      },
+      {
+        minValue: 0,
+        maxValue: 10,
+        options: {
+          floor: 0,
+          ceil: 10,
+          step: 1
+        }
+      }];
+      //console.log($scope.slider.minValue);
       //stub for  level mux.
       $scope.levelMultiplier = [1, 2, 3, 4, 5];
       $scope.addLevels = function(levelIndex) {
@@ -67,15 +87,18 @@ angular.module('quizRT')
       $scope.selectionChange = function(value, index,key) {
         alert(key);
         //key=T1;
-        console.log(value);
+        console.log("value is "+typeof(value));
         console.log(index);
         $scope.levelTopicArray[index] = $scope.levelTopicArray[index] || {};
         console.log($scope.levelTopicArray[index]);
         $scope.levelTopicArray[index][key] = value;
+        if(key=='topicId'){
         $http.get('/questionPaperRetriever/getQPaper/' + value)
              .then(function(successResponse){
                    console.log(successResponse.data);//to pe replaced By appropriate array assignment operation
+                   $scope.questionPaper=successResponse.data;
                });
+             }
       };
       //ng-model="initialTopic.tournamentType"
       $scope.createTournament = function(tournament) {

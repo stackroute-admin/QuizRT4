@@ -17,7 +17,7 @@
 //                      + Anil Sawant
 
 angular.module('quizRT')
-    .controller('quizPlayerController', function($route, $scope, $timeout,$location, $interval, $http, $rootScope, $window, $cookies,$routeParams) {
+    .controller('quizPlayerController', function($route, $scope, $timeout,$location, $interval, $http, $rootScope, $window, $cookies,$routeParams , $q) {
       if ( !$rootScope.loggedInUser ) {
         $rootScope.isAuthenticatedCookie = false;
         $rootScope.serverErrorMsg = 'User not authenticated.';
@@ -30,6 +30,7 @@ angular.module('quizRT')
         $scope.topicId = $rootScope.playGame.topicId;
         $scope.quizTitle = $rootScope.playGame.topicName;
         $scope.tournamentTitle = $rootScope.playGame.tournamentTitle;
+        $scope.expiredUrl = $rootScope.playGame.expiredUrl;
         if ( $scope.levelId && $scope.levelId.length ) {
           $scope.roundCount = $scope.levelId.substring($scope.levelId.lastIndexOf("_") + 1);
         }
@@ -69,11 +70,13 @@ angular.module('quizRT')
 
         console.log($location.path());
         console.log('/quizPlayer/'+$routeParams.topicId+'/'+$routeParams.urlId);
-
+        $rootScope.expiredUrl=true;
         console.log($location.path()==='/quizPlayer/'+$routeParams.topicId+'/'+$routeParams.urlId);
         if($rootScope.firstUser==true){
+          console.log("message from test"+$rootScope.playGame.expiredUrl);
           playerData.url=$rootScope.playGame.url;
           playerData.firstUser=true;
+
           console.log("hi");
           $rootScope.socket.emit('joinGamesOnDemand', playerData);
           $rootScope.firstUser=false;
@@ -81,6 +84,9 @@ angular.module('quizRT')
           $scope.waitInterval = $interval(function () {
             $scope.time--;
             if($scope.time==0){
+              //$scope.expiredUrl=false;
+              $rootScope.playGame.expiredUrl=false;
+              $rootScope.socket.emit('expiredLink',{'expired':true});
               $interval.cancel($scope.waitInterval);
 
             $location.path('/topic/'+$routeParams.topicId);
@@ -88,7 +94,17 @@ angular.module('quizRT')
           }, 1000);
         }
         else if($location.path()==='/quizPlayer/'+$routeParams.topicName+'/'+$routeParams.topicId+'/'+$routeParams.urlId){
-          console.log("second");
+          $rootScope.socket.emit("checkForExpireURL",{'url':'/quizPlayer/'+$routeParams.topicName+'/'+$routeParams.topicId+'/'+$routeParams.urlId});
+          //console.log("paly Game second"+$rootScope.playGame.expiredUrl);
+      }
+        else{
+        $rootScope.socket.emit('join', playerData); // enter the game and wait for other players to join
+      }
+
+      $rootScope.socket.on('checkedURL',function (data) {
+        console.log("EXPIRED url----------"+data);
+          if(data.checkedURL){
+          //  $rootScope.expiredUrl=false;
           $http.post( '/topicsHandler/topic/'+ $routeParams.topicId )
           .then( function( successResponse ) {
             console.log("post",successResponse);
@@ -103,10 +119,14 @@ angular.module('quizRT')
           }, function( errorResponse ) {
             console.log(errorResponse.data.error);
           });
-        }
-        else{
-        $rootScope.socket.emit('join', playerData); // enter the game and wait for other players to join
-      }
+
+
+          }
+          else{
+              $location.path('/topic/'+$routeParams.topicId);
+          }
+
+      });
         $rootScope.socket.on( 'userNotAuthenticated', function() {
             $rootScope.isAuthenticatedCookie = false;
             $rootScope.serverErrorMsg = 'User not authenticated.';

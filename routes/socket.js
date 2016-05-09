@@ -74,12 +74,12 @@ FriendsManager = require('./friendsManager.js')(redisClient);
         };
         //var allFriends=[];
 
-        gamesOnDemandObj=new gamesOnDemand();
+        //gamesOnDemandObj=new gamesOnDemand();
         //gamesOnDemandObj = null;
         client.on('sendInvitedFriends',function(data) {
           console.log(data, data.url);
-          //gamesOnDemandObj=new gamesOnDemand();
-
+          gamesOnDemandObj=new gamesOnDemand();
+          expiredLink=false;
           if(data){
             gamesOnDemandObj.addFriends(data);
             console.log("inside socket-----------------friendzzzzzz"+data.invitedFriendsList.length);
@@ -150,6 +150,25 @@ FriendsManager = require('./friendsManager.js')(redisClient);
             client.emit( 'userNotAuthenticated' ); //this may not be of much use
           }
         };
+
+        client.on('expiredLink',function (data) {
+
+          console.log("I AM EXPIRED");
+          if(data.expired){
+            expiredLink=true;
+          }
+        });
+        client.on('checkForExpireURL',function (data) {
+          console.log("EXPIERED LINK----------"+expiredLink);
+          if(expiredLink){
+            console.log("Emitting EXPIERED LINK true----------"+expiredLink);
+            client.emit('checkedURL',{'checkedURL':false});
+          }
+          else{
+            console.log("Emitting EXPIERED LINK----------"+expiredLink);
+            client.emit('checkedURL',{'checkedURL':true});
+          }
+        });
 
         client.on('confirmAnswer',function(data){
           console.log("Dataaaa####!!!!!@@@@",data);

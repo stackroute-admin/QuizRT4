@@ -7,7 +7,7 @@ module.exports = {
     if ( isNaN(noOfQs) ) {
       done( 'noOfQs is not a number', null );
     } else {
-      questionPaper.find({"Name":questionPaperName}).populate('Question') // retrieve questions from Question Paper collection for questionPaperName
+      questionPaper.find({"name":questionPaperName}).populate('questions') // retrieve questions from Question Paper collection for questionPaperName
       .exec( function(err, questions) {
         if ( err ) {
           done( 'Questions cannot be read from mongo.', null );
