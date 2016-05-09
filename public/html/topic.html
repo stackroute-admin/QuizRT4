@@ -19,7 +19,7 @@
 <div class="container fullHeight">
   <div class="content">
       <div class="row topic-header">
-         <div class="col-xs-4 topic-icon">
+         <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 topic-icon">
            <img ng-src="{{topic.topicIcon}}"  class="img-responsive" alt="">
            <div class="follow">
              <h3>
@@ -27,12 +27,16 @@
              <span title="Follow this topic" class="glyphicon glyphicon-heart-empty" ng-hide="userTopicFollowState" ng-click="followUnfollow()"></span>
              <span>{{topicFollowers}}</span>
              </h3>
-             <label class="btn btn-info" id="levelnum">Level:{{topic.userStats.topicLevel}}</label>
+             <span class="btn btn-info" id="levelnum">Level:{{topic.userStats.topicLevel}}</span>
             </div>
          </div>
-            <h1>{{topic.topicName}}<br><small>{{topic.topicDescription}}</small></h1>
-            <label class="btn btn-success pull-right" id="exp">Points:{{topic.userStats.points}} </label>
+         <div class="col-xs-6 col-sm-10 col-md-10 col-lg-10 topic-name">
+            <h1>{{topic.topicName}}<br><small>{{topic.topicDescription}}</small>
+              <label class="btn btn-success pull-right" id="exp">Points:{{topic.userStats.points}} </label>
+            </h1>
+          </div>
       </div><!--end topic-icon-->
+
       <div class="row">
          <div class="col-xs-4  col-md-offset-2 col-lg-offset-2">
             <div class="pie-chart" ng-if="loadLevelData">

@@ -49,7 +49,11 @@
 
 .topic-icon img{
   margin: auto;
-  border-radius: 20px;
+  border-radius: 30px;
+  padding-top:10px;
+}
+.topic-name{
+  text-align: left;
 }
 
 .follow {

@@ -486,7 +486,7 @@ height:100%;
     margin-bottom: 15px;
     margin-left: 15px;
     position: relative;
-    width: 340px;
+    max-width: 340px;
     min-height: 110px;
     border-radius: 5px;
 }

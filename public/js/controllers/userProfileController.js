@@ -73,14 +73,6 @@ angular.module('quizRT')
           $rootScope.showRecentResult = true;
           $location.path( '/quizResult/' + gameId );
         }
-        $scope.callToast = function(){
-          ngToast.create({
-            className :"warning",
-            content : "You have won the badge!!!",
-            dismissButton: true,
-            timeout:60000
-          });
-        }
         $rootScope.socket.on('gameBadge',function(data) {
           console.log('hello from tost'+data.userId);
           if($rootScope.loggedInUser.userId===data.userId){
