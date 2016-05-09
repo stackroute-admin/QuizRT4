@@ -184,10 +184,10 @@ input[type=radio] {
   margin-top: 20px;
 
 }
-label {
+/*label {
  text-align: center;
 margin: 0 20px 0 20px;
-}
+}*/
 
 #searchbox{
  text-align: center;
