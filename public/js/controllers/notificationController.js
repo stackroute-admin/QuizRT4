@@ -6,19 +6,13 @@ angular.module('quizRT')
       });
 
     $scope.sendNotification = function(userEvent, notification) {
-      notification.userAcceptance = userEvent;
-      //submit user actions
 
       $http.get('/notifications/updateStatus/' + notification).success(function(response) {
           $http.get('/notifications/')
             .success(function(data, status, headers, config) {
               $scope.notificationData = data;
-              $rootScope.notificationSocket.emit('respond:to:frndreq', notification); //notification);
+              $rootScope.notificationSocket.emit('respond:to:frndreq', notification);
             });
-        })
-        // $http.post("/notifications/updateStatus", "abcdefk").success(function(response) {
-        //   console.log(response);
-        // });
-    }
-
-  });
+          })
+        }
+      });

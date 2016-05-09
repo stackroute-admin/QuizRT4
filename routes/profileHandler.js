@@ -20,7 +20,9 @@ var express = require('express'),
 router = express.Router(),
 Profile = require("../models/profile"),
 userSettingsHandler = require('./userSettingsHandler'),
-FriendShip = require("../models/friendship");
+FriendShip = require("../models/friendship"),
+Notification = require("../models/notifications");
+
 
 router.get('/profileData', function(req, res, next) {
   if (req.session && req.session.user ) {
@@ -40,7 +42,9 @@ router.get('/profileData', function(req, res, next) {
           res.end(JSON.stringify({ error: 'We could not find you in our database. Try again later.'}) );
         }else {
           FriendShip.getFriendsListData(req.session.user).then(function(friends){
-              res.json({ error: null, user:profileData , friends : friends });
+            Notification.getNotifications(req.session.user).then(function(notifications){
+              res.json({ error: null, user:profileData , friends : friends , notificationCount : notifications.length });
+            });
           })
         }
       });
@@ -59,36 +63,36 @@ router.get('/topicsList',function(req,res,next){
 
   var regExp = new RegExp("^"+req.query.topic, 'i');
   Topic.find({'_id': regExp} ,function(err,data){
-      res.send(data);
-})
+    res.send(data);
+  })
 })
 
 router.get('/searchPeople',function(req,res,next){
-    var search  =req.query.name;
-    var topicVal = req.query.selectTopic;
-    switch (req.query.radio) {
-      case 'name':
-                        Profile.find( {'name' : new RegExp(search, 'i')},function(err,data){
-                          if (data==null) {
-                            console.log('no results');
-                          }
-                          res.send(data);
-                          console.log(data);
-                        })
-                          break;
-      case 'topic':
-                          Profile.find({'topicsPlayed.topicId':topicVal} ,function(err,data){
-                            console.log(data);
-                            res.send(data);
-                        })
+  var search  =req.query.name;
+  var topicVal = req.query.selectTopic;
+  switch (req.query.radio) {
+    case 'name':
+    Profile.find( {'name' : new RegExp(search, 'i')},function(err,data){
+      if (data==null) {
+        console.log('no results');
+      }
+      res.send(data);
+      console.log(data);
+    })
+    break;
+    case 'topic':
+    Profile.find({'topicsPlayed.topicId':topicVal} ,function(err,data){
+      console.log(data);
+      res.send(data);
+    })
 
-                        break;
-      case 'country':
-                        Profile.find({'country': new RegExp(search, 'i')},function(err,data){
-                        res.send(data);
-                      })
+    break;
+    case 'country':
+    Profile.find({'country': new RegExp(search, 'i')},function(err,data){
+      res.send(data);
+    })
 
-                        break;
+    break;
   }
 })
 

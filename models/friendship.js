@@ -74,7 +74,7 @@ friendshipSchema.statics.getAcceptanceState = function getAcceptanceState(users)
 friendshipSchema.statics.getFriendsListData = function getFriendsListData(userId){
   var deferred = Q.defer();
   this.model('friendship').getFriends(userId).then(function(friends){
-    var userIds = profile.find({userId : { $in : _.values(friends) }})
+    var userIds = profile.find({userId : { $in : friends }})
     .select({'_id' : 1 , 'imageLink' : 1 , 'userId' : 1})
     .exec(function(err,docs){
       if(err){
