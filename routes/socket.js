@@ -396,9 +396,9 @@ FriendsManager = require('./friendsManager.js')(redisClient);
                       console.log('recieved a notification');
                   });
  
-                  client.on('getMyNotifications', function(user) {
-                      console.log("Get Notification for User", user.userId);
-                      NotificationManager.getNotifications(user.userId, client);
+                  client.on('getMyNotifications', function(userId) {
+                      console.log("Get Notification for User", userId);
+                      NotificationManager.getNotifications(userId, client);
                   });
  
                   client.on('sendInvitedFriends', function(data) {

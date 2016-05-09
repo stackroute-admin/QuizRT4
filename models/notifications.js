@@ -4,7 +4,8 @@ _ = require('underscore'),
 metaDataSchema = new mongoose.Schema({
   from: String,
   to: [String],
-  type: String
+  type: String,
+  url : String
 }),
 notificationSchema = new mongoose.Schema({
   dateAdded: 'Date',
