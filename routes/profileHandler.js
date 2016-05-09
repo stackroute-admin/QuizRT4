@@ -44,6 +44,7 @@ router.get('/profileData', function(req, res, next) {
         }else {
           FriendShip.getFriendsListData(req.session.user).then(function(friends){
             Notification.getNotifications(req.session.user).then(function(notifications){
+              console.log(notifications);
               res.json({ error: null, user:profileData , friends : friends , notificationCount : notifications.length });
             });
           })

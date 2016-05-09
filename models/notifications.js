@@ -16,11 +16,8 @@ notificationSchema = new mongoose.Schema({
 
 
 notificationSchema.statics.getNotifications = function getNotifications(user){
-console.log(user);
   var deferred = Q.defer();
-  mongoose.model('Notification').find({
-    'to': user
-  }).where('seen').equals(false).select('_id metaData').where('seen').equals(false).sort('-dateAdded').exec(function(err, data) {
+  mongoose.model('Notification').find({'metaData.to': user}).where('seen').equals(false).select('_id metaData').where('seen').equals(false).sort('-dateAdded').exec(function(err, data) {
 if(err) deferred.reject(err)
     deferred.resolve(data);
   });

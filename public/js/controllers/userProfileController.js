@@ -175,6 +175,7 @@ angular.module('quizRT')
           }
         }
       }
+      console.log();
       $rootScope.myImage = $rootScope.loggedInUser.imageLink;
       $rootScope.fakeMyName = $rootScope.loggedInUser.name;
       $rootScope.topperImage = $rootScope.loggedInUser.imageLink;
