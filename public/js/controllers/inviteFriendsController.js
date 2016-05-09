@@ -22,7 +22,6 @@ angular.module('quizRT')
       $scope.onlineFriends = [];
       $scope.selectedFriends = [];
       $scope.showWarning = 0;
-      console.log($scope.onlineFriends);
     };
 
     $scope.Refresh= function() {
@@ -51,10 +50,8 @@ angular.module('quizRT')
      }
    };
      $scope.socket.once('catchUrl',function(data){
-       console.log("once--------"+data);
        if(data){
          $rootScope.playGame.url=data;
-         console.log($rootScope.playGame.url);
 
          $http.post( '/topicsHandler/topic/'+ $rootScope.playGame.topicId )
            .then( function( successResponse ) {
@@ -71,7 +68,6 @@ angular.module('quizRT')
     });
 
     $scope.toggleSelectFriend = function(index) {
-      console.log("Selected id", $scope.onlineFriends[index]);
       var userId = $scope.onlineFriends[index].id;
       if($scope.selectedFriends.indexOf(userId) == -1){
           $scope.selectedFriends.push(userId);
@@ -81,7 +77,6 @@ angular.module('quizRT')
         $scope.selectedFriends.pop(userId);
         $scope.onlineFriends[index].selected = false;
       }
-      console.log($scope.selectedFriends);
     };
 
 });

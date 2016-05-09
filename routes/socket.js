@@ -408,30 +408,30 @@ FriendsManager = require('./friendsManager.js')(redisClient);
             });
           });// end tournament socket
 
-          var notificationSocket = io
-              .of('/notification')
-              .on('connection', function(client) {
-                  client.on('respond:to:frndreq',function(data){
-                      console.log('recieved a notification');
-                  });
+       var notificationSocket = io
+          .of('/notification')
+          .on('connection', function(client) {
+            client.on('respond:to:frndreq',function(data){
+              console.log('recieved a notification');
+            });
  
-                  client.on('getMyNotifications', function(userId) {
-                      console.log("Get Notification for User", userId);
-                      NotificationManager.getNotifications(userId, client);
-                  });
+            client.on('getMyNotifications', function(userId) {
+              console.log("Get Notification for User", userId);
+              NotificationManager.getNotifications(userId, client);
+            });
  
-                  client.on('sendInvitedFriends', function(data) {
-                      NotificationManager.inviteFriendsToPlay(data, client);
-                  });
+            client.on('sendInvitedFriends', function(data) {
+              NotificationManager.inviteFriendsToPlay(data, client);
+            });
 
-                  client.on('sendFriendRequest', function(data) {
-                      NotificationManager.handleFriendRequest(data, client);
-                  });
+            client.on('sendFriendRequest', function(data) {
+              NotificationManager.handleFriendRequest(data, client);
+            });
              
-                  client.on('response', function(data) {
-                      NotificationManager.handleResponse(data, client);
-                  });
-              });
+            client.on('response', function(data) {
+              NotificationManager.handleResponse(data, client);
+            });
+        });
 
       /*Storing User Activity in Redis */
       var activeSessionTimeout = 300 /* 5 mins */
