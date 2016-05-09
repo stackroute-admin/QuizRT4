@@ -74,7 +74,7 @@ var GameManager = function() {
       }
       return false;
     } else {
-      var gameId = this.createNewGame( topicId, levelId, playersNeeded, 1 ); // create a new game
+      var gameId = this.createNewGame( topicId, levelId, playersNeeded, 3 ); // create a new game
       if ( gameId ) { // if the game was created successfully
         var isPlayerAdded = this.addPlayerToGame( gameId, topicId, incomingPlayer );
         if ( isPlayerAdded ) {

@@ -158,16 +158,6 @@ angular.module('quizRT')
                           },100);
 
                   });
-                  arcs.on("mouseover", function(d) {
-                          d3.select(this).transition()
-                          .duration(1000)
-                          .attr("d", arcOver);
-                        })
-                      .on("mouseout", function(d) {
-                          d3.select(this).transition()
-                          .duration(1000)
-                          .attr("d", arc);
-                        });
                   function angle(d) {
                       var a = (d.startAngle + d.endAngle) * 90 / Math.PI - 90;
                       return a > 90 ? a - 180 : a;
