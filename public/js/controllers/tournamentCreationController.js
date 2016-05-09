@@ -54,30 +54,32 @@ angular.module('quizRT')
       $scope.difficultyLevels = [1, 2, 3, 4, 5];
     //  $scope.questionPaper='';
       $scope.slider = [{
-        minValue: 0,
-        maxValue: 10,
-        options: {
-          floor: 0,
-          ceil: 10,
-          step: 1
-        }
-      },
-      {
-        minValue: 0,
-        maxValue: 10,
-        options: {
-          floor: 0,
-          ceil: 10,
-          step: 1
-        }
-      }];
+          minValue: 0,
+          maxValue: 10,
+          options: {
+            floor: 0,
+            ceil: 10,
+            step: 1
+          }
+        }];
       //console.log($scope.slider.minValue);
       //stub for  level mux.
       $scope.levelMultiplier = [1, 2, 3, 4, 5];
       $scope.addLevels = function(levelIndex) {
+        console.log('here add level');
+        //$scope.levelsArray.push("Level " + ($scope.levelsArray.length + 1));
 
-        $scope.levelsArray.push("Level " + ($scope.levelsArray.length + 1));
       //  $scope.levelTopicArray[]
+      var tempObj = {
+          minValue: 0,
+          maxValue: 10,
+          options: {
+            floor: 0,
+            ceil: 10,
+            step: 1
+          }
+        };
+      $scope.slider.push(tempObj);
       };
 
       $scope.deleteLevels = function(levelIndex) {
@@ -87,6 +89,19 @@ angular.module('quizRT')
       $scope.selectionChange = function(value, index,key) {
         alert(key);
         //key=T1;
+        if(key=="isRandom"){
+          var tempObj = {
+              minValue: 0,
+              maxValue: 10,
+              options: {
+                floor: 0,
+                ceil: 10,
+                step: 1
+              }
+            };
+          $scope.slider.push(tempObj);
+        }
+
         console.log("value is "+typeof(value));
         console.log(index);
         $scope.levelTopicArray[index] = $scope.levelTopicArray[index] || {};
