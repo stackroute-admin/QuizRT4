@@ -62,8 +62,9 @@ angular.module('quizRT')
              console.log(errorResponse.data.error);
            });
 
-         var obj = {'invitedFriendsList':$scope.selectedFriends, 'url':$rootScope.playGame.url};
+         var obj = {'user': $rootScope.loggedInUser.userId, 'invitedFriendsList':$scope.selectedFriends, 'url':$rootScope.playGame.url};
          $rootScope.socket.emit("sendInvitedFriends", obj);
+         $rootScope.notificationSocket.emit("sendInvitedFriends", obj);
        }
     });
 

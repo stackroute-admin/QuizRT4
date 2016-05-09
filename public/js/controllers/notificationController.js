@@ -1,18 +1,19 @@
 angular.module('quizRT')
   .controller('notificationController', function($scope, $routeParams, $http, $rootScope, $location) {
-    $http.get('/notifications')
-      .success(function(data, status, headers, config) {
-        $scope.notificationData = data;
-      });
 
-    $scope.sendNotification = function(userEvent, notification) {
+   console.log("Get Notifications");
+   $rootScope.notificationSocket.emit("getMyNotifications", $rootScope.loggedInUser);
 
-      $http.get('/notifications/updateStatus/' + notification).success(function(response) {
-          $http.get('/notifications/')
-            .success(function(data, status, headers, config) {
-              $scope.notificationData = data;
-              $rootScope.notificationSocket.emit('respond:to:frndreq', notification);
-            });
-          })
-        }
-      });
+   /*Listen For Notifications */
+   $rootScope.notificationSocket.on('NotificationList', function(data) { 
+      console.log("got some notifications", data);
+      $scope.notificationData = data; 
+   });
+
+   $scope.sendNotification = function(userEvent, notificationData) {
+      notificationData.event = userEvent;
+      console.log("Sending data", notificationData);
+      $rootScope.notificationSocket.emit('response', notificationData);
+   };
+
+  });

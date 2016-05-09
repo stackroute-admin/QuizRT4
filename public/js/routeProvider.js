@@ -45,6 +45,8 @@ angular.module('quizRT', ['ngRoute', 'ngCookies'])
       topicName: "",
       tournamentTitle: ""
     }; // used to pass topic/tournament details to quizPlayerController/tournamentPlayController
+    $rootScope.notificationCount = 0;
+    $rootScope.notificationData = "";
 
     // Added application level watcher here
     $rootScope.$watch('isAuthenticatedCookie', function(nv, ov) { // watch that puts/removes cookie based on $rootScope.isAuthenticatedCookie
@@ -100,11 +102,27 @@ angular.module('quizRT', ['ngRoute', 'ngCookies'])
     $rootScope.redirectTo = function(location) {
       $location.path("/" + location);
     };
+  
+
+    if ($rootScope.notificationSocket) {
+       $rootScope.notificationSocket.on('NewNotification', function(users) { 
+          console.log("got some notifications", users, $rootScope.loggedInUser.userId);
+          if (users.indexOf($rootScope.loggedInUser.userId) != -1)
+          {
+            console.log($rootScope.notificationCount, "count");
+            $rootScope.notificationCount += 1; 
+            console.log($rootScope.notificationCount, "count");
+          }
+          else {
+            console.log("Discarding notification update",$rootScope.loggedInUser);
+          }
+       });
+    }
   })
   .factory('socket', function($rootScope) {
     return function($rootScope, type) {
 
-       var socket = io.connect('http://172.23.238.157:8080' + type, {'forceNew':true } );
+       var socket = io.connect('http://172.23.238.184:8080' + type, {'forceNew':true } );
       /*var socket = io.connect('http://127.0.0.1:8080' + type, {
       // var socket = io.connect('http://192.168.0.103:8082' + type, {'forceNew':true } );
       // var socket = io.connect('http://172.23.238.216:7071' + type, {'forceNew':true } );
