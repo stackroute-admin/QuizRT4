@@ -175,7 +175,7 @@ color: wheat;
 .radioBtn{
 color: wheat;
 }
-input[type=radio] {
+.option-input {
  /*margin: 0 13px 0 13px;*/
   border: 5px;
   width: 100%;
@@ -184,7 +184,7 @@ input[type=radio] {
   margin-top: 20px;
 
 }
-label {
+.modalTable label {
  text-align: center;
 margin: 0 20px 0 20px;
 }
