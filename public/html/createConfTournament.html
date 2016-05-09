@@ -70,7 +70,7 @@
             </select>
           </label><br>
             <label ng-if="isRandom=='random'">Select a difficulty Level:</label>
-            <rzslider ng-if="isRandom=='random'" rz-slider-model="slider[$index].minValue"  rz-slider-high="slider[$index].maxValue"  rz-slider-options="slider[$index].options" ng-click = "selectionChange([slider.minValue,slider.maxValue],$index,'difficultyLevel')"></rzslider>
+            <rzslider ng-if="isRandom=='random'" rz-slider-model="slider[$index].minValue"  rz-slider-high="slider[$index].maxValue"  rz-slider-options="slider[$index].options" ng-click = "selectionChange([slider[$index].minValue,slider[$index].maxValue],$index,'difficultyLevel')"></rzslider>
           <br>
 
             <img ng-src="images/add-icon.png" ng-click="tempArray.push($index)">
