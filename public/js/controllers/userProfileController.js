@@ -58,107 +58,107 @@ angular.module('quizRT')
       $location.path('/quizResult/' + gameId);
     }
 
-
     //test
-    $scope.topicsList = function(data){
-      $http({
-        method : 'GET',
-        url : '/userProfile/topicsList',
-        params : {topic:data}
-      }) .then(
-        function(successResponse) {
-          $scope.topics = successResponse.data;
-        },
-        function(errorResponse) {
-          console.log('Error in fetching data.');
-          console.log(errorResponse.status);
-          console.log(errorResponse.statusText);
-        }
-      )
-    }
-
-    $scope.searchPeople1 = function(){
-      var inputData;
-      $scope.getVal=function(changedVal){
-        $scope.radioVal=changedVal;
-        console.log('radio'+ $scope.radioVal);
-      }
-
-      $scope.showOne = function (){
-        $scope.one = true;
-        $scope.three = false;
-        $scope.four = false;
-      }
-
-      $scope.showThree = function (){
-        $scope.one = false;
-        //  $scope.two = false; // now show this one
-        $scope.three = true;
-        $scope.four = false;
-      }
-
-      $scope.showFour = function (){
-        $scope.one = false;
-        //  $scope.two = false; // now show this one
-        $scope.three = false;
-        $scope.four = true;
-      }
-
-      $scope.clearSearch = function(){
-        $scope.user = null;
-        $scope.topicData = null;
-        $scope.topicsData = null;
-        $scope.searchPeople = null;
-      }
-
-      $scope.selectedTopic=function(value){
-        $scope.topicVal = value;
-        console.log("inside function:"+  $scope.topicVal);
-      }
-
-      $scope.userData = function (user) {
-        inputData = {name:user,radio:$scope.radioVal,selectTopic:$scope.topicVal};
-        $http({
-          method : 'GET',
-          url : '/userProfile/searchPeople',
-          params : inputData
-        }) .then(
-          function(successResponse) {
-            $scope.searchPeople = successResponse.data;
-            $scope.topicSortList = [];
-            if ($scope.topicVal) {
-              for (var i = 0; i < $scope.searchPeople.length; i++) {
-                angular.forEach($scope.searchPeople[i], function(value, key){
-                  if (key =='topicsPlayed') {
-                    var topicKey = value;
-                    angular.forEach(topicKey,function(value,index){
-
-                      if (value.topicId == $scope.topicVal) {
-
-                        $scope.topicSortList.push({topicId:value.topicId,gamesPlayed:value.gamesPlayed,name:$scope.searchPeople[i].name,image:$scope.searchPeople[i].imageLink,userId:$scope.searchPeople[i].userId});
-
-                      }
-                    });
-                  }
-                });
-              }
+      $scope.topicsList = function(data){
+             $http({
+                method : 'GET',
+                url : '/userProfile/topicsList',
+                params : {topic:data}
+              }) .then(
+                function(successResponse) {
+                  $scope.topicsData = successResponse.data;
+                },
+                function(errorResponse) {
+                  console.log('Error in fetching data.');
+                  console.log(errorResponse.status);
+                  console.log(errorResponse.statusText);
+                }
+              )
             }
-          },
-          function(errorResponse) {
-            console.log('Error in fetching data.');
-            console.log(errorResponse.status);
-            console.log(errorResponse.statusText);
-          }
-        )
-      }
-    }
-    $scope.selectedUser=function(selectedLocal) {
-      $('body').removeClass('modal-open');
-      $('.modal-backdrop').remove();
-      $scope.viewUserProfile(selectedLocal.userId)
-    }
-  }
 
+
+
+               $scope.searchPeople1 = function(){
+                 var inputData;
+                   $scope.getVal=function(changedVal){
+                   $scope.radioVal=changedVal;
+                   console.log('radio'+ $scope.radioVal);
+                 }
+                   console.log('radio'+ $scope.radioVal);
+                   $scope.showOne = function (){
+                       $scope.one = true;
+                       $scope.three = false;
+                       $scope.four = false;
+                     }
+
+                     $scope.showThree = function (){
+                       $scope.one = false;
+                      //  $scope.two = false; // now show this one
+                       $scope.three = true;
+                       $scope.four = false;
+                     }
+                     $scope.showFour = function (){
+                       $scope.one = false;
+                      //  $scope.two = false; // now show this one
+                       $scope.three = false;
+                        $scope.four = true;
+                     }
+
+                   $scope.clearSearch = function(){
+                     $scope.user = null;
+                     $scope.topicData = null;
+                     $scope.topicsData = null;
+                      $scope.searchPeople = null;
+                   }
+                     $scope.selectedTopic=function(value){
+                       $scope.topicVal = value;
+                       console.log("inside function:"+  $scope.topicVal);
+                     }
+
+                     $scope.userData = function (user) {
+                     inputData = {name:user,radio:$scope.radioVal,selectTopic:$scope.topicVal};
+                      $http({
+                         method : 'GET',
+                         url : '/userProfile/searchPeople',
+                         params : inputData
+                       }) .then(
+                         function(successResponse) {
+                           $scope.searchPeople = successResponse.data;
+                           $scope.topicSortList = [];
+                                 if ($scope.topicVal) {
+                                   for (var i = 0; i < $scope.searchPeople.length; i++) {
+                                       angular.forEach($scope.searchPeople[i], function(value, key){
+                                         if (key =='topicsPlayed') {
+                                           var topicKey = value;
+                                           angular.forEach(topicKey,function(value,index){
+
+                                             if (value.topicId == $scope.topicVal) {
+
+                                                $scope.topicSortList.push({topicId:value.topicId,gamesPlayed:value.gamesPlayed,name:$scope.searchPeople[i].name,image:$scope.searchPeople[i].imageLink,userId:$scope.searchPeople[i].userId});
+
+                                             }
+                                           });
+                                         }
+                                       });
+                                   }
+                                 }
+                         },
+                         function(errorResponse) {
+                           console.log('Error in fetching data.');
+                           console.log(errorResponse.status);
+                           console.log(errorResponse.statusText);
+                         }
+                       );
+                     }
+                   }
+                   $scope.selectedUser=function(selectedLocal) {
+                     console.log(selectedLocal);
+                     $('body').removeClass('modal-open');
+                     $('.modal-backdrop').remove();
+                     $scope.viewUserProfile(selectedLocal.userId)
+                   }
+
+      //end
   $http({
     method: 'GET',
     url: '/userProfile/profileData'
@@ -308,5 +308,6 @@ angular.module('quizRT')
   })
   .success(function(data) {
     $scope.tournaments = data;
-  });
-})
+  })
+}
+});
