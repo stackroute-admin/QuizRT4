@@ -46,7 +46,6 @@ angular.module('quizRT', ['ngRoute', 'ngCookies','rzModule', 'ui.bootstrap'])
       tournamentTitle: ""
     }; // used to pass topic/tournament details to quizPlayerController/tournamentPlayController
     $rootScope.notificationCount = 0;
-    $rootScope.notificationData = "";
 
     // Added application level watcher here
     $rootScope.$watch('isAuthenticatedCookie', function(nv, ov) { // watch that puts/removes cookie based on $rootScope.isAuthenticatedCookie
@@ -109,9 +108,7 @@ angular.module('quizRT', ['ngRoute', 'ngCookies','rzModule', 'ui.bootstrap'])
           console.log("got some notifications", users, $rootScope.loggedInUser.userId);
           if (users.indexOf($rootScope.loggedInUser.userId) != -1)
           {
-            console.log($rootScope.notificationCount, "count");
-            $rootScope.notificationCount += 1;
-            console.log($rootScope.notificationCount, "count");
+            $rootScope.notificationCount += 1; 
           }
           else {
             console.log("Discarding notification update",$rootScope.loggedInUser);

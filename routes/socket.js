@@ -431,8 +431,7 @@ FriendsManager = require('./friendsManager.js')(redisClient);
                   client.on('response', function(data) {
                       NotificationManager.handleResponse(data, client);
                   });
-              });
-
+              })
       /*Storing User Activity in Redis */
       var activeSessionTimeout = 300 /* 5 mins */
 
