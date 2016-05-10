@@ -234,9 +234,6 @@ angular.module('quizRT')
                               console.log("$scope.skipFlag 2"  + $scope.skipFlag);
                               console.log("$scope.questionCounter  "+$scope.questionCounter);
                               if($scope.questionCounter > 1 && $scope.skipFlag === "initial"){
-                                  // call emit for skipped vals
-                                  console.log("second if emit ");
-                                  $rootScope.socket.emit('confirmAnswer', $scope.skipData);
                               }
                               else if($scope.questionCounter > 1 && $scope.skipFlag != "initial") {
                                   $scope.skipFlag = 'initial';
@@ -322,18 +319,12 @@ angular.module('quizRT')
                 }
 
 
-
             }
-
-              // last time check for skipped question
-              console.log("time is end  " +$scope.time);
-              console.log("$scope.skipFlag end  " + $scope.skipFlag);
-              if ( $scope.time === 0  && $scope.skipFlag === 'initial'){
-                  // emit skipped data
-                  console.log("emitting Skip data...");
-                  $rootScope.socket.emit('confirmAnswer', $scope.skipData);
-              }
-
+            // last time check for skipped question
+            if ( $scope.time === 0  && $scope.skipFlag === 'initial' ){
+                // emit skipped data
+                $rootScope.socket.emit('confirmAnswer', $scope.skipData);
+            }
             }, 1000);// to create 1s timer
           } else {
             $rootScope.hideFooterNav = false;
