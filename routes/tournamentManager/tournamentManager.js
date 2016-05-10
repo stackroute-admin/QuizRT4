@@ -22,7 +22,6 @@ var TournamentManager = function() {
     if ( this.tournaments.has( playerData.tournamentId ) ) {
       var gameManager = this.tournaments.get( playerData.tournamentId );
       playerData.playersNeeded = 2;
-      console.log("inside TournamentManager--------------- **********"+playerData.difficultyLevel);
       var addedSuccessfully = gameManager.managePlayer( playerData.topicId, playerData.levelId, playerData.playersNeeded,undefined, gamePlayer,playerData.difficultyLevel,playerData.questionPaper );
       if ( addedSuccessfully ) {
         if ( this.playerTournaments.has( gamePlayer.userId )) {
@@ -38,12 +37,7 @@ var TournamentManager = function() {
     } else {
       var GameManagerClass = require('../gameManager/gameManager.js');
       var newGameManager = new GameManagerClass();
-<<<<<<< HEAD
-      var addedSuccessfully = newGameManager.managePlayer( playerData.topicId, playerData.levelId, 1, gamePlayer );
-=======
-      console.log("playerData playersNeeded....!!!!!###########$$$$$$$$$$$$$$$$$$$$$$$$$$$",playerData.playersNeeded);
       var addedSuccessfully = newGameManager.managePlayer( playerData.topicId, playerData.levelId, playerData.playersNeeded, undefined,gamePlayer );
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
       if ( addedSuccessfully ) {
         this.tournaments.set( playerData.tournamentId, newGameManager);
         if ( this.playerTournaments.has( gamePlayer.userId )) {
@@ -59,8 +53,6 @@ var TournamentManager = function() {
     }
   };
   this.getGameManager = function( tournamentId ) {
-    console.log("-----------------------------------------------------------------------------------"+tournamentId);
-    console.log(this.tournaments.get(tournamentId));
     return this.tournaments.get(tournamentId);
   };
   this.getPlayerTournaments = function( userId ) {

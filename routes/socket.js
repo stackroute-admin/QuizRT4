@@ -19,23 +19,17 @@
 var GameManagerClass = require('./gameManager/gameManager.js'),
     GameManager = new GameManagerClass(),
     TournamentManager = require('./tournamentManager/tournamentManager.js'),
-<<<<<<< HEAD
     clickStreamStat = require('./clickStreamStatistics'),
-    PreserveGameData = require('./preserveGameData');
-    var preserveData = new PreserveGameData();
-module.exports = function(server,sessionMiddleware) {
-=======
+    PreserveGameData = require('./preserveGameData'),
     NotificationManager = require('./notificationManager/notificationManager.js'),
     uuid= require('node-uuid');
-
-module.exports = function(server,sessionMiddleware,redisClient) {
-FriendsManager = require('./friendsManager.js')(redisClient);
-
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
-  var io = require('socket.io')(server);
-  io.use(function(socket,next){
-    sessionMiddleware(socket.request, socket.request.res, next);
-  });
+    var preserveData = new PreserveGameData();
+    module.exports = function(server,sessionMiddleware,redisClient) {
+    FriendsManager = require('./friendsManager.js')(redisClient);
+    var io = require('socket.io')(server);
+    io.use(function(socket,next){
+      sessionMiddleware(socket.request, socket.request.res, next);
+    });
   io.on('disconnect',function(client){
     console.log( 'Server crashed. All the clients were disconnected from the server.');
   })
@@ -130,20 +124,11 @@ FriendsManager = require('./friendsManager.js')(redisClient);
         client.on('join',function( playerData ) {
           console.log( playerData.userId + ' joined. Wants to play ' + playerData.topicId );
           // check if the user is authenticated and his session exists, if so add him to the game
-
-          addPlayersToGame(playerData);
-        }); // end client-on-join
-
-
-
-        var addPlayersToGame=function(playerData){
-          console.log("this is the current player-------------"+playerData);
           if ( client.request.session && (playerData.userId == client.request.session.user) ) {//req.session.user
             var gamePlayer = {
               userId: playerData.userId,
               playerName: playerData.playerName,
               playerPic: playerData.playerPic,
-              score:0,
               client: client
             };
             var difficultyLevelTopic=[1,2,3,4,5];//for topics game fetch questions from all difficulty levels
@@ -156,10 +141,9 @@ FriendsManager = require('./friendsManager.js')(redisClient);
             console.log('User session does not exist for: ' + playerData.userId + '. Or the user client was knocked out.');
             client.emit( 'userNotAuthenticated' ); //this may not be of much use
           }
-        };
+        }); // end client-on-join
 
-        client.on('expiredLink',function (data) {
-
+	client.on('expiredLink',function (data) {
           console.log("I AM EXPIRED");
           if(data.expired){
             expiredLink=true;
@@ -176,9 +160,7 @@ FriendsManager = require('./friendsManager.js')(redisClient);
             client.emit('checkedURL',{'checkedURL':true});
           }
         });
-
         client.on('confirmAnswer',function(data){
-<<<<<<< HEAD
             // call save on collected  data
         //   var questionCount = GameManager.games.get( data.gameId ).questionCount;
         //   data.questionCount = questionCount;
@@ -189,27 +171,6 @@ FriendsManager = require('./friendsManager.js')(redisClient);
           if(data.ans =='correct'){
             //increment correct of allplayers
             //decrement unsawered of all players
-=======
-          console.log("Dataaaa####!!!!!@@@@",data);
-          console.log(new Date());
-          console.log("Invookeddddddddd");
-          console.log("Invoking Confirm Answer",data.selectedId);
-          console.log(data.correctIndex);
-          if (data.selectedId == data.correctIndex){
-            // console.log();
-            //increment correct of allplayers
-            //decrement unsawered of all players
-            GameManager.getGamePlayers(data.gameId).forEach( function( player, index) {
-
-              if(player.userId==data.userId){
-                console.log("insude if getGame..................................."+data.userId);
-                player.score+=data.scopeTime+10;
-                console.log("score is..................."+player.score);
-                player.client.emit('highLightOption',{correct:true,myScore:player.score,correctInd:data.correctIndex});
-              }
-
-            });
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
             GameManager.getGamePlayers(data.gameId).forEach(function(player){
               player.client.emit('isCorrect');
             });
@@ -217,13 +178,6 @@ FriendsManager = require('./friendsManager.js')(redisClient);
           else if (data.ans =='wrong'){
             //increment wrong of allplayers
             //decrement unsawered of all players
-            GameManager.getGamePlayers(data.gameId).forEach(function( player, index) {
-              if(player.userId==data.userId){
-                player.score-=5;
-                player.client.emit('highLightOption',{correct:false,myScore:player.score});
-              }
-
-            });
             GameManager.getGamePlayers(data.gameId).forEach(function(player){
               player.client.emit('isWrong');
             });
@@ -231,15 +185,6 @@ FriendsManager = require('./friendsManager.js')(redisClient);
         });
 
         client.on('updateStatus',function( gameData ){
-          console.log("-----------------------"+new Date());
-          console.log("Update Status Got Invvoked");
-          GameManager.getGamePlayers(gameData.gameId).forEach( function( player, index) {
-            if(player.userId==gameData.userId){
-              console.log("updated game player.score......"+player.score);
-              gameData.playerScore=player.score;
-              console.log("updated game player score......"+gameData.playerScore);
-            }
-          });
           if ( client.request.session && gameData.userId == client.request.session.user ) {
             GameManager.updateScore( gameData.gameId, gameData.userId, gameData.playerScore );
 
@@ -260,7 +205,6 @@ FriendsManager = require('./friendsManager.js')(redisClient);
           }
         });
         client.on( 'gameFinished', function( game ) {
-<<<<<<< HEAD
             game.preserveObj=preserveData;
             game.gameClient = io.of('/normalGame');
             GameManager.finishGame( game );
@@ -270,9 +214,6 @@ FriendsManager = require('./friendsManager.js')(redisClient);
         //   getUserAnalyticsForGame(client.request.session.user, game.gameId);
         // getUserAnalyticsForGame(client.request.session.user, game.topicId,'null');
         // getUserAnalyticsForGame(client.request.session.userId, game.gameId);
-=======
-          GameManager.finishGame( game );
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
         });
 
         client.on('leaveGame', function( gameId ){
@@ -320,7 +261,6 @@ FriendsManager = require('./friendsManager.js')(redisClient);
                   userId: playerData.userId,
                   playerName: playerData.playerName,
                   playerPic: playerData.playerPic,
-                  score:0,
                   client: client
                 };
 
@@ -337,33 +277,16 @@ FriendsManager = require('./friendsManager.js')(redisClient);
 
 
             client.on('confirmAnswer',function( data ){
-<<<<<<< HEAD
                 // var gm = TournamentManager.getGameManager( data.tournamentId )
                 // var questionCount = gm.games.get( data.gameId ).questionCount;
                 // data.questionCount = questionCount;
                 clickStreamStat.userAnalyticsSave(data,'tournament');
                 preserveData.addVal(data);
               if(data.ans == 'correct') {
-=======
-              //console.log("Printingg Data Blahhhhh",data);
-              console.log("Invoking Confirm Answer",data.selectedId);
-              console.log(data.correctIndex, typeof(data.selectedId), typeof(data.correctIndex));
-              if(data.selectedId == data.correctIndex) {
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
                 var gameManager = TournamentManager.getGameManager( data.tournamentId ),
                     gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
-                  gamePlayers.forEach( function( player, index) {
-                    console.log("------------------------   ------------------------------------   ------------------------------------"+player.userId+" "+player.score);
-                      if(player.userId===data.userId){
-                        console.log("inside if getGameTournament...................................");
-                        player.score+=data.responseTime+10;
-                        console.log("tournament score is..................."+player.score);
-                        player.client.emit('highLightOption',{correct:true,myScore:player.score,correctInd:data.correctIndex});
-                      }
-
-                    });
                 if ( gamePlayers && gamePlayers.length ) {
-                  gamePlayers.forEach( function(player, index) {
+                  gamePlayers.forEach( function(player) {
                     player.client.emit('isCorrect');
                   });
                 } else {
@@ -371,16 +294,7 @@ FriendsManager = require('./friendsManager.js')(redisClient);
                 }
               } else {
                 var gameManager = TournamentManager.getGameManager( data.tournamentId ),
-                     gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
-                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"+gamePlayers);
-                    gamePlayers.forEach(function( player, index) {
-                      console.log('player info'+player.userId);
-                      if(player.userId===data.userId){
-                        player.score-=5;
-                        player.client.emit('highLightOption',{correct:false,myScore:player.score,correctInd:data.correctIndex});
-                      }
-
-                    });
+                    gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
                 if ( gamePlayers && gamePlayers.length ) {
                   gamePlayers.forEach( function(player) {
                     player.client.emit('isWrong');
@@ -394,16 +308,6 @@ FriendsManager = require('./friendsManager.js')(redisClient);
             client.on('updateStatus',function( gameData ){
               var gameManager = TournamentManager.getGameManager( gameData.tournamentId ),
                   gamePlayers = gameManager ? gameManager.getGamePlayers( gameData.gameId ) : null ;
-                  gamePlayers.forEach(function( player, index) {
-                    if(player.userId==gameData.userId){
-                      if (levelMultiplier && player.score>0) {
-                        gameData.playerScore=player.score * levelMultiplier;
-                      }else {
-                        gameData.playerScore = player.score;
-                      }
-                    }
-                  });
-
               if ( gameManager ) {
                 gameManager.updateScore( gameData.gameId, gameData.userId, gameData.playerScore );
                 var intermediateGameBoard = gameManager.getLeaderBoard( gameData.gameId ),
@@ -412,19 +316,12 @@ FriendsManager = require('./friendsManager.js')(redisClient);
                 intermediateGameBoard.some( function(player, index ) {
                   if ( player.userId == gameData.userId ) {
                     myRank = index + 1;
-                    // gameData.playerScore = player.score ;
                     return true;
                   }
                 });
                 if ( gamePlayers && gamePlayers.length ) {
                   gamePlayers.forEach( function( player, index) {
-
-                  if (levelMultiplier && gameTopper.score>0) {
-                    tempTopperScore = gameTopper.score/levelMultiplier;
-                  }else {
-                     tempTopperScore =  gameTopper.score;
-                    }
-                    player.client.emit('takeScore', {myRank: myRank, userId: client.request.session.user, topperName:gameTopper.playerName, topperScore:tempTopperScore, topperImage:gameTopper.playerPic });
+                    player.client.emit('takeScore', {myRank: myRank, userId: client.request.session.user, topperName:gameTopper.playerName, topperScore:gameTopper.score, topperImage:gameTopper.playerPic });
                   });
                 }
               } else {
@@ -459,12 +356,12 @@ FriendsManager = require('./friendsManager.js')(redisClient);
             client.on('respond:to:frndreq',function(data){
               console.log('recieved a notification');
             });
- 
+
             client.on('getMyNotifications', function(userId) {
               console.log("Get Notification for User", userId);
               NotificationManager.getNotifications(userId, client);
             });
- 
+
             client.on('sendInvitedFriends', function(data) {
               NotificationManager.inviteFriendsToPlay(data, client);
             });
@@ -472,7 +369,7 @@ FriendsManager = require('./friendsManager.js')(redisClient);
             client.on('sendFriendRequest', function(data) {
               NotificationManager.handleFriendRequest(data, client);
             });
-             
+
             client.on('response', function(data) {
               NotificationManager.handleResponse(data, client);
             });

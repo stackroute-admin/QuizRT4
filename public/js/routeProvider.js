@@ -15,8 +15,7 @@
 //   Name of Developers  Raghav Goel, Kshitij Jain, Lakshay Bansal, Ayush Jain, Saurabh Gupta, Akshay Meher
 //                        + Anil Sawant
 
-<<<<<<< HEAD
-angular.module('quizRT', ['ngRoute','ngAnimate', 'ngCookies','angular-c3-simple','ngToast'])
+angular.module('quizRT', ['ngRoute','ngAnimate', 'ngCookies','angular-c3-simple','ngToast','rzModule', 'ui.bootstrap'])
     .config(['ngToastProvider', function(ngToast) {
         ngToast.configure({
           verticalPosition: 'bottom',
@@ -25,9 +24,6 @@ angular.module('quizRT', ['ngRoute','ngAnimate', 'ngCookies','angular-c3-simple'
           animation:'slide'
         });
     }])
-=======
-angular.module('quizRT', ['ngRoute', 'ngCookies','rzModule', 'ui.bootstrap'])
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
     .run(function($cookies,$rootScope,$http,$location,socket) {
 
     $rootScope.initializeSockets = function() {
@@ -120,7 +116,7 @@ angular.module('quizRT', ['ngRoute', 'ngCookies','rzModule', 'ui.bootstrap'])
           console.log("got some notifications", users, $rootScope.loggedInUser.userId);
           if (users.indexOf($rootScope.loggedInUser.userId) != -1)
           {
-            $rootScope.notificationCount += 1; 
+            $rootScope.notificationCount += 1;
           }
           else {
             console.log("Discarding notification update",$rootScope.loggedInUser);
@@ -130,24 +126,16 @@ angular.module('quizRT', ['ngRoute', 'ngCookies','rzModule', 'ui.bootstrap'])
   })
   .factory('socket', function($rootScope) {
     return function($rootScope, type) {
-       var socket = io.connect('http://172.23.238.178:8080' + type, {'forceNew':true } );
-      /*var socket = io.connect('http://127.0.0.1:8080' + type, {
-      // var socket = io.connect('http://192.168.0.103:8082' + type, {'forceNew':true } );
+       var socket = io.connect('http://172.23.238.171:7000' + type, {'forceNew':true } );
+    //   /*var socket = io.connect('http://127.0.0.1:8080' + type, {
+    //   var socket = io.connect('http://192.168.0.101:7000' + type, {'forceNew':true } );
       // var socket = io.connect('http://172.23.238.216:7071' + type, {'forceNew':true } );
 
-<<<<<<< HEAD
-      return function($rootScope, type) {
-        // var socket = io.connect('http://192.168.0.104:7000' + type, {'forceNew':true } );
-        var socket = io.connect('http://172.23.238.195:7000' + type, {'forceNew':true } );
-        // var socket = io.connect('http://quizart.stackroute.in:2000' + type, {'forceNew':true } );
-        console.log('Socket initialized for ' + type);
-=======
-      var socket = io.connect('http://172.23.238.151:8080'  + type, {
-        'forceNew': true
-      });*/
+    //   var socket = io.connect('http://172.23.238.151:8080'  + type, {
+        // 'forceNew': true
+    //   })
       // var socket = io.connect('http://quizart.stackroute.in:2000' + type, {'forceNew':true } );
       console.log('Socket initialized for ' + type);
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
 
         return {
           on: function (eventName, callback) {
@@ -330,7 +318,7 @@ angular.module('quizRT', ['ngRoute', 'ngCookies','rzModule', 'ui.bootstrap'])
           'controller': 'notificationController'
         })
         .otherwise({
-          redirectTo : '/'
+          redirectTo : '/404'
         });
     })
     .service('$ajaxService', function($http){

@@ -16,16 +16,11 @@
 var uuid = require('node-uuid'), // used to generate unique game ids
     questionBank = require('./questionBank'),
     LeaderBoard = require('./leaderboard.js'),
-<<<<<<< HEAD
+    prebuildQuestionBank=require('./prebuildQuestions.js'),
     MongoDB = require('./mongoService.js'),
     badgeEligibilityCheck = require('../badgesManager/badgeEligibilityCheck'),
     storeAnalyticsData = require('../analytics/storeAnalyticsData');
 
-=======
-    prebuildQuestionBank=require('./prebuildQuestions.js'),
-    MongoDB = require('./mongoService.js');
-    questionPaper=null;
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
 /**
 ** @param no constructor params
 ** @desc GameManager is a class that will handle all the games running in QuizRT.
@@ -67,7 +62,7 @@ var GameManager = function() {
       topicId: topicId,
       levelId: levelId,
       state: 'WAITING', // can be 'WAITING', 'LIVE', "FINISHED"
-      playersNeeded: playersNeeded ? playersNeeded : 2,
+      playersNeeded: playersNeeded ? playersNeeded : 5,
       leaderBoard: [],
       timer:15,
       players: [],
@@ -83,18 +78,15 @@ var GameManager = function() {
   ** @return true if player was added to a game, otherwise false
   */
   this.managePlayer = function( topicId, levelId, playersNeeded, url,incomingPlayer,difficultyLevel,questionPaper) {
-    console.log("inside----------managePlayer---------"+topicId);
-    console.log("inside----------managePlayer---------"+url);
     var gameId4TopicInWaitStack,gameId4TopicUrlInWaitStack;
     if(url===undefined){
-     gameId4TopicInWaitStack = this.topicsWaiting[topicId];
-  }
-  else{
-    gameId4TopicUrlInWaitStack=this.topicsWaiting[url];
-  }
-  if(url===undefined){
+      gameId4TopicInWaitStack = this.topicsWaiting[topicId];
+    }
+    else{
+      gameId4TopicUrlInWaitStack=this.topicsWaiting[url];
+    }
+ if(url===undefined){
     if ( gameId4TopicInWaitStack ) { // if the game is waiting in the wait stack
-      console.log("#################################Adding player to the game if part..........................");
       var isPlayerAdded = this.addPlayerToGame( gameId4TopicInWaitStack, topicId, incomingPlayer );
       if ( isPlayerAdded ) {
         if ( this.isGameReady( gameId4TopicInWaitStack ) ) {
@@ -107,13 +99,7 @@ var GameManager = function() {
       }
       return false;
     } else {
-<<<<<<< HEAD
       var gameId = this.createNewGame( topicId, levelId, playersNeeded, 3 ); // create a new game
-=======
-      console.log("#################################Adding player to the game else part..........................");
-
-      var gameId = this.createNewGame( topicId, levelId, playersNeeded ); // create a new game
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
       if ( gameId ) { // if the game was created successfully
         var isPlayerAdded = this.addPlayerToGame( gameId, topicId, incomingPlayer );
         if ( isPlayerAdded ) {
@@ -261,30 +247,15 @@ var GameManager = function() {
   ** @param gameId as String
   ** @return true if everything is setup before starting a Game and 'startGame' events are emitted
   */
-<<<<<<< HEAD
-
-  this.startGame = function( gameId ) {
-    var game = this.games.get( gameId ),
-        self = this;
-    questionBank.getQuizQuestions( game.topicId, game.questionCount , function( err, questions ) { // get questions from the questionBank
-=======
   this.startGame = function( gameId,difficultyLevel,questionPaper) {
-    console.log("start gameeeeeeeeeeeeeeeeeee----------------"+difficultyLevel);
     var game = this.games.get( gameId ),
         self = this;
-        console.log("inside start game........................................"+game);
-        console.log("difficultyLevel issssssssssss arry"+difficultyLevel);
-        console.log("Questrion paperrrrrrrrrrrrr--------------"+questionPaper);
         if (difficultyLevel.length === 0) {
           difficultyLevel = [1,2,3,4,5];
-
         }
         if(questionPaper === undefined || questionPaper===null){
     questionBank.getQuizQuestions( game.topicId, difficultyLevel, 5 , function( err, questions ) { // get questions from the questionBank
-      console.log("popppppppppopokkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkoooooooooooo"+questions);
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
       if ( err ) {
-
         console.log('ERROR: Failed to get quiz questions for ' + gameId + '. Cannot start the game. Terminating the game launch.');
         console.error(err);
         // return false;
@@ -428,7 +399,6 @@ console.log("jkjkjkjkjkjkjkjkkjkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+questions);
       gameBoard: gameBoard
     }
     game.players.forEach( function( player ) {
-      console.log("topicId---------------------  ---------------------"+gameResultObj.topicId);
       player.client.emit('takeResult', { error: null, gameResult: gameResultObj } );
       gameBoard.some( function( boardPlayer, index ) {
         if ( player.userId == boardPlayer.userId ) {
@@ -668,6 +638,6 @@ console.log("jkjkjkjkjkjkjkjkkjkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+questions);
   this.updateScore = function( gameId, userId, score) {
     LeaderBoard.updateScore( gameId, userId, score); // call the LeaderBoard to update the player score
   };
+}
 
-};
 module.exports = GameManager;

@@ -16,7 +16,6 @@
 //                        + Anil Sawant
 
 angular.module('quizRT')
-<<<<<<< HEAD
     .controller('userProfileController',function($http,$scope,$rootScope,$location,ngToast,$ajaxService, $badges){
 
       function init(){
@@ -33,66 +32,49 @@ angular.module('quizRT')
           $scope.lastWonBadge = $scope.userBadgeArr[$scope.userBadgeArr.length-1];
         });
       }
-=======
-.controller('userProfileController', function($http, $scope, $rootScope, $location) {
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
 
-  // redirect to login page if the user's isAuthenticated cookie doesn't exist
-  if (!$rootScope.isAuthenticatedCookie) {
-    $rootScope.logInLogOutErrorMsg = 'You are logged out. Kindly Login...';
-    $rootScope.logInLogOutSuccessMsg = '';
-    $location.path('/login');
-  } else {
-    $rootScope.hideFooterNav = false;
-    $rootScope.stylesheetName = "userProfile";
-    $scope.a = 7;
-    $scope.see = true;
-    $scope.btnImg = "images/userProfileImages/seeall.jpg";
-    $scope.recentGameResults = [];
-    for (game in $rootScope.recentGames) {
-      $scope.recentGameResults.push($rootScope.recentGames[game]);
-    }
-    $scope.showTournamentDetails = function(tournamentId) {
-      $location.path('/tournament/' + tournamentId);
-    };
-    //added for test
-    $scope.createTournament = function() {
-      $location.path('/tournamentHandler/createTournament');
-    };
-    //end
-    $scope.seeHide = function(length) {
-      if ($scope.see) {
-        $scope.see = false;
-        $scope.btnImg = "images/userProfileImages/hide.jpg";
-        $scope.a = length;
+      // redirect to login page if the user's isAuthenticated cookie doesn't exist
+      if( !$rootScope.isAuthenticatedCookie ){
+        $rootScope.logInLogOutErrorMsg = 'You are logged out. Kindly Login...';
+        $rootScope.logInLogOutSuccessMsg = '';
+        $location.path('/login');
       } else {
+        $rootScope.hideFooterNav = false;
+        $rootScope.stylesheetName="userProfile";
+        $scope.a=7;
         $scope.see = true;
         $scope.btnImg = "images/userProfileImages/seeall.jpg";
-        $scope.a = 7;
-      }
-    }
-    $scope.showRecentResult = function(gameId) {
-      $rootScope.isComingFromTournament = false;
-      $rootScope.showRecentResult = true;
-      $location.path('/quizResult/' + gameId);
-    }
-
-    //test
-    $scope.topicsList = function(data){
-      $http({
-        method : 'GET',
-        url : '/userProfile/topicsList',
-        params : {topic:data}
-      }) .then(
-        function(successResponse) {
-          $scope.topicsData = successResponse.data;
-        },
-        function(errorResponse) {
-          console.log('Error in fetching data.');
-          console.log(errorResponse.status);
-          console.log(errorResponse.statusText);
+        $scope.recentGameResults = [];
+        for ( game in $rootScope.recentGames ) {
+          $scope.recentGameResults.push( $rootScope.recentGames[game] );
         }
-<<<<<<< HEAD
+        $scope.showTournamentDetails = function( tournamentId ) {
+          $location.path( '/tournament/' + tournamentId );
+        };
+        //added for test
+        $scope.createTournament = function() {
+          $location.path( '/tournamentHandler/createTournament');
+        };
+        //end
+        $scope.seeHide = function(length){
+         if($scope.see){
+           $scope.see = false;
+           $scope.btnImg = "images/userProfileImages/hide.jpg";
+           $scope.a=length;
+         }
+         else{
+           $scope.see = true;
+           $scope.btnImg = "images/userProfileImages/seeall.jpg";
+           $scope.a=7;
+         }
+        }
+        $scope.showRecentResult = function( gameId ) {
+          $rootScope.isComingFromTournament = false;
+          $rootScope.showRecentResult = true;
+          $location.path( '/quizResult/' + gameId );
+        }
+
+
         $rootScope.socket.on('gameBadge',function(data) {
           console.log('hello from tost'+data.userId);
           if($rootScope.loggedInUser.userId===data.userId){
@@ -111,16 +93,21 @@ angular.module('quizRT')
               console.log("I am not the user for this badge");
           }
         })
-      $http({method : 'GET',url:'/userProfile/profileData'})
-        .then( function( successResponse ){
-          $scope.data = successResponse.data.user;
-          $rootScope.loggedInUser = successResponse.data.user;
-          $scope.topicsFollowed = [];
-          if($rootScope.loggedInUser.topicsPlayed != null) {
-            for(var i = 0;i < $rootScope.loggedInUser.topicsPlayed.length;i++){
-              if( $rootScope.loggedInUser.topicsPlayed[i].isFollowed){
-                $scope.topicsFollowed.push( $rootScope.loggedInUser.topicsPlayed[i] );
-=======
+
+$scope.topicsList = function(data){
+      $http({
+        method : 'GET',
+        url : '/userProfile/topicsList',
+        params : {topic:data}
+      }) .then(
+        function(successResponse) {
+          $scope.topicsData = successResponse.data;
+        },
+        function(errorResponse) {
+          console.log('Error in fetching data.');
+          console.log(errorResponse.status);
+          console.log(errorResponse.statusText);
+        }
       )
     }
 
@@ -162,8 +149,7 @@ angular.module('quizRT')
         $scope.topicVal = value;
         console.log("inside function:"+  $scope.topicVal);
       }
-
-      $scope.userData = function (user) {
+ $scope.userData = function (user) {
         inputData = {name:user,radio:$scope.radioVal,selectTopic:$scope.topicVal};
         $http({
           method : 'GET',
@@ -188,7 +174,6 @@ angular.module('quizRT')
                     });
                   }
                 });
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
               }
             }
           },
@@ -207,22 +192,18 @@ angular.module('quizRT')
       $scope.viewUserProfile(selectedLocal.userId)
     }
 
-    //end
-    $http({
-      method: 'GET',
-      url: '/userProfile/profileData'
-    })
-    .then(function(successResponse) {
-      $scope.data = successResponse.data.user;
-      $rootScope.loggedInUser = successResponse.data.user;
-      $rootScope.friends = successResponse.data.friends;
-      $scope.topicsFollowed = [];
-      if ($rootScope.loggedInUser.topicsPlayed != null) {
-        for (var i = 0; i < $rootScope.loggedInUser.topicsPlayed.length; i++) {
-          if ($rootScope.loggedInUser.topicsPlayed[i].isFollowed) {
-            $scope.topicsFollowed.push($rootScope.loggedInUser.topicsPlayed[i]);
+      $http({method : 'GET',url:'/userProfile/profileData'})
+        .then( function( successResponse ){
+          $scope.data = successResponse.data.user;
+          $rootScope.loggedInUser = successResponse.data.user;
+          $scope.topicsFollowed = [];
+          if($rootScope.loggedInUser.topicsPlayed != null) {
+            for(var i = 0;i < $rootScope.loggedInUser.topicsPlayed.length;i++){
+              if( $rootScope.loggedInUser.topicsPlayed[i].isFollowed){
+                $scope.topicsFollowed.push( $rootScope.loggedInUser.topicsPlayed[i] );
+              }
+            }
           }
-<<<<<<< HEAD
           $rootScope.myImage = $rootScope.loggedInUser.imageLink;
           $rootScope.fakeMyName = $rootScope.loggedInUser.name;
           $rootScope.topperImage = $rootScope.loggedInUser.imageLink;
@@ -346,36 +327,9 @@ angular.module('quizRT')
           $rootScope.serverErrorStatusText = errorResponse.statusText;
           $location.path('/error');
           console.log('User profile could not be loaded!');
+
         });
-        $scope.showFollowedTopic = function(topicID){
-          var path = '/topic/'+topicID;
-          $location.path(path);
-        };
-        $scope.play = function() {
-          $location.path( "/categories" );
-=======
-        }
-      }
-      console.log();
-      $rootScope.myImage = $rootScope.loggedInUser.imageLink;
-      $rootScope.fakeMyName = $rootScope.loggedInUser.name;
-      $rootScope.topperImage = $rootScope.loggedInUser.imageLink;
-      $rootScope.userIdnew = $rootScope.loggedInUser.userId;
-      $rootScope.notificationCount = successResponse.data.notificationCount;
-    }, function(errorResponse) {
-      if (errorResponse.status === 401) {
-        $rootScope.isAuthenticatedCookie = false;
-        console.log('User not authenticated by Passport.');
-      }
-      $rootScope.serverErrorMsg = errorResponse.data.error;
-      $rootScope.serverErrorStatus = errorResponse.status;
-      $rootScope.serverErrorStatusText = errorResponse.statusText;
-      $location.path('/error');
-      console.log('User profile could not be loaded!');
-    });
-
-
-    $scope.viewUserProfile = function(user) {
+$scope.viewUserProfile = function(user) {
       $http({
         method: 'GET',
         url: '/userProfile/profileData/' + user,
@@ -396,7 +350,6 @@ angular.module('quizRT')
               $scope.friendUser.topicsFollowed.push($rootScope.friendUser.topicsPlayed[i]);
             }
           }
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
         }
         $location.path('/friendUserProfile/' + $rootScope.friendUser.name);
       }, function(errorResponse) {
@@ -429,29 +382,24 @@ angular.module('quizRT')
         $scope.viewUserProfile(user.userId)
       })
     }
-
-
-    $scope.showFollowedTopic = function(topicID) {
-      var path = '/topic/' + topicID;
-      $location.path(path);
-    };
-    $scope.play = function() {
-      $location.path("/categories");
-    }
-    $rootScope.socket.on('refreshUser', function(refreshData) {
-      console.log('Refresh user recevied.');
-      $rootScope.loggedInUser = refreshData.user;
-    });
-    $rootScope.tournamentSocket.on('refreshUser', function(refreshData) {
-      console.log('Refresh user recevied.');
-      $rootScope.loggedInUser = refreshData.user;
-    });
-    $http({
-      method: 'GET',
-      url: '/tournamentHandler/tournaments'
-    })
-    .success(function(data) {
-      $scope.tournaments = data;
-    })
-  }
-});
+        $scope.showFollowedTopic = function(topicID){
+          var path = '/topic/'+topicID;
+          $location.path(path);
+        };
+        $scope.play = function() {
+          $location.path( "/categories" );
+        }
+        $rootScope.socket.on( 'refreshUser', function( refreshData ) {
+          console.log('Refresh user recevied.');
+          $rootScope.loggedInUser = refreshData.user;
+        });
+        $rootScope.tournamentSocket.on( 'refreshUser', function( refreshData ) {
+          console.log('Refresh user recevied.');
+          $rootScope.loggedInUser = refreshData.user;
+        });
+        $http({method : 'GET',url:'/tournamentHandler/tournaments'})
+        .success(function(data){
+          $scope.tournaments = data;
+        });
+      }
+  });
