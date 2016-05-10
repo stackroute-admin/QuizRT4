@@ -25,6 +25,6 @@ questionPaperSchema = mongoose.Schema({
   questions: [{type:mongoose.Schema.Types.ObjectId, ref:'Question'}]
 });
 
-QuestionPapers = mongoose.model('QuestionPapers',questionPaperSchema,'QuestionPapers');
+QuestionPapers = mongoose.model('QuestionPapers',questionPaperSchema,'questionPapers');
 
 module.exports = QuestionPapers;

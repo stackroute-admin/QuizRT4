@@ -15,312 +15,305 @@
 //   Name of Developers  Anil Sawant
 
 angular.module('quizRT')
-    .controller('tournamentPlayController', function($route, $scope, $location, $interval, $http, $rootScope, $window, $cookies, $timeout) {
-      if ( !$rootScope.loggedInUser ) {
-        $rootScope.isAuthenticatedCookie = false;
-        $rootScope.serverErrorMsg = 'User not authenticated.';
-        $rootScope.serverErrorStatus = 401;
-        $rootScope.serverErrorStatusText = 'You are not logged in. Kindly do a fresh login.';
-        $location.path('/error');
-      } else {
-        $rootScope.hideFooterNav = true;
-        $scope.gameId = '';
-        $scope.levelId = $rootScope.playGame.levelId;
-        $scope.levelMultiplier = $rootScope.playGame.levelMultiplier;
-        $scope.tournamentId = $rootScope.playGame.tournamentId;
-        $scope.topicId = $rootScope.playGame.topicId;
-        $scope.topicName = $rootScope.playGame.topicName;
-        $scope.tournamentTitle = $rootScope.playGame.tournamentTitle;
-        if ( $scope.levelId && $scope.levelId.length ) {
-          $scope.roundCount = $scope.levelId.substring($scope.levelId.lastIndexOf("_") + 1);
-        }
-        $scope.myscore = 0;
-        $scope.myrank = 0;
-        $scope.topperScore = 0;
-        $scope.topperName = 'Topper';
-        $scope.correctAnswerers = 0;
-        $scope.wrongAnswerers = 0;
-        $scope.unattempted = 0;
-        $scope.quizTitle = $scope.tournamentTitle;
-        var playersPerMatch = $rootScope.playersPerMatch;
-        $scope.pendingUsersCount = playersPerMatch;
-        $scope.question = "Setting up your game...";
-        // console.log("WAITING FOR " + playersPerMatch +" OTHER PLAYERS");
+.controller('tournamentPlayController', function($route, $scope, $location, $interval, $http, $rootScope, $window, $cookies, $timeout) {
+  if ( !$rootScope.loggedInUser ) {
+    $rootScope.isAuthenticatedCookie = false;
+    $rootScope.serverErrorMsg = 'User not authenticated.';
+    $rootScope.serverErrorStatus = 401;
+    $rootScope.serverErrorStatusText = 'You are not logged in. Kindly do a fresh login.';
+    $location.path('/error');
+  } else {
+    $rootScope.hideFooterNav = true;
+    $scope.gameId = '';
+    $scope.levelId = $rootScope.playGame.levelId;
+    $scope.levelMultiplier = $rootScope.playGame.levelMultiplier;
+    $scope.tournamentId = $rootScope.playGame.tournamentId;
+    $scope.topicId = $rootScope.playGame.topicId;
+    $scope.topicName = $rootScope.playGame.topicName;
+    $scope.tournamentTitle = $rootScope.playGame.tournamentTitle;
+    if ( $scope.levelId && $scope.levelId.length ) {
+      $scope.roundCount = $scope.levelId.substring($scope.levelId.lastIndexOf("_") + 1);
+    }
+    $scope.myscore = 0;
+    $scope.myrank = 0;
+    $scope.topperScore = 0;
+    $scope.topperName = 'Topper';
+    $scope.correctAnswerers = 0;
+    $scope.wrongAnswerers = 0;
+    $scope.unattempted = 0;
+    $scope.quizTitle = $scope.tournamentTitle;
+    var playersPerMatch = $rootScope.playersPerMatch;
+    $scope.pendingUsersCount = playersPerMatch;
+    $scope.question = "Setting up your game...";
+    // console.log("WAITING FOR " + playersPerMatch +" OTHER PLAYERS");
 
-        // levelId is defined for Tournaments only
-        if($scope.levelId){
-             $scope.levelDetails = "Round "+ $scope.roundCount + " : " + $scope.topicName;
-        }else{
-            $scope.levelDetails = "";
-        }
-        // watch when the user leaves the quiz-play page to show/hide footer nav
-        $scope.$on( '$routeChangeStart', function(args) {
-          $rootScope.hideFooterNav = false;
-        });
-        // create the playerData obj for the quiz gameManager to identify the player and his client
-        var playerData = {
-            levelId: $scope.levelId, // defined only for Tournaments
-            levelMultiplier: $scope.levelMultiplier,
-            tournamentId: $scope.tournamentId,
-            topicId: $scope.topicId,
-            difficultyLevel:  $rootScope.playGame.difficultyLevel,
-            userId: $rootScope.loggedInUser.userId,
-            playerName: $rootScope.loggedInUser.name,
-            playerPic: $rootScope.loggedInUser.imageLink,
-            questionPaper:$rootScope.playGame.questionPaper,
-            playersNeeded: playersPerMatch
-        };
-        $rootScope.tournamentSocket.emit('joinTournament', playerData); // enter the tournament and wait for other players to join
+    // levelId is defined for Tournaments only
+    if($scope.levelId){
+      $scope.levelDetails = "Round "+ $scope.roundCount + " : " + $scope.topicName;
+    }else{
+      $scope.levelDetails = "";
+    }
+    // watch when the user leaves the quiz-play page to show/hide footer nav
+    $scope.$on( '$routeChangeStart', function(args) {
+      $rootScope.hideFooterNav = false;
+    });
+    // create the playerData obj for the quiz gameManager to identify the player and his client
+    var playerData = {
+      levelId: $scope.levelId, // defined only for Tournaments
+      levelMultiplier: $scope.levelMultiplier,
+      tournamentId: $scope.tournamentId,
+      topicId: $scope.topicId,
+      difficultyLevel:  $rootScope.playGame.difficultyLevel,
+      userId: $rootScope.loggedInUser.userId,
+      playerName: $rootScope.loggedInUser.name,
+      playerPic: $rootScope.loggedInUser.imageLink,
+      questionPaper:$rootScope.playGame.questionPaper,
+      playersNeeded: playersPerMatch
+    };
+    $rootScope.tournamentSocket.emit('joinTournament', playerData); // enter the tournament and wait for other players to join
 
-        $rootScope.tournamentSocket.on( 'userNotAuthenticated', function() {
-            $rootScope.isAuthenticatedCookie = false;
-            $rootScope.serverErrorMsg = 'User not authenticated.';
-            $rootScope.serverErrorStatus = 401;
-            $rootScope.serverErrorStatusText = 'User session could not be found. kindly do a fresh login.';
-            $location.path('/error');
-            // console.log('Problem maintaining the user session!');
-        });
+    $rootScope.tournamentSocket.on( 'userNotAuthenticated', function() {
+      $rootScope.isAuthenticatedCookie = false;
+      $rootScope.serverErrorMsg = 'User not authenticated.';
+      $rootScope.serverErrorStatus = 401;
+      $rootScope.serverErrorStatusText = 'User session could not be found. kindly do a fresh login.';
+      $location.path('/error');
+      // console.log('Problem maintaining the user session!');
+    });
 
-        $rootScope.tournamentSocket.once('startGame', function( startGameData ) {
-          // console.log(startGameData);
-          if ( startGameData.questions && startGameData.questions.length && startGameData.questions[0]) {
-            $rootScope.freakgid = startGameData.gameId;
-            $scope.playersCount = startGameData.playersNeeded;
-            $scope.questionCounter = 0; // reset the questionCounter for each game
-            $scope.question = "Starting Game in...";
-            $scope.time = 3;
-            $scope.timerSpan = $('#timer');
-            $scope.shouldContinue=true;
-            $scope.timeInterval = $interval( function() {
-                if($scope.shouldContinue){
-                  $scope.time--;
-                  //waiting for counter to end to start the Quiz
-                  if ($scope.time === 0) {
-                      $scope.isDisabled = false;
-                      $scope.wrongAnswerers = 0;
-                      $scope.correctAnswerers = 0;
-                      $scope.unattempted = $scope.playersCount;
-                      if ( $scope.questionCounter == startGameData.questions.length ) {
-                          $interval.cancel($scope.timeInterval);
-                          $scope.options = null;
-                          $scope.question = 'Game finished. Compiling the result...';
-                          $scope.questionImage = null;
-                          $scope.unattempted = 0;
-                          $scope.finishGameData = {
-                            gameId: startGameData.gameId,
-                            tournamentId: $scope.tournamentId,
-                            levelId: $scope.levelId,
-                            topicId: startGameData.topicId
-                          };
-                          $rootScope.tournamentSocket.emit( 'gameFinished', $scope.finishGameData );
-                      } else {
-                        if(!$scope.currentQuestion) {
-                          $scope.currentQuestion = startGameData.questions[$scope.questionCounter];
-                          $scope.options = $scope.currentQuestion.options;
-                          // console.log($scope.options);
-                          $scope.questionCounter++;
-                          $scope.question = $scope.questionCounter + ". " +$scope.currentQuestion.question;
-                          if ($scope.currentQuestion.image != "null")
-                              $scope.questionImage = $scope.currentQuestion.image;
-                          else {
-                              $scope.questionImage = null;
-                          }
-                          $scope.time = 5;
-                        } else {
-
-                          $scope.shouldContinue = false;
-                          $timeout(function(correctIndex) {
-                            $('.selectedOptionTournament').removeClass('selectedOptionTournament btn-danger');
-                            $('#'+correctIndex).removeClass('btn-success');
-                            $scope.currentQuestion = startGameData.questions[$scope.questionCounter];
-                            $scope.options = $scope.currentQuestion.options;
-                            // console.log($scope.options);
-                            $scope.questionCounter++;
-                            $scope.question = $scope.questionCounter + ". " +$scope.currentQuestion.question;
-                            if ($scope.currentQuestion.image != "null")
-                            $scope.questionImage = $scope.currentQuestion.image;
-                            else {
-                              $scope.questionImage = null;
-                            }
-                            $scope.time = 5;
-                            $scope.shouldContinue = true;
-                          },20,true,$scope.currentQuestion.correctIndex);
-                        }
-
-
-
-                          $scope.changeColor = function(id, clickEvent) {
-                            $scope.isDisabled = true;
-                            // console.log("Question Counter",$scope.questionCounter);
-                            // console.log("Debugging Change Color",id);
-                            // console.log("Debugging Change Color",clickEvent);
-                            // // console.log("Inside Change Color -  ClickEventTarget",clickEvent.target);
-                            // // console.log(angular.element(clickEvent.target).attributes);
-                            angular.element(clickEvent.target).addClass('selectedOptionTournament');
-                            var correctIndexId = $scope.currentQuestion.correctIndex;
-                            if($('.selectedOptionTournament').attr('id') == correctIndexId){
-                              $('#'+$scope.currentQuestion.correctIndex).addClass('btn-success');
-                            }
-                            else{
-                            $('.selectedOptionTournament').addClass('btn-danger');
-                            $('#'+$scope.currentQuestion.correctIndex).addClass('btn-success');
-
-                          }
-
-
-                            var obj = {
-                              gameId: startGameData.gameId,
-                              topicId: startGameData.topicId,
-                              selectedId:id,
-                              tournamentId: $scope.tournamentId,
-                              questionId : $scope.currentQuestion.questionId,
-                              // selectedElm:element,
-                              correctIndex:$scope.currentQuestion.correctIndex,
-                              // myScore:$scope.myscore,
-                              responseTime:$scope.time,
-                              userId:$rootScope.loggedInUser.userId,
-                              gameTime:new Date().toString()
-                            };
-                            // console.log(obj);
-                            $rootScope.tournamentSocket.emit('confirmAnswer', {
-
-                                gameId: startGameData.gameId,
-                                topicId: startGameData.topicId,
-                                selectedId:id,
-                                tournamentId: $scope.tournamentId,
-                                questionId : $scope.currentQuestion.questionId,
-                                // selectedElm:element,
-                                correctIndex:$scope.currentQuestion.correctIndex,
-                                 myScore:$scope.myscore,
-                                responseTime:$scope.time,
-                                userId:$rootScope.loggedInUser.userId,
-                                gameTime:new Date().toString()
-                            });
-
-
-                        $rootScope.tournamentSocket.emit('updateStatus', {
-
-                            gameId: startGameData.gameId,
-                            topicId: startGameData.topicId,
-                            userId: $rootScope.loggedInUser.userId,
-                            tournamentId: $scope.tournamentId,
-                            playerName: $rootScope.loggedInUser.name,
-                            playerPic: $rootScope.loggedInUser.imageLink
-                        });
-
-
-
-                          };
-                      }
+    $rootScope.tournamentSocket.once('startGame', function( startGameData ) {
+      // console.log(startGameData);
+      if ( startGameData.questions && startGameData.questions.length && startGameData.questions[0]) {
+        $rootScope.freakgid = startGameData.gameId;
+        $scope.playersCount = startGameData.playersNeeded;
+        $scope.questionCounter = 0; // reset the questionCounter for each game
+        $scope.question = "Starting Game in...";
+        $scope.time = 3;
+        $scope.timerSpan = $('#timer');
+        $scope.shouldContinue=true;
+        $scope.timeInterval = $interval( function() {
+          if($scope.shouldContinue){
+            $scope.time--;
+            //waiting for counter to end to start the Quiz
+            if ($scope.time === 0) {
+              $scope.isDisabled = false;
+              $scope.wrongAnswerers = 0;
+              $scope.correctAnswerers = 0;
+              $scope.unattempted = $scope.playersCount;
+              if ( $scope.questionCounter == startGameData.questions.length ) {
+                $interval.cancel($scope.timeInterval);
+                $scope.options = null;
+                $scope.question = 'Game finished. Compiling the result...';
+                $scope.questionImage = null;
+                $scope.unattempted = 0;
+                $scope.finishGameData = {
+                  gameId: startGameData.gameId,
+                  tournamentId: $scope.tournamentId,
+                  levelId: $scope.levelId,
+                  topicId: startGameData.topicId
+                };
+                $rootScope.tournamentSocket.emit( 'gameFinished', $scope.finishGameData );
+              } else {
+                if(!$scope.currentQuestion) {
+                  $scope.currentQuestion = startGameData.questions[$scope.questionCounter];
+                  $scope.options = $scope.currentQuestion.options;
+                  // console.log($scope.options);
+                  $scope.questionCounter++;
+                  $scope.question = $scope.questionCounter + ". " +$scope.currentQuestion.question;
+                  if ($scope.currentQuestion.image != "null")
+                  $scope.questionImage = $scope.currentQuestion.image;
+                  else {
+                    $scope.questionImage = null;
                   }
+                  $scope.time = 5;
+                } else {
 
+                  $scope.shouldContinue = false;
+                  $timeout(function(correctIndex) {
+                    $('.selectedOptionTournament').removeClass('selectedOptionTournament btn-danger');
+                    $('#'+correctIndex).removeClass('btn-success');
+                    console.log('Current Ques' , $scope.currentQuestion);
+                    $scope.currentQuestion = startGameData.questions[$scope.questionCounter];
+                    console.log('Current Ques 2' , $scope.currentQuestion);
+                    $scope.options = $scope.currentQuestion.options;
+                    // console.log($scope.options);
+                    $scope.questionCounter++;
+                    $scope.question = $scope.questionCounter + ". " +$scope.currentQuestion.question;
+                    if ($scope.currentQuestion.image != "null")
+                    $scope.questionImage = $scope.currentQuestion.image;
+                    else {
+                      $scope.questionImage = null;
+                    }
+                    $scope.time = 5;
+                    $scope.shouldContinue = true;
+                  },20,true,$scope.currentQuestion.correctIndex);
                 }
 
-            }, 1000);// to create 1s timer
-          } else {
-            $rootScope.hideFooterNav = false;
-            $scope.question = 'Selected topic does not have any questions in our QuestionBank :(';
-          }
-        });
 
-        $rootScope.tournamentSocket.on('highLightOption', function(data) {
-          // console.log("Debugging highLightOption",data);
-          console.log("In Callback");
-          $scope.myscore=data.myScore;
-          console.log('hello my score is......'+$scope.myscore);
-          if(data.correct){
-            // console.log('hello');
-            // $(data.elem.target).addClass('btn-success');
-            console.log("Data correct");
-            // $('.selectedOptionTournament').addClass('btn-success');
-          }
-          else{
-              // console.log('hello');
-            // $(data.elem.target).addClass('btn-danger');
-            console.log("Data false");
-            // $('.selectedOptionTournament').addClass('btn-danger');
-            // $('#option'+ data.correctInd).addClass('btn-success');
-          }
 
-        });
+                $scope.changeColor = function(id, clickEvent) {
+                  $scope.isDisabled = true;
+                  angular.element(clickEvent.target).addClass('selectedOptionTournament');
+                  var correctIndexId = $scope.currentQuestion.correctIndex;
+                  if($('.selectedOptionTournament').attr('id') == correctIndexId){
+                    $('#'+$scope.currentQuestion.correctIndex).addClass('btn-success');
+                  }
+                  else{
+                    $('.selectedOptionTournament').addClass('btn-danger');
+                    $('#'+$scope.currentQuestion.correctIndex).addClass('btn-success');
 
-        $scope.leaveGame = function() {
-          $rootScope.tournamentSocket.emit('leaveGame', {userId: $rootScope.loggedInUser.userId, tournamentId: $scope.tournamentId, gameId: $scope.gameId}, function( leaveData ) {
-            if ( !leaveData.error ) {
-              $('#cancelLeaveGame').click();
-              $timeout( function() {
-                $location.path( '/tournament/' + $scope.tournamentId );
-              }, 500);
+                  }
+
+
+                  var obj = {
+                    gameId: startGameData.gameId,
+                    topicId: startGameData.topicId,
+                    selectedId:id,
+                    tournamentId: $scope.tournamentId,
+                    questionId : $scope.currentQuestion.questionId,
+                    // selectedElm:element,
+                    correctIndex:$scope.currentQuestion.correctIndex,
+                    // myScore:$scope.myscore,
+                    responseTime:$scope.time,
+                    userId:$rootScope.loggedInUser.userId,
+                    gameTime:new Date().toString()
+                  };
+                  // console.log(obj);
+                  $rootScope.tournamentSocket.emit('confirmAnswer', {
+
+                    gameId: startGameData.gameId,
+                    topicId: startGameData.topicId,
+                    selectedId:id,
+                    tournamentId: $scope.tournamentId,
+                    questionId : $scope.currentQuestion.questionId,
+                    // selectedElm:element,
+                    correctIndex:$scope.currentQuestion.correctIndex,
+                    myScore:$scope.myscore,
+                    responseTime:$scope.time,
+                    userId:$rootScope.loggedInUser.userId,
+                    gameTime:new Date().toString()
+                  });
+
+
+                  $rootScope.tournamentSocket.emit('updateStatus', {
+
+                    gameId: startGameData.gameId,
+                    topicId: startGameData.topicId,
+                    userId: $rootScope.loggedInUser.userId,
+                    tournamentId: $scope.tournamentId,
+                    playerName: $rootScope.loggedInUser.name,
+                    playerPic: $rootScope.loggedInUser.imageLink
+                  });
+                };
+              }
             }
-          }); // leave the game
-        };
-        $rootScope.tournamentSocket.on('takeScore', function(data) {
-          if ( data.userId == $rootScope.loggedInUser.userId ) {
-            $scope.myrank = data.myRank;
           }
-          $scope.topperScore = data.topperScore;
-          $scope.topperImage = data.topperImage;
-          $scope.topperName = data.topperName;
-        });
-        $rootScope.tournamentSocket.on('isCorrect', function(data) {
-          $scope.correctAnswerers++;
-          $scope.unattempted--;
-        });
-        $rootScope.tournamentSocket.on('isWrong', function(data) {
-          $scope.wrongAnswerers++;
-          $scope.unattempted--;
-        });
-        $rootScope.tournamentSocket.on('pendingPlayers', function(data) {
-          $scope.question = "WAITING FOR " + data.pendingPlayers +" OTHER PLAYER(S)";
-          $scope.gameId = data.gameId;
-        });
-        $rootScope.tournamentSocket.on('playerLeft', function( data ) {
-          $scope.playersCount = data.remainingCount;
-          $scope.playerLeft = data.playerName + " left the game.";
-        });
-        $scope.$watch( 'playerLeft', function(nv,ov) {
-          if ( nv ) {
-            $timeout( function() {
-              $scope.playerLeft = '';
-            },2000);
-          }
-        });
-        $rootScope.tournamentSocket.on('playerJoined', function( data ) {
-          // $scope.playersCount = data.newCount;
-          $scope.playerJoined = data.playerName + " joined the game.";
-        });
-        $scope.$watch( 'playerJoined', function(nv,ov) {
-          if ( nv ) {
-            $timeout( function() {
-              $scope.playerJoined = '';
-            },2000);
-          }
-        });
-        $rootScope.tournamentSocket.on( 'takeResult', function( resultData ) {
-            $rootScope.recentGames[resultData.gameResult.gameId] = {
-              error: resultData.error,
-              gameId: resultData.gameResult.gameId,
-              tournamentId: resultData.gameResult.tournamentId,
-              topicId: resultData.gameResult.topicId,
-              gameBoard: resultData.gameResult.gameBoard
-            };
-            $timeout( function() {
-              $location.path( '/quizResult/' + resultData.gameResult.gameId );
-            },2000);
-        });
-        $rootScope.tournamentSocket.on( 'alreadyPlayingTheGame', function( duplicateEntryData ) {
-          $scope.question = 'WARNING!!  You are already playing ' + duplicateEntryData.topicId + '. Kindly complete the previous game or play a different one.';
-          $rootScope.hideFooterNav = false;
-        });
-        $rootScope.tournamentSocket.on( 'serverMsg', function( msgData ) {
-          if (msgData.type == 'LOGOUT') {
-            $cookies.remove('isAuthenticated');
-            $rootScope.loggedInUser = null;
-            $rootScope.isAuthenticatedCookie = false;
-            $rootScope.logInLogOutErrorMsg = 'Server knocked out your session. This may be due to running multiple sessions.';
-            $rootScope.logInLogOutSuccessMsg = '';
-            $location.path('/login');
-          }
-        });
+
+        }, 1000);// to create 1s timer
+      } else {
+        $rootScope.hideFooterNav = false;
+        $scope.question = 'Selected topic does not have any questions in our QuestionBank :(';
       }
     });
+
+    $rootScope.tournamentSocket.on('highLightOption', function(data) {
+      // console.log("Debugging highLightOption",data);
+      console.log("In Callback");
+      $scope.myscore=data.myScore;
+      console.log('hello my score is......'+$scope.myscore);
+      if(data.correct){
+        // console.log('hello');
+        // $(data.elem.target).addClass('btn-success');
+        console.log("Data correct");
+        // $('.selectedOptionTournament').addClass('btn-success');
+      }
+      else{
+        // console.log('hello');
+        // $(data.elem.target).addClass('btn-danger');
+        console.log("Data false");
+        // $('.selectedOptionTournament').addClass('btn-danger');
+        // $('#option'+ data.correctInd).addClass('btn-success');
+      }
+
+    });
+
+    $scope.leaveGame = function() {
+      $rootScope.tournamentSocket.emit('leaveGame', {userId: $rootScope.loggedInUser.userId, tournamentId: $scope.tournamentId, gameId: $scope.gameId}, function( leaveData ) {
+        if ( !leaveData.error ) {
+          $('#cancelLeaveGame').click();
+          $timeout( function() {
+            $location.path( '/tournament/' + $scope.tournamentId );
+          }, 500);
+        }
+      }); // leave the game
+    };
+    $rootScope.tournamentSocket.on('takeScore', function(data) {
+      if ( data.userId == $rootScope.loggedInUser.userId ) {
+        $scope.myrank = data.myRank;
+      }
+      $scope.topperScore = data.topperScore;
+      $scope.topperImage = data.topperImage;
+      $scope.topperName = data.topperName;
+    });
+    $rootScope.tournamentSocket.on('isCorrect', function(data) {
+      $scope.correctAnswerers++;
+      $scope.unattempted--;
+    });
+    $rootScope.tournamentSocket.on('isWrong', function(data) {
+      $scope.wrongAnswerers++;
+      $scope.unattempted--;
+    });
+    $rootScope.tournamentSocket.on('pendingPlayers', function(data) {
+      $scope.question = "WAITING FOR " + data.pendingPlayers +" OTHER PLAYER(S)";
+      $scope.gameId = data.gameId;
+    });
+    $rootScope.tournamentSocket.on('playerLeft', function( data ) {
+      $scope.playersCount = data.remainingCount;
+      $scope.playerLeft = data.playerName + " left the game.";
+    });
+    $scope.$watch( 'playerLeft', function(nv,ov) {
+      if ( nv ) {
+        $timeout( function() {
+          $scope.playerLeft = '';
+        },2000);
+      }
+    });
+    $rootScope.tournamentSocket.on('playerJoined', function( data ) {
+      // $scope.playersCount = data.newCount;
+      $scope.playerJoined = data.playerName + " joined the game.";
+    });
+    $scope.$watch( 'playerJoined', function(nv,ov) {
+      if ( nv ) {
+        $timeout( function() {
+          $scope.playerJoined = '';
+        },2000);
+      }
+    });
+    $rootScope.tournamentSocket.on( 'takeResult', function( resultData ) {
+      $rootScope.recentGames[resultData.gameResult.gameId] = {
+        error: resultData.error,
+        gameId: resultData.gameResult.gameId,
+        tournamentId: resultData.gameResult.tournamentId,
+        topicId: resultData.gameResult.topicId,
+        gameBoard: resultData.gameResult.gameBoard
+      };
+      $timeout( function() {
+        $location.path( '/quizResult/' + resultData.gameResult.gameId );
+      },2000);
+    });
+    $rootScope.tournamentSocket.on( 'alreadyPlayingTheGame', function( duplicateEntryData ) {
+      $scope.question = 'WARNING!!  You are already playing ' + duplicateEntryData.topicId + '. Kindly complete the previous game or play a different one.';
+      $rootScope.hideFooterNav = false;
+    });
+    $rootScope.tournamentSocket.on( 'serverMsg', function( msgData ) {
+      if (msgData.type == 'LOGOUT') {
+        $cookies.remove('isAuthenticated');
+        $rootScope.loggedInUser = null;
+        $rootScope.isAuthenticatedCookie = false;
+        $rootScope.logInLogOutErrorMsg = 'Server knocked out your session. This may be due to running multiple sessions.';
+        $rootScope.logInLogOutSuccessMsg = '';
+        $location.path('/login');
+      }
+    });
+  }
+});

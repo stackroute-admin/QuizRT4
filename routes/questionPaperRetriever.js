@@ -27,11 +27,11 @@ router.route('/getQPaper/:topicId')
       .get(function(request,response){
         console.log(request.params.topicId);
         questionPaper.find({'topics' : request.params.topicId})
-                           .select('name')
                            .exec(function(err, questionPaperNames) {
                              if (err) {
                                return response.send(err);
                              }
+                             console.log(questionPaperNames);
                              return response.send(questionPaperNames.map(function(e){return e.name}));
                            });
       });

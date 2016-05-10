@@ -14,18 +14,28 @@
 //
 
 var mongoose = require('mongoose'),
-    category = require('./category'),
-    game = require('./game'),
-    topicSchema = new mongoose.Schema({
-      _id: { type: String, required: true},
-      topicName: String,
-      topicIcon: String,
-      topicCategory: { type: String, required: true, ref: 'Category'},
-      topicDescription: String,
-      topicFollowers: Number,
-      playersPerMatch:{type:Number,default:2},
-      games:[{type: String, ref: 'Game'}]
-    }),
-    Topic = mongoose.model('Topic', topicSchema, "topics_collection");
+category = require('./category'),
+game = require('./game'),
+topicSchema = new mongoose.Schema({
+  _id: { type: String, required: true},
+  topicName: String,
+  topicIcon: String,
+  topicCategory: { type: String, required: true, ref: 'Category'},
+  topicDescription: String,
+  topicFollowers: Number,
+  playersPerMatch:{type:Number,default:2},
+  games:[{type: String, ref: 'Game'}]
+});
+
+topicSchema.statics.getTopicId  = function getTopicId(topicName , levelsTopicArray , count , length, callback){
+  mongoose.model('Topic').find({topicName : topicName}, function(err,data){
+      //callback(null ,null,topicArray.push(data));
+      callback(data,levelsTopicArray , count , length);
+  });
+};
+
+Topic = mongoose.model('Topic', topicSchema, "topics_collection");
+
+
 
 module.exports = Topic;
