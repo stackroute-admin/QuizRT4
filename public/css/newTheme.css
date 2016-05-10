@@ -70,19 +70,22 @@
   background: #2d8bca;
 }
 .notification-counter{
-  font-size:10px;
+  font-size:12px;
   position: absolute;
-  top:0px;
-  right:2px;
-  padding: 1px 3px;
+  top:2px;
+  right:6px;
+  padding: 1px 4px;
   background: orangered;
   border-radius: 2px;
 }
 .notification-title{
-  font-size:16px;
+  font-size:25px;
   position: relative;
 }
 .notification-title:hover{
   color: white;
   text-shadow:1px 1px #2c3e50;
+}
+.login-btn,.logoff-btn{
+  font-size:25px;
 }

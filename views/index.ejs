@@ -43,16 +43,16 @@
     <header>
       <div class="container">
         <div class="row">
-    			<div class="col-xs-offset-1 col-xs-8">
+    			<div class="col-xs-offset-1 col-lg-9 col-md-7 col-sm-6 col-xs-6 ">
     				QuizART
     			</div>
-    			<div ng-if="loggedInUser" class="col-xs-3">
+    			<div ng-if="loggedInUser" class="col-lg-2 col-md-2 col-sm-4 col-xs-4">
             <notification-data notification-count="notificationCount"></notification-data>
-            <a ng-click="$emit('logout',loggedInUser)" class="glyphicon glyphicon-off">
+            <a ng-click="$emit('logout',loggedInUser)" class="btn login-btn glyphicon glyphicon-off">
     				</a>
     			</div>
           <div ng-if="!loggedInUser" class="col-xs-2">
-    				<a ng-click="$emit('login')" class="glyphicon glyphicon-play-circle">
+    				<a ng-click="$emit('login')" class="btn logoff-btn glyphicon glyphicon-play-circle">
     				</a>
     			</div>
     		</div>
