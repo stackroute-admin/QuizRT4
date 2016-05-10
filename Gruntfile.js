@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
     grunt.initConfig({
         jshint: {
-            all: ['Gruntfile.js', 'test/**/*.js', '!lib/**/*.js', '!node_modules/**/*', '**/*.js']
+            all: ['Gruntfile.js', 'test/**/*.js', '!public/css/lib/**/*','!public/js/lib/**/*','!node_modules/**/*', '**/*.js']
         },
         express: {
             dev: {
@@ -12,7 +12,7 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            files: ['**/*.js', '!node_modules/**/*','!public/**/*'],
+            files: ['**/*.js', '!node_modules/**/*'],
             tasks: ['express:dev'],
             options: {
                 spawn: false
@@ -20,7 +20,7 @@ module.exports = function(grunt) {
         },
         copy: {
             build: {
-                src: ['**','!node_modules/**/*','!target/**/*'],
+                src: ['bin/**/*','config/**/*','models/**/*','public/**/*','routes/**/*','views/**/*','app.js','passport-init.js','package.json'],
                 dest: 'src',
                 expand: true
             }
@@ -32,9 +32,20 @@ module.exports = function(grunt) {
                 dest: '../',
                 options: {
                     // mode: 'gzip',
-                    archive: 'target/build.zip'
+                    archive: 'build.zip'
                 }
             }
+        },
+        cssmin: {
+          target: {
+            files: [{
+              expand: true,
+              cwd: 'src/public/css',
+              src: ['*.css', '!*.min.css'],
+              dest: 'src/public/css',
+              ext: '.css'
+            }]
+          }
         }
     });
 
@@ -43,7 +54,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-compress');
-
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.registerTask('server', ['express:dev', 'watch']);
-    grunt.registerTask('build-project', ['copy','compress']);
+    grunt.registerTask('build-project', ['copy','cssmin','compress']);
 };

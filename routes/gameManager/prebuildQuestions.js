@@ -15,11 +15,12 @@ module.exports = {
           var myReservoir = Reservoir( noOfQs ),
               fewQuestions = [];
           questions.forEach(function(e) {
-            console.log(e);
+            console.log('das',e);
             myReservoir.pushSome(e);
           });
 
           for (var i = 0; i < noOfQs; i++) {
+            console.log('few',fewQuestions);
             fewQuestions.push(myReservoir[i]);
           }
           fewQuestions[0] ? done( null, fewQuestions) : done( 'No Questions in QuestionBank for ' + topicId + '.', null ); // if no questions send null else send the questions

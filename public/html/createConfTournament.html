@@ -63,6 +63,7 @@
             </select> -->
             <label>Select a score multiplier</label>
             <select ng-model="selectedMultiplierLevel" ng-change = "selectionChange(selectedMultiplierLevel,$index,'levelMultiplier')" ng-options="a for a in levelMultiplier">
+            <option value="">-- choose no --</option>
             </select>
             <label ng-if="isRandom=='prebuilt'">Question Paper
             <select ng-model="selectedQuestionPaper" ng-change = "selectionChange(selectedQuestionPaper,$index,'questionPaper')" ng-options="a for a in questionPaper">

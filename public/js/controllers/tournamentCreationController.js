@@ -87,7 +87,6 @@ angular.module('quizRT')
       };
       //
       $scope.selectionChange = function(value, index,key) {
-        alert(key);
         //key=T1;
         if(key=="isRandom"){
           var tempObj = {
@@ -121,8 +120,6 @@ angular.module('quizRT')
         var isValidTournament = validateTournament(tournament);
         if (isValidTournament) {
           tournament.levelTopicArray = $scope.levelTopicArray;
-          console.log(tournament.levelTopicArray);
-          console.log($scope.tournament);
           var formData = new FormData();
 
           formData.append('data', JSON.stringify(tournament));
