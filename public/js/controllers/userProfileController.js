@@ -137,6 +137,7 @@ $scope.topicsList = function(data){
         //  $scope.two = false; // now show this one
         $scope.three = false;
         $scope.four = true;
+        $scope.changedVal = false;
       }
 
       $scope.clearSearch = function(){

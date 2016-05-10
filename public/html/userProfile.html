@@ -162,7 +162,7 @@
 									<div class="th tableHead col-xs-4 col-sm-4">Country</div>
 								</div>
 								<div class="tbody">
-									<div class="modalTableRow" ng-if="user"  ng-repeat="item in searchPeople ">
+									<div class="modalTableRow" ng-if="user"  ng-repeat="item in searchPeople |filter: { userId : '!' + loggedInUser.userId }  ">
 										<div class="tr row" ng-click="toggleSelectFriend($index)">
 											<div class="td tableValue col-xs-3 col-sm-4"><label><img src="{{item.imageLink}}" alt="userImage" /><label></div>
 												<div class="td  tableValue col-xs-5 col-sm-4"><label><a href="#" class = "link" ng-click="selectedUser(item)" >{{item.name}}</a><label></div>
