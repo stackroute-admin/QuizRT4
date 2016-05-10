@@ -340,7 +340,7 @@ $scope.viewUserProfile = function(user) {
       .then(function(successResponse) {
         $rootScope.friendUser = successResponse.data.user;
         $rootScope.friendUser.acceptanceState = successResponse.data.isfriend == null ? undefined : successResponse.data.isfriend["acceptanceState"];
-        $rootScope.friendUser.buttonText = $rootScope.friendUser.acceptanceState == 0 ? 'Request Sent' : $rootScope.friendUser.acceptanceState == 1 ? 'Friends' : $rootScope.friendUser.acceptanceState == 2 ? 'Cannot Send Request' : 'Send Friend Request'
+        $rootScope.friendUser.buttonText = $rootScope.friendUser.acceptanceState == 0 ? 'Friend Request Pending' : $rootScope.friendUser.acceptanceState == 1 ? 'Friends' : $rootScope.friendUser.acceptanceState == 2 ? 'Cannot Send Request' : 'Send Friend Request'
         $rootScope.friendUser.disableButton = $rootScope.friendUser.acceptanceState != undefined;
         $rootScope.friendUser.friends = successResponse.data.friends;
         $scope.friendUser.topicsFollowed = [];
