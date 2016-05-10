@@ -149,107 +149,114 @@ angular.module('quizRT')
             $scope.skipFlag = 'initial';
 
             $scope.timeInterval = $interval( function() {
+                console.log('$scope.skipFlag' +$scope.skipFlag);
+                console.log("Starting Time interval block");
                 $scope.time--;
                   if($scope.shouldContinue){
-                //waiting for counter to end to start the Quiz
-                if ($scope.time === 0) {
-                    $scope.isDisabled = false;
-                    $scope.wrongAnswerers = 0;
-                    $scope.correctAnswerers = 0;
-                    $scope.unattempted = $scope.playersCount;
+                    //waiting for counter to end to start the Quiz
+                    if ($scope.time === 0) {
+                        $scope.isDisabled = false;
+                        $scope.wrongAnswerers = 0;
+                        $scope.correctAnswerers = 0;
+                        $scope.unattempted = $scope.playersCount;
 
-                    if ( $scope.questionCounter == startGameData.questions.length ) {
-                        $interval.cancel($scope.timeInterval);
-                        $scope.options = null;
-                        $scope.question = 'Game finished. Compiling the result...';
-                        $scope.questionImage = null;
-                        $scope.unattempted = 0;
-                        $scope.finishGameData = {
-                          gameId: startGameData.gameId,
-                          tournamentId: $scope.tournamentId,
-                          levelId: $scope.levelId,
-                          topicId: startGameData.topicId
-                        };
-                        $rootScope.socket.emit( 'gameFinished', $scope.finishGameData );
-                    } else {
-
-                      if(!$scope.currentQuestion) {
-                        $scope.currentQuestion = startGameData.questions[$scope.questionCounter];
-                        $scope.options = $scope.currentQuestion.options;
-                        $scope.questionCounter++;
-                        $scope.question = $scope.questionCounter + ". " +$scope.currentQuestion.question;
-                        if ($scope.currentQuestion.image != "null")
-                            $scope.questionImage = $scope.currentQuestion.image;
-                        else {
+                        if ( $scope.questionCounter == startGameData.questions.length ) {
+                            $interval.cancel($scope.timeInterval);
+                            $scope.options = null;
+                            $scope.question = 'Game finished. Compiling the result...';
                             $scope.questionImage = null;
+                            $scope.unattempted = 0;
+                            $scope.finishGameData = {
+                              gameId: startGameData.gameId,
+                              tournamentId: $scope.tournamentId,
+                              levelId: $scope.levelId,
+                              topicId: startGameData.topicId
+                            };
+                            $rootScope.socket.emit( 'gameFinished', $scope.finishGameData );
                         }
-                        $scope.time = 5;
-						// check if game is in 2nd question and still we see
-                        // skig flag has same initial value
-                        if($scope.questionCounter > 1 && $scope.skipFlag === "initial"){
-                            // call emit for skipped vals
-                            $rootScope.socket.emit('confirmAnswer', $scope.skipData);
-                        }
-                        else if($scope.questionCounter > 1 && $scope.skipFlag != "initial") {
-                            $scope.skipFlag = 'initial';
-                        }
-                        // set data for skip entry
-                        $scope.skipData =  {
-                            ans: "skip",
-                            gameId: startGameData.gameId,
-                            topicId: startGameData.topicId,
-                            userId: $rootScope.loggedInUser.userId,
-                            responseTime: null,
-                            selectedOption:null,
-                            questionId : $scope.currentQuestion.questionId,
-                            questionNumber : $scope.questionCounter,
-                            gameTime: new Date().toString(),
-                            score : $scope.myscore
-                        };
-                      }
                         else {
-
-                          $scope.shouldContinue = false;
-                          $timeout(function(correctIndex) {
-                            $('.selectedOptionTournament').removeClass('selectedOptionTournament btn-danger');
-                            $('#'+correctIndex).removeClass('btn-success');
-                            $scope.currentQuestion = startGameData.questions[$scope.questionCounter];
-                            $scope.options = $scope.currentQuestion.options;
-                            // console.log($scope.options);
-                            $scope.questionCounter++;
-                            $scope.question = $scope.questionCounter + ". " +$scope.currentQuestion.question;
-                            if ($scope.currentQuestion.image != "null")
-                            $scope.questionImage = $scope.currentQuestion.image;
-                            else {
-                              $scope.questionImage = null;
+                            if(!$scope.currentQuestion) {
+                                $scope.currentQuestion = startGameData.questions[$scope.questionCounter];
+                                $scope.options = $scope.currentQuestion.options;
+                                $scope.questionCounter++;
+                                $scope.question = $scope.questionCounter + ". " +$scope.currentQuestion.question;
+                                if ($scope.currentQuestion.image != "null")
+                                    $scope.questionImage = $scope.currentQuestion.image;
+                                else {
+                                    $scope.questionImage = null;
+                                }
+                                $scope.time = 5;
+        						// check if game is in 2nd question and still we see
+                                // skig flag has same initial value
+                                // console.log("1 questionCounter "+$scope.questionCounter);
+                                // if($scope.questionCounter > 1 && $scope.skipFlag === "initial"){
+                                //     // call emit for skipped vals
+                                //     console.log("first if emit skip ");
+                                //     $rootScope.socket.emit('confirmAnswer', $scope.skipData);
+                                // }
+                                // else if($scope.questionCounter > 1 && $scope.skipFlag != "initial") {
+                                //     $scope.skipFlag = 'initial';
+                                // }
+                                // set data for skip entry
+                                $scope.skipData =  {
+                                    ans: "skip",
+                                    gameId: startGameData.gameId,
+                                    topicId: startGameData.topicId,
+                                    userId: $rootScope.loggedInUser.userId,
+                                    responseTime: null,
+                                    selectedOption:null,
+                                    questionId : $scope.currentQuestion.questionId,
+                                    questionNumber : $scope.questionCounter,
+                                    gameTime: new Date().toString(),
+                                    score : $scope.myscore
+                                };
                             }
-                            $scope.time = 5;
-                            $scope.shouldContinue = true;
-                          },20,true,$scope.currentQuestion.correctIndex);
-						  // check if game is in 2nd question and still we see
-                        // skig flag has same initial value
-                        if($scope.questionCounter > 1 && $scope.skipFlag === "initial"){
-                            // call emit for skipped vals
-                            $rootScope.socket.emit('confirmAnswer', $scope.skipData);
-                        }
-                        else if($scope.questionCounter > 1 && $scope.skipFlag != "initial") {
-                            $scope.skipFlag = 'initial';
-                        }
-                        // set data for skip entry
-                        $scope.skipData =  {
-                            ans: "skip",
-                            gameId: startGameData.gameId,
-                            topicId: startGameData.topicId,
-                            userId: $rootScope.loggedInUser.userId,
-                            responseTime: null,
-                            selectedOption:null,
-                            questionId : $scope.currentQuestion.questionId,
-                            questionNumber : $scope.questionCounter,
-                            gameTime: new Date().toString(),
-                            score : $scope.myscore
-                        };
-                        }
+                            else {
+                              $scope.shouldContinue = false;
+                              $timeout(function(correctIndex) {
+                                $('.selectedOptionTournament').removeClass('selectedOptionTournament btn-danger');
+                                $('#'+correctIndex).removeClass('btn-success');
+                                $scope.currentQuestion = startGameData.questions[$scope.questionCounter];
+                                $scope.options = $scope.currentQuestion.options;
+                                // console.log($scope.options);
+                                $scope.questionCounter++;
+                                $scope.question = $scope.questionCounter + ". " +$scope.currentQuestion.question;
+                                if ($scope.currentQuestion.image != "null")
+                                $scope.questionImage = $scope.currentQuestion.image;
+                                else {
+                                  $scope.questionImage = null;
+                                }
+                                $scope.time = 5;
+                                $scope.shouldContinue = true;
+                                // check if game is in 2nd question and still we see
+                              // skig flag has same initial value
+                              console.log("time is 1" +$scope.time);
+                              console.log("$scope.skipFlag 2"  + $scope.skipFlag);
+                              console.log("$scope.questionCounter  "+$scope.questionCounter);
+                              if($scope.questionCounter > 1 && $scope.skipFlag === "initial"){
+                                  // call emit for skipped vals
+                                  console.log("second if emit ");
+                                  $rootScope.socket.emit('confirmAnswer', $scope.skipData);
+                              }
+                              else if($scope.questionCounter > 1 && $scope.skipFlag != "initial") {
+                                  $scope.skipFlag = 'initial';
+                              }
+                              // set data for skip entry
+                              $scope.skipData =  {
+                                  ans: "skip",
+                                  gameId: startGameData.gameId,
+                                  topicId: startGameData.topicId,
+                                  userId: $rootScope.loggedInUser.userId,
+                                  responseTime: null,
+                                  selectedOption:null,
+                                  questionId : $scope.currentQuestion.questionId,
+                                  questionNumber : $scope.questionCounter,
+                                  gameTime: new Date().toString(),
+                                  score : $scope.myscore
+                              };
+                              },20,true,$scope.currentQuestion.correctIndex);
 
+                        }
                         $scope.changeColor = function(id, element) {
                           angular.element(element.target).addClass('selectedOptionTournament');
                           var correctIndexId = $scope.currentQuestion.correctIndex;
@@ -289,7 +296,6 @@ angular.module('quizRT')
                                     gameTime: new Date().toString(),
                                     score : $scope.myscore
                                 });
-
                         }
                           $scope.isDisabled = true;
                           var obj = {
@@ -303,10 +309,7 @@ angular.module('quizRT')
                             userId:$rootScope.loggedInUser.userId
                           };
                           console.log(obj);
-
-
                       $rootScope.socket.emit('updateStatus', {
-
                           gameId: startGameData.gameId,
                           topicId: startGameData.topicId,
                           userId: $rootScope.loggedInUser.userId,
@@ -318,11 +321,17 @@ angular.module('quizRT')
                     }
                 }
 
-                // last time check for skipped question
-                  if ( $scope.time === 0  && $scope.skipFlag === 'initial'){
-                      // emit skipped data
-                      $rootScope.socket.emit('confirmAnswer', $scope.skipData);
-                  }
+
+
+            }
+
+              // last time check for skipped question
+              console.log("time is end  " +$scope.time);
+              console.log("$scope.skipFlag end  " + $scope.skipFlag);
+              if ( $scope.time === 0  && $scope.skipFlag === 'initial'){
+                  // emit skipped data
+                  console.log("emitting Skip data...");
+                  $rootScope.socket.emit('confirmAnswer', $scope.skipData);
               }
 
             }, 1000);// to create 1s timer
