@@ -47,7 +47,8 @@
     				QuizART
     			</div>
     			<div ng-if="loggedInUser" class="col-xs-2">
-    				<a ng-click="$emit('logout',loggedInUser)" class="glyphicon glyphicon-off">
+            <notification-data notification-count="notificationCount"></notification-data>  
+            <a ng-click="$emit('logout',loggedInUser)" class="glyphicon glyphicon-off">
     				</a>
     			</div>
           <div ng-if="!loggedInUser" class="col-xs-2">
