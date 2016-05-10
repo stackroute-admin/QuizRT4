@@ -137,6 +137,7 @@ $scope.topicsList = function(data){
         //  $scope.two = false; // now show this one
         $scope.three = false;
         $scope.four = true;
+        $scope.changedVal = false;
       }
 
       $scope.clearSearch = function(){
@@ -342,8 +343,8 @@ $scope.viewUserProfile = function(user) {
       .then(function(successResponse) {
         $rootScope.friendUser = successResponse.data.user;
         $rootScope.friendUser.acceptanceState = successResponse.data.isfriend == null ? undefined : successResponse.data.isfriend["acceptanceState"];
-        $rootScope.friendUser.buttonText = $rootScope.friendUser.acceptanceState == 0 ? 'Friend Request Pending' : $rootScope.friendUser.acceptanceState == 1 ? 'Friends' : $rootScope.friendUser.acceptanceState == 2 ? 'Cannot Send Request' : 'Send Friend Request'
-        $rootScope.friendUser.disableButton = $rootScope.friendUser.acceptanceState != undefined;
+        $rootScope.friendUser.buttonText = $rootScope.friendUser.acceptanceState == 0 ? 'Friend Request Pending' : $rootScope.friendUser.acceptanceState == 1 ? 'Friends' : 'Send Friend Request'
+        $rootScope.friendUser.disableButton = $rootScope.friendUser.acceptanceState != undefined && $rootScope.friendUser.acceptanceState != 2;
         $rootScope.friendUser.friends = successResponse.data.friends;
         $scope.friendUser.topicsFollowed = [];
         if ($rootScope.friendUser.topicsPlayed != null) {
