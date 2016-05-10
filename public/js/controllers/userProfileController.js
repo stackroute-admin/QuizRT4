@@ -195,6 +195,7 @@ $scope.topicsList = function(data){
 
       $http({method : 'GET',url:'/userProfile/profileData'})
         .then( function( successResponse ){
+          console.log(successResponse.data);
           $scope.data = successResponse.data.user;
           $rootScope.loggedInUser = successResponse.data.user;
           $rootScope.friends = successResponse.data.friends;

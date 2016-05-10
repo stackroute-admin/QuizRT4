@@ -9,7 +9,6 @@ Notification = require('../../models/notifications');
 module.exports = {
   handleResponse : function(metadata, client) {
     var $this = this;
-    console.log('Im here');
     if (metadata.type === 'FRND') {
       var acceptanceState = metadata.event === 'accept' ? 1 : 2 ;
       var query = [];
@@ -71,6 +70,7 @@ module.exports = {
   },
 
   getNotifications: function(userId, client) {
+    console.log('user' +userId);
     Notification.find({
       'metaData.to': userId
     }).where('seen').equals(false).select('_id metaData').where('seen').equals(false).sort('-dateAdded').exec(function(err, data) {

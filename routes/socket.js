@@ -420,7 +420,6 @@ var GameManagerClass = require('./gameManager/gameManager.js'),
             });
 
             client.on('response', function(data) {
-              console.log('In Response');
               NotificationManager.handleResponse(data, client);
             });
         });
