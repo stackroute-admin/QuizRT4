@@ -134,7 +134,6 @@ var GameManagerClass = require('./gameManager/gameManager.js'),
               userId: playerData.userId,
               playerName: playerData.playerName,
               playerPic: playerData.playerPic,
-              score:0,
               client: client
             };
             var difficultyLevelTopic=[1,2,3,4,5];//for topics game fetch questions from all difficulty levels
@@ -421,6 +420,7 @@ var GameManagerClass = require('./gameManager/gameManager.js'),
             });
 
             client.on('response', function(data) {
+              console.log('In Response');
               NotificationManager.handleResponse(data, client);
             });
         });

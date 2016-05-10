@@ -9,6 +9,7 @@ Notification = require('../../models/notifications');
 module.exports = {
   handleResponse : function(metadata, client) {
     var $this = this;
+    console.log('Im here');
     if (metadata.type === 'FRND') {
       var acceptanceState = metadata.event === 'accept' ? 1 : 2 ;
       var query = [];
