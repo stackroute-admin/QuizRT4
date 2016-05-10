@@ -12,7 +12,7 @@ module.exports = {
     if (metadata.type === 'FRND') {
       var acceptanceState = metadata.event === 'accept' ? 1 : 2 ;
       var query = [];
-      Notification.update({$and : [{'metaData.from' : metadata.from} , {'metaData.to' : metadata.to[0] }]} , {seen : true}, {upsert:true},function(result){
+      Notification.update({$and : [{'metaData.from' : metadata.from} , {'metaData.to' : metadata.to[0] }]} , {seen : true}, {multi : true},function(result){
         $this.getNotifications(metadata.to[0],client);
       })
       Profile.getUserIdFromId(metadata.from, metadata.to).then(function(ret) {
