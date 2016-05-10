@@ -56,7 +56,7 @@
   padding-bottom: 20px;
 }
 .notification-sender{
-  padding: 5px;
+  padding: 3px;
   border-radius: 2px;
   background: #28b262;
 }
@@ -65,7 +65,7 @@
 }
 .notification-topic{
   font-style: italic;
-  padding: 5px;
+  padding: 3px;
   border-radius: 2px;
   background: #2d8bca;
 }
