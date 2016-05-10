@@ -16,65 +16,65 @@
 */
 
 body {
-  padding-bottom: 75px; /* to counter fixed-footer height*/
+    padding-bottom: 75px;
+    /* to counter fixed-footer height*/
 }
 footer {
-  bottom: 0;
-  position: fixed;
-  width: 100%;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
 }
-footer .container{
-  border-top:1px solid #555;
-  background: #2F2D2D;
-  padding-top: 2px;
-  color: white;
+footer .container {
+    border-top: 1px solid #555;
+    background: #2F2D2D;
+    padding-top: 2px;
+    color: white;
 }
 footer .nav {
-  padding: 2px 0 0;
-  text-align: center;
+    padding: 2px 0 0;
+    text-align: center;
 }
-footer .nav img,
-footer .nav span,
-footer .nav p{
-  cursor: pointer;
+footer .nav img, footer .nav span, footer .nav p {
+    cursor: pointer;
 }
-footer .nav p{
-  margin-bottom: 0;
+footer .nav p {
+    margin-bottom: 0;
 }
 footer .nav img {
-  margin: -7px auto -1px;
-  width: 60px;
-  height: auto;
-  cursor: pointer;
+    margin: -7px auto -1px;
+    width: 60px;
+    height: auto;
+    cursor: pointer;
 }
-#recentGames .btnRow{
-  padding: 10px 20px 5px;
+#recentGames .btnRow {
+    padding: 10px 20px 5px;
 }
 #recentGames .btnRow button {
-  margin: 5px 10px;
+    margin: 5px 10px;
 }
 .panel {
-  cursor: pointer;
+    cursor: pointer;
 }
 .panel-body {
-  padding: 0;
+    padding: 0;
 }
 .panel-footer {
-  position:relative;
-  padding:10px 5px;
-  font-size: 1.1em;
-  color: slategrey;
-  word-wrap: break-word;
+    position: relative;
+    padding: 10px 5px;
+    font-size: 1.1em;
+    color: slategrey;
+    word-wrap: break-word;
 }
-.panel-footer p{
+.panel-footer p {
     overflow: hidden;
     text-overflow: ellipsis;
 }
 .content {
-  position: relative;
+    position: relative;
 }
-.badge{
-  position: absolute;;
+.badge {
+    position: absolute;
+    ;
     top: 2px;
     right: 3px;
     width: 30px;
@@ -82,482 +82,422 @@ footer .nav img {
     background-color: #337ab7;
     color: white;
 }
-.topic-info{
-  white-space: nowrap;
-  width: 102%;
-  display: inline-block;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  margin-top: 20px;
+.topic-info {
+    white-space: nowrap;
+    width: 102%;
+    display: inline-block;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    margin-top: 20px;
 }
-#activity-info{
-  white-space: nowrap;
-  width: 102%;
-  display: inline-block;
-  overflow-x: auto;
-  overflow-y: hidden;
-  margin-top: 20px;
+#activity-info {
+    white-space: nowrap;
+    width: 102%;
+    display: inline-block;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-top: 20px;
 }
-.topic-info .topicsholder{
-  width:25%;
-  height:80%
-  padding: 5px 5px 5px 5px;
-  display: inline-block;
-  margin: 0px 3px;
+.topic-info .topicsholder {
+    width: 25%;
+    height: 80% padding: 5px 5px 5px 5px;
+    display: inline-block;
+    margin: 0px 3px;
 }
-.topicsholder img
-{
-  height:100%;
-  width:100%;
+.topicsholder img {
+    height: 100%;
+    width: 100%;
 }
 .win-loss {
-  position:absolute;
-  bottom: 3%;
-  right: 3%;
-  font-weight: bold;
+    position: absolute;
+    bottom: 3%;
+    right: 3%;
+    font-weight: bold;
 }
 #main {
-  padding-bottom: 10px;
+    padding-bottom: 10px;
 }
-#GamesInfo{
-  padding-top:5px;
-  color:white;
-}
-.sectionHeader{
-  background-color:lightyellow;
-  color:black;
-  font-size:23px;
-  margin-top: 10px;
-  text-align: center;
-}
-
-
-.wins{
-  color: green;
-}
-
-
-.played {
-  color: slategray;
-}
-
-.btn-height
-{
-height:100%;
-}
-
-.play-button-bar{
-  text-align: center;
-}
-
-.topicName{
-  font-family: Bitter;
-  font-size: 1.3em;
-  padding-left:2px;
-  word-wrap: break-word;
-}
-
-.topics-info .wins{
-  margin-left: 0;
-  font-size: 1.2em;
-  font-weight: bold;
-}
-
-.usermiddle{
-  color:white;
-}
-
-.user{
-  background-color:rgb(67, 73, 74);
-  padding-top: 30px;
-}
-.profile{
-  padding: 15px 15px 15px 15px;
-}
-.streak{
-  color: white;
-  font-size: 1em;
-  border-bottom:1px solid white;
-  display: inline block;
-  margin-top: 40px;
-  margin-left:40px;
-}
-.streakScore,.streakDate{
-  padding-left:20px;
-  padding-top:5px;
-}
-#win, #games, #age, #winpercentage, #winRank, #pointsRank, #speedRank, #accuracyRank,
-#streak,#current-streak,#days{
-  text-align: center;
-}
-
-
-
-.radioBtn{
-color: wheat;
-}
-.option-input {
- /*margin: 0 13px 0 13px;*/
-  border: 5px;
-  width: 100%;
-  height: 2em;
-  background: red;
-  margin-top: 20px;
-
-}
-.modalTable label {
- text-align: center;
-margin: 0 20px 0 20px;
-}
-
-#searchbox{
- text-align: center;
- margin-left: auto;
- margin-right: auto;
- margin-top: 20px;
- margin-bottom: 20px;
- width: 350px;
- height: 50px;
- color: black;
- text-decoration-style: solid;
-
-}
-.modalTable{
- margin-top: 20px;
- font-size: 20px;
-font-weight: 10px;
-}
-.modalTableRow{
-margin-left:15px;
-color:skyblue;
-}
-.modalTableRow a{
-/*margin-left:15px;*/
-font-size: 15px;
-font-weight: 20px;
-color:grey;
-}
-.tableValue{
-color: grey;
-font-size: 15px;
-padding-left: 0px;
-padding-right:0px;
-}
-.tableHead {
-color: #252830;
-padding-left: 0px;
-padding-right:0px;
-}
-.modalTable img{
-height: 50px;
-width: 50px;
-}
-#mySlider{
-  display: block;
-}
-
-@media(min-width:768px){
-
-  h4 {
-    font-size: 1.3em;
-  }
-  h6{
-    font-size: 1.2em;
-  }
-
-  p{font-size:1em;}
-
-  #button-height a{
-    font-size:20px;
-  }
-  .panel-body {
-     padding: 0;
-   }
-
-  #badge,#country{
-    font-size: 16px;
-  }
-
-  .Following,.Followers,.game{
-    font-size: 20px;
-    margin-bottom: 7px;
-  }
-
-  .glyph {
-    font-size: 3em;
-  }
-
- .glyphRank {
-      font-size: 2em;
-    }
-
-  .user {
-    padding-top: 15px;
-    padding-bottom: 15px;
-  }
- .streak{
+#GamesInfo {
+    padding-top: 5px;
     color: white;
-    font-size: 2em;
-    border-bottom:1px solid white;
+}
+.sectionHeader {
+    background-color: lightyellow;
+    color: black;
+    font-size: 23px;
+    margin-top: 10px;
+    text-align: center;
+}
+.wins {
+    color: green;
+}
+.played {
+    color: slategray;
+}
+.btn-height {
+    height: 100%;
+}
+.play-button-bar {
+    text-align: center;
+}
+.topicName {
+    font-family: Bitter;
+    font-size: 1.3em;
+    padding-left: 2px;
+    word-wrap: break-word;
+}
+.topics-info .wins {
+    margin-left: 0;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+.usermiddle {
+    color: white;
+}
+.user {
+    background-color: rgb(67, 73, 74);
+    padding-top: 30px;
+}
+.profile {
+    padding: 15px 15px 15px 15px;
+}
+.streak {
+    color: white;
+    font-size: 1em;
+    border-bottom: 1px solid white;
     display: inline block;
     margin-top: 40px;
-    margin-left:10px;
-  }
-  .streakDetails{
-    color: white;
-  }
+    margin-left: 40px;
 }
-
-@media (min-width:500px) and (max-width:768px){
-  h4 {
-    font-size: 2em;
-  }
-
-  h5 {
-    font-size: 1.5em;
-  }
-
-  h6 {
-    font-size: 1.2em;
-  }
-
-  p {
-    font-size:1em;
-  }
-
-  #button-height a {
-    font-size:20px;
-  }
-  .panel-body {
-     padding: 0;
-   }
-
-  #badge,#country {
-    font-size: 1em;
-  }
-
-  .Following,.Followers,.game{
-    font-size: 20px;
-    margin-bottom: 7px;
-  }
-
-  .glyph {
-    font-size: 2em;
-  }
-  footer .nav img {
-    margin: -4px auto -1px;
-    width: 33px;
-  }
-  body {
-    padding-bottom: 51px;/* to counter fixed-footer height*/
-  }
-  #GamesInfo {
-    padding-top:5px;
-    color:white;
-    border:none;
-  }
- .rankInfo{
-    padding-top:5px;
-  }
-
-  #topics {
-    background-color:lightyellow;
-    color:black;
+.streakScore, .streakDate {
+    padding-left: 20px;
+    padding-top: 5px;
+}
+#win, #games, #age, #winpercentage, #winRank, #pointsRank, #speedRank, #accuracyRank, #streak, #current-streak, #days {
     text-align: center;
-    padding-bottom: 0px;
-  }
-  .user {
-      padding-top: 15px;
-   }
-
-   .container {
-     width: 100%;
-     margin: 0px;
-   }
-
-
-   .topicsholder img {
-     height:100%;
-     width:100%;
-   }
 }
-
-
- /* end media queries */
-@media (min-width: 900px) {
+.radioBtn {
+    color: wheat;
 }
-
-@media (max-width:500px){
-  #searchbox{
-  width:200px;
+.option-input {
+    /*margin: 0 13px 0 13px;*/
+    border: 5px;
+    width: 100%;
+    height: 2em;
+    background: red;
+    margin-top: 20px;
 }
-  h4 {
-    font-size: 2em;
-  }
-
-  h5 {
-    font-size: 1.5em;
-  }
-
-  h6 {
-    font-size: 1.2em;
-  }
-
-  p {
-    font-size:1em;
-  }
-
-  #button-height a {
-    font-size:20px;
-  }
-
-
-  #badge,#country {
-    font-size: 1em;
-  }
-
-  .Following,.Followers,.game{
-    font-size: 20px;
-    margin-bottom: 7px;
-  }
-
-  .glyph {
-    font-size: 2em;
-  }
-  footer .nav img {
-    margin: -4px auto -1px;
-    width: 33px;
-  }
-  body {
-    padding-bottom: 51px;/* to counter fixed-footer height and mobile's browser nav*/
-  }
-
-  #GamesInfo {
-    padding-top:5px;
-    color:white;
-    border:none;
-  }
-
-  #topics {
-    background-color:lightyellow;
-    color:black;
+.modalTable label {
     text-align: center;
-    padding-bottom: 0px;
-  }
-  .user {
-      padding-top: 15px;
-   }
-
-   .container {
-     width: 100%;
-     margin: 0px;
-   }
-
-   .topicsholder img {
-     height:100%;
-     width:100%;
-   }
+    margin: 0 20px 0 20px;
 }
-
-#foot .btn1 {
-            background-color: green;
-            color:white;
-            height:100%;
-            padding:0px 0px 0px 0px;
-            font-size: 20px;
-  }
-
-  #foot .btn2 {
-    background-color: red;
-    color:white;
-    height:100%;
-      padding:0px 0px 0px 0px;
+#searchbox {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 350px;
+    height: 50px;
+    color: black;
+    text-decoration-style: solid;
+}
+.modalTable {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 10px;
+}
+.modalTableRow {
+    margin-left: 15px;
+    color: skyblue;
+}
+.modalTableRow a {
+    /*margin-left:15px;*/
+    font-size: 15px;
+    font-weight: 20px;
+    color: grey;
+}
+.tableValue {
+    color: grey;
+    font-size: 15px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.tableHead {
+    color: #252830;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.modalTable img {
+    height: 50px;
+    width: 50px;
+}
+#mySlider {
+    display: block;
+}
+@media(min-width:768px) {
+    h4 {
+        font-size: 1.3em;
+    }
+    h6 {
+        font-size: 1.2em;
+    }
+    p {
+        font-size: 1em;
+    }
+    #button-height a {
         font-size: 20px;
-  }
+    }
+    .panel-body {
+        padding: 0;
+    }
+    #badge, #country {
+        font-size: 16px;
+    }
+    .Following, .Followers, .game {
+        font-size: 20px;
+        margin-bottom: 7px;
+    }
+    .glyph {
+        font-size: 3em;
+    }
+    .glyphRank {
+        font-size: 2em;
+    }
+    .user {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    .streak {
+        color: white;
+        font-size: 2em;
+        border-bottom: 1px solid white;
+        display: inline block;
+        margin-top: 40px;
+        margin-left: 10px;
+    }
+    .streakDetails {
+        color: white;
+    }
+}
+@media (min-width:500px) and (max-width:768px) {
+    h4 {
+        font-size: 2em;
+    }
+    h5 {
+        font-size: 1.5em;
+    }
+    h6 {
+        font-size: 1.2em;
+    }
+    p {
+        font-size: 1em;
+    }
+    #button-height a {
+        font-size: 20px;
+    }
+    .panel-body {
+        padding: 0;
+    }
+    #badge, #country {
+        font-size: 1em;
+    }
+    .Following, .Followers, .game {
+        font-size: 20px;
+        margin-bottom: 7px;
+    }
+    .glyph {
+        font-size: 2em;
+    }
+    footer .nav img {
+        margin: -4px auto -1px;
+        width: 33px;
+    }
+    body {
+        padding-bottom: 51px;
+        /* to counter fixed-footer height*/
+    }
+    #GamesInfo {
+        padding-top: 5px;
+        color: white;
+        border: none;
+    }
+    .rankInfo {
+        padding-top: 5px;
+    }
+    #topics {
+        background-color: lightyellow;
+        color: black;
+        text-align: center;
+        padding-bottom: 0px;
+    }
+    .user {
+        padding-top: 15px;
+    }
+    .container {
+        width: 100%;
+        margin: 0px;
+    }
+    .topicsholder img {
+        height: 100%;
+        width: 100%;
+    }
+}
 
- #foot .btn3 {
+/* end media queries */
+
+@media (min-width: 900px) {}
+@media (max-width:500px) {
+    #searchbox {
+        width: 200px;
+    }
+    h4 {
+        font-size: 2em;
+    }
+    h5 {
+        font-size: 1.5em;
+    }
+    h6 {
+        font-size: 1.2em;
+    }
+    p {
+        font-size: 1em;
+    }
+    #button-height a {
+        font-size: 20px;
+    }
+    #badge, #country {
+        font-size: 1em;
+    }
+    .Following, .Followers, .game {
+        font-size: 20px;
+        margin-bottom: 7px;
+    }
+    .glyph {
+        font-size: 2em;
+    }
+    footer .nav img {
+        margin: -4px auto -1px;
+        width: 33px;
+    }
+    body {
+        padding-bottom: 51px;
+        /* to counter fixed-footer height and mobile's browser nav*/
+    }
+    #GamesInfo {
+        padding-top: 5px;
+        color: white;
+        border: none;
+    }
+    #topics {
+        background-color: lightyellow;
+        color: black;
+        text-align: center;
+        padding-bottom: 0px;
+    }
+    .user {
+        padding-top: 15px;
+    }
+    .container {
+        width: 100%;
+        margin: 0px;
+    }
+    .topicsholder img {
+        height: 100%;
+        width: 100%;
+    }
+}
+#foot .btn1 {
+    background-color: green;
+    color: white;
+    height: 100%;
+    padding: 0px 0px 0px 0px;
+    font-size: 20px;
+}
+#foot .btn2 {
+    background-color: red;
+    color: white;
+    height: 100%;
+    padding: 0px 0px 0px 0px;
+    font-size: 20px;
+}
+#foot .btn3 {
     background-color: rgb(194, 214, 29);
-    color:white;
-    height:100%;
-      padding:0px 0px 0px 0px;
-       font-size: 20px;
-  }
+    color: white;
+    height: 100%;
+    padding: 0px 0px 0px 0px;
+    font-size: 20px;
+}
+
 /* User Rank Chart Style*/
-.chart-tooltip{
-  background-color: #e9f6fb;
+
+.chart-tooltip {
+    background-color: #e9f6fb;
 }
-.chart .axis>.tick>text{
-  fill: white;
+.chart .axis>.tick>text {
+    fill: white;
 }
-.chart .axis>path{
-  fill:none;
-  stroke:#B73535;
+.chart .axis>path {
+    fill: none;
+    stroke: #B73535;
 }
-.color-dot{
-  background-color: orange;
+.color-dot {
+    background-color: orange;
 }
-.tooltip-item,.abscissas{
-  color:black;
+.tooltip-item, .abscissas {
+    color: black;
 }
+
 /*User Rank Chart Style End*/
 
-
-
 #activity-info .c3 path, .c3 line {
-  fill: none;
-  stroke: #fff;
+    fill: none;
+    stroke: #fff;
 }
-
-#activity-info text{
+#activity-info text {
     fill: #fff;
 }
-#activity-info .c3-tooltip th{
+#activity-info .c3-tooltip th {
     background-color: #cc99ff;
     color: #000;
 }
-
-#activity-info .c3-tooltip td{
+#activity-info .c3-tooltip td {
     color: #000;
 }
-
-#activity-info .c3-tooltip{
+#activity-info .c3-tooltip {
     opacity: 1;
 }
-.badgebox{
+.badgebox {
     /*background: white;*/
     border: 1px solid #ddd;
     margin-bottom: 15px;
     margin-left: 15px;
     position: relative;
-    max-width: 340px;
+    max-width: 320px;
     min-height: 110px;
     border-radius: 5px;
 }
-
-.badges{
-	padding-top:10px;
-	height:60px;
-	width:55px;
+.badges {
+    padding-top: 10px;
+    height: 60px;
+    width: 55px;
 }
-.badge-name{
-	color:#FFF;
-	font-weight: bold;
-	padding:2px;
-	text-align:center;
-	background-color: #2c3e50;
-	border-radius: 2px;
-}
-  .friendList {
-  	width: initial !important;
-  }
-
-  .friendName{
+.badge-name {
+    color: #FFF;
+    font-weight: bold;
+    padding: 2px;
     text-align: center;
-  }
-  @media (max-width: 640px)
-  {
-      #mySlider
-      {
-          display: none;
-      }
-  }
+    background-color: #2c3e50;
+    border-radius: 2px;
+}
+.friendList {
+    width: initial !important;
+}
+.friendName {
+    text-align: center;
+}
+@media (max-width: 640px) {
+    #mySlider {
+        display: none;
+    }
+}
