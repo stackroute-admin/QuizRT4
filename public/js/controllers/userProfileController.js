@@ -196,6 +196,8 @@ $scope.topicsList = function(data){
         .then( function( successResponse ){
           $scope.data = successResponse.data.user;
           $rootScope.loggedInUser = successResponse.data.user;
+          $rootScope.friends = successResponse.data.friends;
+          $rootScope.loggedInUser.notificationCount = successResponse.data.notificationCount;
           $scope.topicsFollowed = [];
           if($rootScope.loggedInUser.topicsPlayed != null) {
             for(var i = 0;i < $rootScope.loggedInUser.topicsPlayed.length;i++){

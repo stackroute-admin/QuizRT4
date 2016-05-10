@@ -44,7 +44,6 @@ router.get('/profileData', function(req, res, next) {
         }else {
           FriendShip.getFriendsListData(req.session.user).then(function(friends){
             Notification.getNotifications(req.session.user).then(function(notifications){
-              console.log(notifications);
               res.json({ error: null, user:profileData , friends : friends , notificationCount : notifications.length });
             });
           })
@@ -115,7 +114,6 @@ router.get('/profileData/:userId' ,function(req,res){
       res.end(JSON.stringify({ error: 'We could not find the user in our database. Try again later.'}) );
     }else {
       FriendShip.getFriendsListData(user).then(function(friends){
-        console.log(friends);
         Friendship.getAcceptanceState({user : req.session.user,frienduser :user}).then(function(isfriend){
           res.json({ error: null, user:profileData , isfriend  , friends });
         })
