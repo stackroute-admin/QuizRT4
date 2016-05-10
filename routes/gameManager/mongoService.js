@@ -193,6 +193,9 @@ module.exports = {
             }
           });
           // put the player on leaderBoard
+          console.log("tournamentData is ---------------->>>");
+          console.log(tournamentData);
+          console.log("tournamentData is ---------------->>>oooo");
           if ( !isPlayerOnBoard ) {
             console.log('Pushing new player to leaderboard');
             tournamentData.leaderBoard.push( player );

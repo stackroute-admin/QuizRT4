@@ -191,7 +191,7 @@ angular.module('quizRT')
                                 questionId : $scope.currentQuestion.questionId,
                                 // selectedElm:element,
                                 correctIndex:$scope.currentQuestion.correctIndex,
-                                // myScore:$scope.myscore,
+                                 myScore:$scope.myscore,
                                 responseTime:$scope.time,
                                 userId:$rootScope.loggedInUser.userId,
                                 gameTime:new Date().toString()
@@ -227,7 +227,7 @@ angular.module('quizRT')
           // console.log("Debugging highLightOption",data);
           console.log("In Callback");
           $scope.myscore=data.myScore;
-          // console.log('hello my score is......'+$scope.myscore);
+          console.log('hello my score is......'+$scope.myscore);
           if(data.correct){
             // console.log('hello');
             // $(data.elem.target).addClass('btn-success');

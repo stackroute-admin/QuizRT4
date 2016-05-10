@@ -42,13 +42,21 @@
 			</div> <!-- end ng-repeat -->
 		</div>
 	</section><!--  end user Tournament Section -->
-	<section><!--create tournament-->
-		<button id="createConfTournament" type="button" style="color:black"><a href="http://172.23.238.182:9090/#/createTournament">Create Tournament</a></button>
-	</section>
+	<!-- <section><!--create tournament-->
+		<!-- <button id="createConfTournament" type="button" style="color:black"><a href="http://172.23.238.182:9090/#/createTournament">Create Tournament</a></button> -->
+		<div class="row">
+			<!-- <span  ng-click="redirectTo('createTournament')" class="glyph glyphicon glyphicon-user"></span>
+			<p>Create Tournament</p> -->
+			<div class="col-xs-11 col-sm-8 col-md-2 col-lg-2">
+				<button type="button" class="btn btn-primary" ng-click="redirectTo('createConfTournament')">Create Tournament</button>
+			</div>
 
-	<section><!--create configurable tournament-->
-		<button id="createTournament" type="button"><a href="http://172.23.238.182:9090/#/createTournament" style="color:black">Create Configurable Tournament</a></button>
-	</section>
+		</div>
+	<!-- </section> -->
+
+		<!-- <button id="createTournament" type="button"><a href="http://172.23.238.182:9090/#/createTournament" style="color:black">Create Configurable Tournament</a></button> -->
+		<!-- <section><!--create configurable tournament-->
+	<!-- </section> -->
 	<!--  All Tournament Section -->
 	<section>
 		<div class="row sectionHeader">All Tournaments</div>

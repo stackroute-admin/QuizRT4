@@ -62,7 +62,7 @@ var GameManager = function() {
       topicId: topicId,
       levelId: levelId,
       state: 'WAITING', // can be 'WAITING', 'LIVE', "FINISHED"
-      playersNeeded: playersNeeded ? playersNeeded : 5,
+      playersNeeded: playersNeeded ? playersNeeded : 2,
       leaderBoard: [],
       timer:15,
       players: [],
@@ -363,9 +363,13 @@ console.log("jkjkjkjkjkjkjkjkkjkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+questions);
         this.storeResult( gameData, gameBoard, game,function() {
             storeAnalyticsData(gameData,game.players,function() {
                 // call stuffs which needs updated data from db
-                game.players.forEach(function(userObj) {
-                    new badgeEligibilityCheck(userObj.userId,'gameFinish',gameData).check(gameData.gameClient);
-                });
+                // @FIXME check if the data doesn't belong to touranament
+                // not doing badge manipulation for touranament
+                if(gameData.levelId===undefined){
+                    game.players.forEach(function(userObj) {
+                        new badgeEligibilityCheck(userObj.userId,'gameFinish',gameData).check(gameData.gameClient);
+                    });
+                }
             });
         });
       }
@@ -382,7 +386,11 @@ console.log("jkjkjkjkjkjkjkjkkjkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+questions);
   this.storeResult = function( gameData, gameBoard, game,cb ) {
     var noOfCallbacksFinished = 0,
         self = this;
-
+        console.log("Logging data inside store results-------------------------?>>");
+        console.log(gameData);
+        console.log(gameBoard);
+        console.log(game);
+        console.log("Logging data inside store results-------------------------?>>11");
     MongoDB.saveGameToMongo( gameData, gameBoard, function() {
       noOfCallbacksFinished++;
       if ( noOfCallbacksFinished == game.players.length+1 ) {
@@ -403,7 +411,9 @@ console.log("jkjkjkjkjkjkjkjkkjkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+questions);
       gameBoard.some( function( boardPlayer, index ) {
         if ( player.userId == boardPlayer.userId ) {
          // pass rank to preserveObj
-        gameData.preserveObj.addUserRank(player.userId,index);
+         if(gameData.preserveObj){
+             gameData.preserveObj.addUserRank(player.userId,index);
+         }
           var updateProfileObj = {
            score: boardPlayer.score,
            rank: index+1,
