@@ -69,3 +69,20 @@
   border-radius: 2px;
   background: #2d8bca;
 }
+.notification-counter{
+  font-size:10px;
+  position: absolute;
+  top:0px;
+  right:2px;
+  padding: 1px 3px;
+  background: orangered;
+  border-radius: 2px;
+}
+.notification-title{
+  font-size:16px;
+  position: relative;
+}
+.notification-title:hover{
+  color: white;
+  text-shadow:1px 1px #2c3e50;
+}

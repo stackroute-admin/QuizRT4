@@ -12,7 +12,7 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            files: ['**/*.js', '!node_modules/**/*'],
+            files: ['**/*.js', '!node_modules/**/*','!public/**/*'],
             tasks: ['express:dev'],
             options: {
                 spawn: false
