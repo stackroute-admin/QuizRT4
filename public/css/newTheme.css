@@ -46,3 +46,26 @@
 .streak-details{
   padding-top: 15px;
 }
+.notification-box{
+  margin:10px;
+  background: #34495e;
+  color:#FFF;
+}
+.notification-msg{
+  font-size:14px;
+  padding-bottom: 20px;
+}
+.notification-sender{
+  padding: 5px;
+  border-radius: 2px;
+  background: #28b262;
+}
+.notification-btn{
+  margin-top: 10px;
+}
+.notification-topic{
+  font-style: italic;
+  padding: 5px;
+  border-radius: 2px;
+  background: #2d8bca;
+}

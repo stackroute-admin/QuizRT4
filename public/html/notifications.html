@@ -1,9 +1,16 @@
 <div class="container" id="main">
-
-  <h2>Your notifications</h2>
-  <div class="" ng-repeat="notification in notificationData">
-    <span ng-if="((notification.metaData.type == 'FRND'))">FriendShip Request from <b> {{notification.metaData.from}} </b> </span>
-    <span ng-if="((notification.metaData.type == 'GRPPLAY'))">Invite to Play Game from <b> {{notification.metaData.from}} </b> on Topic <i><u> {{notification.metaData.url.split('/')[2]}} </i></u>  <br></span>
-    <a ng-click="sendNotification('accept',notification.metaData)">Accept</a>
-    <a ng-click="sendNotification('reject',notification.metaData)">Reject</a>
-  </div>
+    <h2>Your notifications</h2>
+    <div class="row well notification-box" ng-repeat="notification in notificationData">
+      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <span class="notification-msg" ng-if="((notification.metaData.type == 'FRND'))">You have a new friend Request from <span class="notification-sender"> {{notification.metaData.from}}</span></span>
+        <span class="notification-msg" ng-if="((notification.metaData.type == 'GRPPLAY'))">Invite to Play Game from <span class="notification-sender"> {{notification.metaData.from}}</span> on Topic <span class="notification-topic"> {{notification.metaData.url.split('/')[2]}}</span></span>
+        <br>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 notification-btn">
+        <div class="clearfix pull-right">
+          <a class="btn btn-primary" ng-click="sendNotification('accept',notification.metaData)">Accept</a>
+          <a class="btn btn-danger" ng-click="sendNotification('reject',notification.metaData)">Reject</a>
+        </div>
+      </div>
+    </div>
+</div>
