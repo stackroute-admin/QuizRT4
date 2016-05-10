@@ -82,17 +82,6 @@ angular.module('quizRT')
       $scope.slider.push(tempObj);
       };
 
-<<<<<<< HEAD
-     $scope.deleteLevels = function(levelIndex){
-
-     }
-
-     $scope.selectionChange = function(value , index){
-       $scope.levelTopicArray[index] = value;
-       //console.log($scope.levelTopicArray);
-
-     };
-=======
       $scope.deleteLevels = function(levelIndex) {
 
       };
@@ -112,7 +101,6 @@ angular.module('quizRT')
             };
           $scope.slider.push(tempObj);
         }
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
 
         console.log("value is "+typeof(value));
         console.log(index);
@@ -160,39 +148,9 @@ angular.module('quizRT')
 
         }
 
-<<<<<<< HEAD
-      if(isValidTournament){
-        tournament.levelTopicArray = $scope.levelTopicArray;
-        console.log($scope.tournament);
-        var formData = new FormData();
-
-        formData.append('data',JSON.stringify(tournament));
-        formData.append('file',$scope.imageFile);
-
-        $http.post('tournamentHandler/createTournament', formData , {headers: { 'Content-Type': undefined }})
-        .then(
-            function(successResponse){
-              var tournamentId = successResponse.data.tournamentId;
-              $location.path( "/tournament/" + tournamentId);
-
-            },// end successCallback
-            function(errorResponse){
-              console.log('Error occurred while creating Tournament');
-              console.log(errorResponse.error);
-              alert(errorResponse.error);
-            } //end errorCallback
-          );
-
-      }
-
-
-
-     }
-=======
 
 
       }
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
 
       $scope.reset = function(form) {
         if (form) {
@@ -205,20 +163,10 @@ angular.module('quizRT')
       validateTournament = function(tournament) {
 
         var isValidTournament = false;
-<<<<<<< HEAD
-
-=======
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
 
 
         if (!tournament || !tournament.title) {
           alert("Please provide title for the tournament.");
-<<<<<<< HEAD
-
-        }else if(!$scope.imageFile){
-           alert("Please choose image file for the tournament.");
-=======
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb
 
         } else if (!$scope.imageFile) {
           alert("Please choose image file for the tournament.");
@@ -240,9 +188,5 @@ angular.module('quizRT')
       }
 
 
-<<<<<<< HEAD
-    }]);
-=======
     }
   ]);
->>>>>>> ec594d0d36d1093b1a48ae772d6d70cccce5e5cb

@@ -122,13 +122,19 @@ var GameManagerClass = require('./gameManager/gameManager.js'),
 
 
         client.on('join',function( playerData ) {
-          console.log( playerData.userId + ' joined. Wants to play ' + playerData.topicId );
-          // check if the user is authenticated and his session exists, if so add him to the game
+         addPlayersToGame(playerData);
+        }); // end client-on-join
+
+
+
+        var addPlayersToGame=function(playerData){
+          console.log("this is the current player-------------"+playerData);
           if ( client.request.session && (playerData.userId == client.request.session.user) ) {//req.session.user
             var gamePlayer = {
               userId: playerData.userId,
               playerName: playerData.playerName,
               playerPic: playerData.playerPic,
+              score:0,
               client: client
             };
             var difficultyLevelTopic=[1,2,3,4,5];//for topics game fetch questions from all difficulty levels
@@ -141,10 +147,10 @@ var GameManagerClass = require('./gameManager/gameManager.js'),
             console.log('User session does not exist for: ' + playerData.userId + '. Or the user client was knocked out.');
             client.emit( 'userNotAuthenticated' ); //this may not be of much use
           }
-        }); // end client-on-join
+        };
 
 	client.on('expiredLink',function (data) {
-          console.log("I AM EXPIRED");
+
           if(data.expired){
             expiredLink=true;
           }
@@ -261,6 +267,7 @@ var GameManagerClass = require('./gameManager/gameManager.js'),
                   userId: playerData.userId,
                   playerName: playerData.playerName,
                   playerPic: playerData.playerPic,
+                  score:0,
                   client: client
                 };
 
@@ -280,34 +287,65 @@ var GameManagerClass = require('./gameManager/gameManager.js'),
                 // var gm = TournamentManager.getGameManager( data.tournamentId )
                 // var questionCount = gm.games.get( data.gameId ).questionCount;
                 // data.questionCount = questionCount;
-                clickStreamStat.userAnalyticsSave(data,'tournament');
-                preserveData.addVal(data);
-              if(data.ans == 'correct') {
-                var gameManager = TournamentManager.getGameManager( data.tournamentId ),
-                    gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
-                if ( gamePlayers && gamePlayers.length ) {
-                  gamePlayers.forEach( function(player) {
-                    player.client.emit('isCorrect');
-                  });
+                console.log("MY CORRECT ANSWER is "+data.correctIndex+'.........MY SELECTED ID'+data.selectedId);
+                // clickStreamStat.userAnalyticsSave(data,'tournament');
+                // preserveData.addVal(data);
+                if(data.selectedId == data.correctIndex) {
+                  var gameManager = TournamentManager.getGameManager( data.tournamentId ),
+                      gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
+                    gamePlayers.forEach( function( player, index) {
+                      console.log("------------------------   ------------------------------------   ------------------------------------"+player.userId+" "+player.score);
+                        if(player.userId===data.userId){
+                          console.log("inside if getGameTournament...................................");
+                          player.score+=data.responseTime+10;
+                          console.log("tournament score is..................."+player.score);
+                          player.client.emit('highLightOption',{correct:true,myScore:player.score,correctInd:data.correctIndex});
+                        }
+
+                      });
+                  if ( gamePlayers && gamePlayers.length ) {
+                    gamePlayers.forEach( function(player, index) {
+                      player.client.emit('isCorrect');
+                    });
+                  } else {
+                    console.log('ERROR: Cannot find the gameManager for ' + data.tournamentId );
+                  }
                 } else {
-                  console.log('ERROR: Cannot find the gameManager for ' + data.tournamentId );
-                }
-              } else {
-                var gameManager = TournamentManager.getGameManager( data.tournamentId ),
-                    gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
-                if ( gamePlayers && gamePlayers.length ) {
-                  gamePlayers.forEach( function(player) {
-                    player.client.emit('isWrong');
-                  });
-                } else {
-                  console.log('ERROR: Cannot find the gameManager for ' + data.tournamentId );
-                }
+                  var gameManager = TournamentManager.getGameManager( data.tournamentId ),
+                       gamePlayers = gameManager ? gameManager.getGamePlayers( data.gameId ) : null ;
+                      console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"+gamePlayers);
+                      gamePlayers.forEach(function( player, index) {
+                        console.log('player info'+player.userId);
+                        if(player.userId===data.userId){
+                          player.score-=5;
+                          player.client.emit('highLightOption',{correct:false,myScore:player.score,correctInd:data.correctIndex});
+                        }
+                    });
+
+                    if ( gamePlayers && gamePlayers.length ) {
+                      gamePlayers.forEach( function(player) {
+                        player.client.emit('isWrong');
+                      });
+                    } else {
+                      console.log('ERROR: Cannot find the gameManager for ' + data.tournamentId );
+                    }
               }
+
             });
 
             client.on('updateStatus',function( gameData ){
               var gameManager = TournamentManager.getGameManager( gameData.tournamentId ),
                   gamePlayers = gameManager ? gameManager.getGamePlayers( gameData.gameId ) : null ;
+                  gamePlayers.forEach(function( player, index) {
+                    if(player.userId==gameData.userId){
+                      if (levelMultiplier && player.score>0) {
+                        gameData.playerScore=player.score * levelMultiplier;
+                      }else {
+                        gameData.playerScore = player.score;
+                      }
+                    }
+                  });
+
               if ( gameManager ) {
                 gameManager.updateScore( gameData.gameId, gameData.userId, gameData.playerScore );
                 var intermediateGameBoard = gameManager.getLeaderBoard( gameData.gameId ),
@@ -316,12 +354,20 @@ var GameManagerClass = require('./gameManager/gameManager.js'),
                 intermediateGameBoard.some( function(player, index ) {
                   if ( player.userId == gameData.userId ) {
                     myRank = index + 1;
+                    // gameData.playerScore = player.score ;
                     return true;
                   }
                 });
                 if ( gamePlayers && gamePlayers.length ) {
                   gamePlayers.forEach( function( player, index) {
-                    player.client.emit('takeScore', {myRank: myRank, userId: client.request.session.user, topperName:gameTopper.playerName, topperScore:gameTopper.score, topperImage:gameTopper.playerPic });
+
+                  if (levelMultiplier && gameTopper.score>0) {
+                    tempTopperScore = gameTopper.score/levelMultiplier;
+                  }else {
+                     tempTopperScore =  gameTopper.score;
+                     console.log("TOPPER SCORE IS-------"+tempTopperScore);
+                    }
+                    player.client.emit('takeScore', {myRank: myRank, userId: client.request.session.user, topperName:gameTopper.playerName, topperScore:tempTopperScore, topperImage:gameTopper.playerPic });
                   });
                 }
               } else {
@@ -330,9 +376,13 @@ var GameManagerClass = require('./gameManager/gameManager.js'),
             });
 
             client.on( 'gameFinished', function( finishGameData ) {
-              TournamentManager.finishGame( finishGameData );
+
               console.log("Showing preserved data --->>>>>");
-              preserveData.show();
+            //   finishGameData.preserveObj=preserveData;
+               TournamentManager.finishGame( finishGameData );
+               finishGameData.gameClient = io.of('/normalGame');
+            //   preserveData.show();
+            //   preserveData.show();
             //   initialize the obj again
             // var preserveData = new PreserveGameData();
             });

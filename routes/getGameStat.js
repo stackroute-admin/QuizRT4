@@ -95,14 +95,20 @@ module.exports = {
               if (err) {
                  console.log(err);
                  done( -1 );
-             } else {
+             }
+             else {
 
               //    analyticsDbObj.close();
-                if (result[0].responseTimeC !== 0){
-                    var totalQuesCount = result[0].correctCount + result[0].wrongCount + result[0].skipCount;
-                    if ( result[0].correctCount === totalQuesCount ){
-                        var avgResTimeCur =  result[0].responseTimeC/totalQuesCount;
-                        done(avgResTimeCur);
+                if(result.length>0){
+                    if (result[0].responseTimeC !== 0){
+                        var totalQuesCount = result[0].correctCount + result[0].wrongCount + result[0].skipCount;
+                        if ( result[0].correctCount === totalQuesCount ){
+                            var avgResTimeCur =  result[0].responseTimeC/totalQuesCount;
+                            done(avgResTimeCur);
+                        }
+                        else {
+                            done(-1);
+                        }
                     }
                     else {
                         done(-1);
