@@ -73,11 +73,9 @@ angular.module('quizRT')
           console.log("message from test"+$rootScope.playGame.expiredUrl);
           playerData.url=$rootScope.playGame.url;
           playerData.firstUser=true;
-
-          console.log("hi");
           $rootScope.socket.emit('joinGamesOnDemand', playerData);
           $rootScope.firstUser=false;
-          $scope.time = 30;
+          $scope.time = 100;
           $scope.waitInterval = $interval(function () {
             $scope.time--;
             if($scope.time==0){
@@ -185,7 +183,7 @@ angular.module('quizRT')
                                 else {
                                     $scope.questionImage = null;
                                 }
-                                $scope.time = 5;
+                                $scope.time = 15;
         						// check if game is in 2nd question and still we see
                                 // skig flag has same initial value
                                 // console.log("1 questionCounter "+$scope.questionCounter);
@@ -226,7 +224,7 @@ angular.module('quizRT')
                                 else {
                                   $scope.questionImage = null;
                                 }
-                                $scope.time = 5;
+                                $scope.time = 15;
                                 $scope.shouldContinue = true;
                                 // check if game is in 2nd question and still we see
                               // skig flag has same initial value

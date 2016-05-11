@@ -3,7 +3,7 @@ angular.module('quizRT')
       console.log("Got new controller with Modal");
       $scope.onlineFriends = [];
       $scope.selectedFriends = [];
-      $scope.minFriends = 1;
+      $scope.minFriends = 3;
       $scope.showWarning = 0;
 
     $scope.getOnlineFriends = function() {

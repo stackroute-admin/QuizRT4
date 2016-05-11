@@ -125,7 +125,7 @@ angular.module('quizRT')
                   else {
                     $scope.questionImage = null;
                   }
-                  $scope.time = 5;
+                  $scope.time = 15;
                 } else {
 
                   $scope.shouldContinue = false;
@@ -144,7 +144,7 @@ angular.module('quizRT')
                     else {
                       $scope.questionImage = null;
                     }
-                    $scope.time = 5;
+                    $scope.time = 15;
                     $scope.shouldContinue = true;
                   },20,true,$scope.currentQuestion.correctIndex);
                 }

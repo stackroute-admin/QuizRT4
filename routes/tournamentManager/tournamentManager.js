@@ -21,8 +21,7 @@ var TournamentManager = function() {
   this.managePlayer = function( playerData, gamePlayer ) {
     if ( this.tournaments.has( playerData.tournamentId ) ) {
       var gameManager = this.tournaments.get( playerData.tournamentId );
-      playerData.playersNeeded = 2;
-      var addedSuccessfully = gameManager.managePlayer( playerData.topicId, playerData.levelId, 2,undefined, gamePlayer,playerData.difficultyLevel,playerData.questionPaper );
+      var addedSuccessfully = gameManager.managePlayer( playerData.topicId, playerData.levelId, playerData.playersNeeded,undefined, gamePlayer,playerData.difficultyLevel,playerData.questionPaper );
       if ( addedSuccessfully ) {
         if ( this.playerTournaments.has( gamePlayer.userId )) {
           this.playerTournaments.get( gamePlayer.userId ).push( playerData.tournamentId );
