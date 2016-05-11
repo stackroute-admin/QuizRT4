@@ -23,8 +23,13 @@ module.exports = {
       })
     } else if (metadata.type === 'GRPPLAY') {
        /*remove the notification From DB */
-       Notification.remove({'metaData.url' : metadata.url})
-       .then(function (data) {
+//       Notification.remove({'metaData.url' : metadata.url})
+       Notification.findOne({'metaData.url' : metadata.url}).then(function (data) {
+         console.log(data, "find");
+         data.metaData.to.pop(metadata.myId);
+         console.log("user", data.metaData);
+          Notification.update({'metaData.url' : metadata.url}, {$set : {'metaData' : data.metaData } }, {upsert:false}, function(err, data) {
+           console.log(err, data);
            console.log("removed Data",data);
           //method to update fields
           if (metadata.event == 'accept') {
@@ -36,10 +41,11 @@ module.exports = {
             metadata.url = "/userProfile/";
             client.emit('playGame', metadata);
           }
-
+         }); 
        });
+       
     } else {
-      //do nothing throw error
+      //Nothing 
     }
   },
 

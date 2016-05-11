@@ -20,6 +20,7 @@ angular.module('quizRT')
 
    $scope.sendNotification = function(userEvent, notificationData) {
       notificationData.event = userEvent;
+      notificationData.myId = $rootScope.loggedInUser.userId;
       $rootScope.notificationSocket.emit('response', notificationData);
       $rootScope.notificationCount -= 1;
    };
