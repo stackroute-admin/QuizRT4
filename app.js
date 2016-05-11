@@ -52,14 +52,14 @@ var express = require('express'),
       secret: 'keyboard cat'
     });
     // mongoose.connect('mongodb://localhost/QuizART');
-    mongoose.connect('mongodb://localhost/quizRT3');
+    mongoose.connect('mongodb://localhost/quizRT4');
 
-//mongoose.connect('mongodb://quizart.stackroute.in/quizRT3');
- // mongoose.connect('mongodb://172.23.238.253/quizRT3');
+//mongoose.connect('mongodb://quizart.stackroute.in/quizRT4');
+ // mongoose.connect('mongodb://172.23.238.253/quizRT4');
   // }),
-mongoose.connection.on('error', console.error.bind(console, 'Failed to establish connection to MongoDB@StackRouteHost:PORT/quizRT3'));
+mongoose.connection.on('error', console.error.bind(console, 'Failed to establish connection to MongoDB@StackRouteHost:PORT/quizRT4'));
 mongoose.connection.on('open', function() {
-  console.log('Connected to MongoDB@StackRouteHost:PORT/quizRT3');
+  console.log('Connected to MongoDB@StackRouteHost:PORT/quizRT4');
 });
 require('./routes/socket.js')(server,sessionMiddleware);
 require('./routes/socket.js')(server,sessionMiddleware,redisClient);

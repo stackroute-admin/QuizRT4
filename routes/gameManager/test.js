@@ -1,7 +1,7 @@
 var test = require('./prebuildQuestions.js');
 var mongoose = require('mongoose');
 //console.log(test.getPrebuildQuestions);
-mongoose.connect('mongodb://localhost/quizRT3');
+mongoose.connect('mongodb://localhost/quizRT4');
 test.getPrebuildQuestions('T1','Question Paper 3',2,function (err,question) {
   if ( err ) {
 

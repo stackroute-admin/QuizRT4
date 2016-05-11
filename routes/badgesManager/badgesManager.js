@@ -3,7 +3,7 @@ var Profile = require('../../models/profile');
 var badgesData = require('../../test-data/badgesData.js');
 
 /*var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/quizRT3',function () {
+mongoose.connect('mongodb://localhost/quizRT4',function () {
   console.log('connected');
 });*/
 

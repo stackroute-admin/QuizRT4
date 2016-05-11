@@ -27,7 +27,7 @@ var Tournament = require('../models/tournament.js');
   var json=JSON.parse(data);
 
   var mongoose = require('mongoose');
-  mongoose.connect('mongodb://172.23.238.253/quizRT3');
+  mongoose.connect('mongodb://172.23.238.253/quizRT4');
 
   var db = mongoose.connection;
   db.on('error', console.error.bind(console, 'connection error:'));

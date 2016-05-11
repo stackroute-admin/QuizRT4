@@ -15,7 +15,7 @@ var userAnalyticsSchema = require('../models/userAnalytics'),
 
 
    // var mongoose = require('mongoose');
-   // mongoose.connect('mongodb://localhost/quizRT3');
+   // mongoose.connect('mongodb://localhost/quizRT4');
 
 
 module.exports = {

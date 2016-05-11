@@ -2,7 +2,7 @@ var Event = require('./eventCreator');
 var mongoose = require('mongoose');
 var EventExecutor = require('./eventExecutor');
 var BadgesManager = require('./badgesManager');
-// mongoose.connect('mongodb://localhost/quizRT3',function () {
+// mongoose.connect('mongodb://localhost/quizRT4',function () {
 //   console.log('connected');
 // });
 var badgeEligibilityCheck= function(userId,eventType,gameData) {

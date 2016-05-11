@@ -1,7 +1,7 @@
 var userProfile = require('../../models/profile');
 var mongoose = require('mongoose');
 var moment = require('moment');
-mongoose.connect('mongodb://localhost/quizRT3');
+mongoose.connect('mongodb://localhost/quizRT4');
 
 // get overall points for all users across different topics and tournaments
 // and store data in "userpointstats" collection present in "analyticsDB"

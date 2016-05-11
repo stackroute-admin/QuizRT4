@@ -2,7 +2,7 @@ var Event = require('../../models/event');
 var eventsData = require('../../test-data/eventsData.js');
 
 /*var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/quizRT3',function () {
+mongoose.connect('mongodb://localhost/quizRT4',function () {
   console.log('connected');
 });*/
 
