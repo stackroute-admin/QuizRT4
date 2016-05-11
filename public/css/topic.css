@@ -162,3 +162,10 @@
 .selected {
   background: #5BC0DE ;
 }
+
+.c3-chart-arcs .c3-chart-arcs-gauge-unit{
+  fill:white;
+}
+.c3-chart-arc .c3-gauge-value{
+  fill:white;
+}
